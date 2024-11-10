@@ -1,27 +1,7 @@
 import React, { useState } from 'react';
-
-// Login Page Component
-
-
-// Sign Up Page Component
-function SignUp({onNavigate}) {
-  return(
-    <div>
-      <h1>Sign Up Page</h1>
-      <button onClick={() => onNavigate('login')}>Go back to Login</button>
-    </div>
-  );
-}
-
-// Home Page Component
-function Home({ onNavigate }) {
-  return (
-    <div>
-      <h1>Home Page</h1>
-      <button onClick={() => onNavigate('login')}>Go back to Login</button>
-    </div>
-  );
-}
+import Login from './pages/loginPage';
+import SignUp from './pages/signupPage';
+import Home from './pages/homePage';
 
 // App Component - Manages Navigation
 function App() {

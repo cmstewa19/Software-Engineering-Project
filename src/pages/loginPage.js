@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import logo from './assets/ScenicTrain1.jpg'; // photo for login page
 
+
 // creates login page. 
 function Login({ onNavigate }) {
     return (
@@ -144,3 +145,4 @@ function Login({ onNavigate }) {
       </div>
     );
   }
+export default Login;

@@ -8,3 +8,4 @@ function Home({ onNavigate }) {
       </div>
     );
   }
+export default Home;

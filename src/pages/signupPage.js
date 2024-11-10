@@ -8,3 +8,4 @@ function SignUp({onNavigate}) {
       </div>
     );
   }
+export default SignUp;
