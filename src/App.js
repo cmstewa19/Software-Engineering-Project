@@ -22,7 +22,7 @@ function Login({ onNavigate }) {
         fontSize: '40px', 
         fontWeight: 'bold', 
         fontFamily: 'Courier'
-        }}>COMPANY NAME</p>
+        }}>Train Track</p>
 
       {/* Image for the log in page */}
       <img src={logo} alt="ScenicTrain1"style={{ 
