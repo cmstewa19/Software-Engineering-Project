@@ -1,6 +1,7 @@
 const express = require('express'); // required node package
 const sqlite3 = require('sqlite3').verbose(); //require package
 const QRCode = require('qrcode'); //require package for the qr code generator
+const bootstrap = require('bootstrap'); //require bootstrap package
 const app = express(); //instance of our app
 const port = 3000; //local hosting port
 
