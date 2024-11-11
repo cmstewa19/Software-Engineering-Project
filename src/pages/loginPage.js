@@ -1,146 +1,88 @@
-import React, { useState } from 'react';
-import logo from './assets/ScenicTrain1.jpg'; // photo for login page
+import React from 'react';
+import trainPhoto from '../assets/train.jpg'; // photo for login page
+import Header from '../components/header.js'; // header
+import UsernamePasswordForm from '../components/usernamePasswordForm.js'; // username password form
+import NavigationButton from '../components/navigationButton.js'; // nav button
 
-// creates login page. 
-function Login({ onNavigate }) {
+function Login() {
     return (
-      <div>
-  
-        {/* Creates the green header at top of log in page */}
-        <div style={{ 
-          backgroundColor: 'darkseagreen', 
-          width: '1739px', 
-          height: '100px'
-          }}></div>
-        
-        {/* Name of the company at the top of log in page */}
-        <p style={{ 
-          position: 'absolute', 
-          top: '0px', 
-          left:'30px', 
-          fontSize: '40px', 
-          fontWeight: 'bold', 
-          fontFamily: 'Courier'
-          }}>Train Track</p>
-  
-        {/* Image for the log in page */}
-        <img src={logo} alt="ScenicTrain1"style={{ 
-          position: 'absolute',
-          width: '900px', 
-          marginBottom: '20px',
-          top: '200px',
-          left: '750px',
-          borderRadius: '10px'
-          }}/>
-  
-        {/* Creates the gray box that has all the log in information inside*/}
-        <div style={{ 
-          width: 600, 
-          height: 600, 
-          backgroundColor: 'lightgray', 
-          border: '1px solid lightgray', 
-          margintop: '20px',
-          position: 'absolute',
-          top: '200px', 
-          left: '100px',
-          borderRadius: '10px'
-          }}>
-  
-            <br />
-            <h2 style={{ textAlign: 'center', fontFamily: 'Courier', fontSize: '40px' }}>Welcome!</h2>
-            <br />
-            <br />
-            <br />
-  
-            {/* Input box for username */}
-            <label style={{
-              fontFamily: 'Arial', 
-              fontSize: '20px', 
-              position: 'absolute', 
-              top: '160px', 
-              left: '55px' 
-              }}>Enter your username:<br /></label>
-  
-              <input
-                type="text"
-                style={{
-                  width: '500px',
-                  padding: '10px',
-                  marginTop: '10px',
-                  fontSize: '18px',
-                  border: '1px solid black',
-                  boxSizing: 'border-box',
-                  display: 'block',
-                  marginLeft: 'auto',
-                  marginRight: 'auto',
-                  borderRadius: '10px'
-                }}/><br />
-            
-            {/* Input box for password */}
-            <label style={{ 
-              fontFamily: 'Arial',
-              fontSize: '20px',  
-              position: 'absolute', 
-              top: '230px', 
-              left: '55px' }}>
-              <br />Enter your password:</label>
-  
-              <br />
-              <input
-                type="password"
-                style={{
-                  width: '500px',
-                  padding: '10px',
-                  marginTop: '10px',
-                  fontSize: '18px',
-                  border: '1px solid black',
-                  boxSizing: 'border-box',
-                  display: 'block',
-                  marginLeft: 'auto',
-                  marginRight: 'auto',
-                  borderRadius: '10px'
-                }}/><br />
-  
-            {/* Log in button (currently redirects to home page, no security measures rn) */}
-            <button onClick={() => onNavigate('home')}
-              style={{
-                position: 'absolute',
-                top: '350px',
-                left: '225px',
-                padding: '10px 30px',
-                fontSize: '20px',
-                fontWeight: 'bold',
-                fontFamily: 'Arial',
-                backgroundColor: 'darkseagreen',
-                border: '3px solid darkgreen',
-                borderRadius: '10px'
-              }}>Log In</button>
-  
-            {/* Label for going to the sign up page */}
-            <h2 style ={{
-              position: 'absolute',
-              top: '455px',
-              left: '110px',
-              fontFamily: 'Arial',
-              fontSize: '17px'
-            }}>Don't have an account?</h2> 
-  
-            {/* Sign up button (Redirects to sign up page) */ }
-            <button onClick={() => onNavigate('signup')}
-              style={{
-                position: 'absolute',
-                top: '455px',
-                left: '320px',
-                padding: '10px 30px',
-                fontSize: '20px',
-                fontWeight: 'bold',
-                fontFamily: 'Arial',
-                backgroundColor: 'white',
-                border: '2px solid dimgray',
-                borderRadius: '10px'
-              }}>Sign Up</button>
-          </div>
-        {/* <button onClick={() => onNavigate('home')}>Go to Home Page</button> */}
-      </div>
+        <div style={{ overflow: 'hidden', height: '100vh', display: 'flex', flexDirection: 'column' }}>
+            {/* Header component */}
+            <Header />
+
+            {/* Flex container for content */}
+            <div className="row no-gutters" style={{ flex: 1, display: 'flex', height: '100%' }}>
+
+                {/* Left column for login form */}
+                <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '20px' }}>
+                    <div 
+                        className="border p-4 rounded text-center" 
+                        style={{ 
+                            width: '100%', 
+                            maxWidth: '600px',
+                            border: '2px solid #28a745',
+                            boxSizing: 'border-box',
+                        }}
+                    >
+                        {/* Welcome message */}
+                        <h2 style={{ fontFamily: 'Courier', fontSize: '2rem', marginBottom: '20px', textAlign: 'center' }}>
+                            Welcome!
+                        </h2>
+
+                        {/* Username and password form */}
+                        <UsernamePasswordForm />
+
+                        {/* Login and Signup buttons */}
+                        <div style={{ marginTop: '20px' }}>
+                            <NavigationButton 
+                                text="Log In"
+                                path="/home"
+                                style={{
+                                    display: 'block',
+                                    width: '100%',
+                                    marginBottom: '10px',
+                                    backgroundColor: '#28a745',
+                                    color: 'white',
+                                }}
+                            />
+                            <NavigationButton 
+                                text="Sign Up"
+                                path="/signup"
+                                style={{
+                                    display: 'block',
+                                    width: '100%',
+                                    backgroundColor: '#ffffff',
+                                    color: '#28a745',
+                                    border: '2px solid #28a745',
+                                }}
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Right column for train photo */}
+                <div style={{
+                    flex: 1,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '100vh',
+                }}>
+                    <img
+                        src={trainPhoto}
+                        alt="train photo"
+                        className="img-fluid"
+                        style={{
+                            objectFit: 'cover',
+                            width: '100%',
+                            height: '100%',
+                        }}
+                    />
+                </div>
+
+            </div>
+        </div>
     );
-  }
+}
+
+export default Login;

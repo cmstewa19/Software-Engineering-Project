@@ -1,10 +1,28 @@
-import React, { useState } from 'react';
+import React from 'react';
+import NavigationButton from '../components/navigationButton.js';
+import Header from '../components/header.js'; // header
+
 // Home Page Component
-function Home({ onNavigate }) {
-    return (
-      <div>
+function Home() {
+  return (
+    <div>
+        {/* Header component */}
+        <Header />
+
         <h1>Home Page</h1>
-        <button onClick={() => onNavigate('login')}>Go back to Login</button>
-      </div>
-    );
-  }
+      
+        {/* Navigate to Login */}
+        <NavigationButton 
+            text="Login" 
+            path="/" 
+            style={{
+                padding: '10px 20px',
+                fontSize: '18px',
+                marginTop: '20px',
+            }}
+        />
+    </div>
+  );
+}
+
+export default Home;
