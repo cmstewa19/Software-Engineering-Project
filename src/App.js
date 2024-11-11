@@ -21,6 +21,10 @@ function App() {
         <Route path="/" element={<LoginPageWithNavigation />} />
         <Route path="/home" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
+        {/* <Route path="/profile" element={<MyProfile />} />
+        <Route path="/browse" element={<BrowseTrains />} />
+        <Route path="/checkout" element={<Purchase />} /> */}
+
       </Routes>
     </Router>
   );
