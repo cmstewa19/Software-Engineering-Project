@@ -1,5 +1,5 @@
 import React from 'react';
-import NavigationButton from '../components/navigationButton.js';
+import NavigationButton from '../components/navigationButton.js'; // nav button
 import Header from '../components/header.js'; // header
 
 // Home Page Component

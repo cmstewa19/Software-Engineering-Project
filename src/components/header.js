@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from '../assets/rail.png';  // Adjust the path based on where your logo is located
+import logo from '../assets/rail.png';  
 
 function Header() {
     return (
