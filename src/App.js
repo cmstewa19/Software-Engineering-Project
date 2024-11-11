@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-route
 import Home from './pages/homePage.js';
 import Login from './pages/loginPage.js';
 import Signup from './pages/signupPage.js';
+import BrowseTrains from './pages/browseTrainsPage.js';
 
 function LoginPageWithNavigation() {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ function App() {
         <Route path="/" element={<LoginPageWithNavigation />} />
         <Route path="/home" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/browse" element={<BrowseTrains />} />
         {/* <Route path="/profile" element={<MyProfile />} />
         <Route path="/browse" element={<BrowseTrains />} />
         <Route path="/checkout" element={<Purchase />} /> */}

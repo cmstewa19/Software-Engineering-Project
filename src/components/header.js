@@ -1,3 +1,4 @@
+// Header that is displayed at the top of every page
 import React from 'react';
 import logo from '../assets/rail.png';  
 
@@ -7,8 +8,7 @@ function Header() {
         {/* Header Section */}
         <header style={{
             height: '80px',
-            backgroundColor: '#28a745',
-            borderBottom: 'solid',
+            backgroundColor: '#40826D',
             display: 'flex',
             alignItems: 'center',
             padding: '10px',

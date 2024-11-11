@@ -1,3 +1,6 @@
+// takes text (the display text on the button) and path (where the website will be redirected to)
+// for example, to get to home, text = "Home"; path = "/home", button takes you to 'localhost:3000/home'
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -9,13 +12,16 @@ function NavigationButton({ text, path, style }) {
     <button
       onClick={() => navigate(path)}
       style={{
-        padding: '10px 30px',
-        fontSize: '20px',
+        width: '100%',        
+        maxWidth: '300px',       
+        padding: '10px',          
+        fontSize: '16px',            
         fontWeight: 'bold',
         fontFamily: 'Arial',
-        backgroundColor: 'white',
-        border: '2px solid dimgray',
-        borderRadius: '10px',
+        backgroundColor: 'black',
+        color: 'white',
+        border: '2px solid black',
+        borderRadius: '5px',
         ...style,
       }}
     >
@@ -27,6 +33,7 @@ function NavigationButton({ text, path, style }) {
 NavigationButton.propTypes = {
   text: PropTypes.string.isRequired,
   path: PropTypes.string.isRequired,
+  style: PropTypes.object,
 };
 
 export default NavigationButton;
