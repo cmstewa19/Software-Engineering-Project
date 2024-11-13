@@ -1,5 +1,8 @@
 import React from 'react';
 
+//import header
+import Header from '../components/header.js'; // header
+
 const MyTickets = () => {
   const ticket = {
     id: "0001",
