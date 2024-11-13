@@ -37,11 +37,11 @@ const MyTickets = () => {
 
       {/* Ticket Info Section */}
       <div style={styles.ticketInfo}>
-        <h2 style={styles.ticketTitle}>Ticket #{ticket.id}</h2>
+        <h2 style={styles.ticketTitle}>Ticket ID:{ticket.id}</h2>
         <p><strong>Origin:</strong> {ticket.origin}</p>
         <p><strong>Destination:</strong> {ticket.destination}</p>
         <p><strong>Departure Date:</strong> {ticket.departureDate}</p>
-        <p><strong>Departure Time:</strong> {ticket.departureTime}</p>
+        <p><strong>Arrival Date:</strong> {ticket.arrivalDate}</p>
       </div>     
 
       {/* QR Code Image Section */}
