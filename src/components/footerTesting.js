@@ -10,6 +10,7 @@ function Footer() {
       <NavigationButton text="Signup" path="/signup" />
       <NavigationButton text="Browse Trains" path="/browse" />
       <NavigationButton text="Profile" path="/profile" />
+      <NavigationButton text="Checkout" path="/checkout" />
     </footer>
   );
 }

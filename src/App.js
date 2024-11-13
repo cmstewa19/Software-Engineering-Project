@@ -7,6 +7,7 @@ import Login from './pages/loginPage.js';
 import Signup from './pages/signupPage.js';
 import BrowseTrains from './pages/browseTrainsPage.js';
 import Profile from "./pages/profilePage.js";
+import PurchaseTickets from './pages/purchaseTickets.js';
 import Footer from "./components/footerTesting.js"
 
 function LoginPageWithNavigation() {
@@ -28,6 +29,7 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/browse" element={<BrowseTrains />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/checkout" element={<PurchaseTickets />} />
           </Routes>
         </main>
         <Footer /> 
