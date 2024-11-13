@@ -9,12 +9,14 @@ const app = express(); //instance of our app
 const port = 3000; //local hosting port
 
 //middleware to handle JSON and URL-encoded data
+// Middleware
+app.use(cors());
 app.use(express.json());
 // Enable CORS for all routes
 app.use(cors());
 
 //connect to  database
-const db = //initialize database here
+const db = new sqlite3.Database('.../server/tickets.db');
 
 // Create a payment intent using stripe
 app.post('/create-payment-intent', async (req, res) => {
@@ -72,26 +74,47 @@ app.get('TICKETID PATHL OCATION', (req, res) => {
     });
 });
 
-//app endpoint to generate QR code for a ticket
-app.get('TICKETID', (req, res) => {
-    const ticketId = REQ PARAMS FOR TICKETSID;
-    db.get('SELECT TICKET FROM TICKETID', [ticketId], (err, row) => {
-        if (err || !row) { //check for exisitng ticket
-            return res.status(404).json({ error: 'Ticket not found' }); //report no exisitng ticket
+//endpoint to generate QR code for a ticket
+app.get('/api/qr/:ticketId', (req, res) => {
+    const ticketId = req.params.ticketId; // Get ticket ID from request parameters
+
+    // Fetch ticket data from database based on ticket ID
+    db.get('SELECT * FROM tickets WHERE id = ?', [ticketId], (err, row) => {
+        if (err || !row) {
+            return res.status(404).json({ error: 'Ticket not found' }); // Error if no ticket found
         }
-        //generate QR code containing ticket info 
+
+        // Generate QR code with ticket info
         QRCode.toDataURL(JSON.stringify(row), (err, url) => {
-            if (err) { //catch error
-                return res.status(500).json({ error: 'Failed to generate QR code' }); //report error
+            if (err) {
+                return res.status(500).json({ error: 'Failed to generate QR code' });
             }
-            res.json({ qrCode: url }); //report qrCode
+            res.json({ qrCode: url }); // Return QR code data URL
+        });
+    });
+});
+*/
+
+// Endpoint to generate QR code for a ticket
+app.get('/api/qr/:ticketId', (req, res) => {
+    const ticketId = req.params.ticketId;
+
+    // Fetch ticket data from the database
+    db.get('SELECT * FROM tickets WHERE id = ?', [ticketId], (err, row) => {
+        if (err || !row) {
+            return res.status(404).json({ error: 'Ticket not found' });
+        }
+
+        // Generate a QR code containing the ticket info
+        QRCode.toDataURL(JSON.stringify(row), (err, url) => {
+            if (err) {
+                return res.status(500).json({ error: 'Failed to generate QR code' });
+            }
+            res.json({ qrCode: url });  // Return the QR code data URL
         });
     });
 });
 
-
-
-*/
 
 // Start server
 app.listen(port, () => {
