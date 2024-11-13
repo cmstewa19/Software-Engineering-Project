@@ -34,6 +34,21 @@ const MyTickets = () => {
         <p>QR Code Image Here</p>
         <div style={styles.qrCodePlaceholder}></div>
       </div>
+
+      {/* Button to return to home */}
+      <br />
+      <div className="d-flex justify-content-center mt-3">
+        <NavigationButton
+          text="Return to Home"
+          path="/home"
+          style={{
+            backgroundColor: 'black',
+            color: 'white',
+            border: '1px solid black',
+          }}
+        />
+      </div>
+      <br />
     </div>
   );
 };
