@@ -1,4 +1,5 @@
 // Form for login page
+// Will need to take input in the future
 
 import React from 'react';
 import NavigationButton from '../components/navigationButton';
