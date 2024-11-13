@@ -6,10 +6,6 @@ import NavigationButton from '../components/navigationButton.js'; // nav button
 import Header from '../components/header.js'; // header
 
 const MyTickets = () => {
-
-  //add header
-  {/* Header component */}
-  <Header />
   
   const ticket = {
     id: "0001",
@@ -21,12 +17,9 @@ const MyTickets = () => {
 
   return (
     <div style={styles.container}>
-      {/* Header Section */}
-      <header style={styles.header}>
-        <img src="logo_placeholder.png" alt="App Logo" style={styles.logo} />
-        <h1 style={styles.appName}>App Name</h1>
-        <button style={styles.profileButton}>My Profile</button>
-      </header>
+      //add header
+      {/* Header component */}
+      <Header />
 
       {/* Ticket Info Section */}
       <div style={styles.ticketInfo}>
