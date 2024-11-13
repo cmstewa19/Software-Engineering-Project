@@ -36,7 +36,7 @@ function Home() {
         {/* Navigate to My Tickets */}
         <NavigationButton 
           text="My Tickets" 
-          path="/my-tickets" 
+          path="/myTickets" 
           style={{
             padding: '10px 20px',
             fontSize: '18px',
