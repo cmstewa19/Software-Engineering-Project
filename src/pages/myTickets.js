@@ -17,7 +17,6 @@ const MyTickets = () => {
 
   return (
     <div style={styles.container}>
-      //add header
       {/* Header component */}
       <Header />
 
