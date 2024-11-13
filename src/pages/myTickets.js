@@ -6,7 +6,8 @@ import NavigationButton from '../components/navigationButton.js'; // nav button
 import Header from '../components/header.js'; // header
 
 const MyTickets = () => {
-  
+
+  const [qrCodeUrl, setQrCodeUrl] = useState(null);
   const ticket = {
     id: "0001",
     origin: "Sioux Falls",
@@ -14,6 +15,13 @@ const MyTickets = () => {
     departureDate: "1/1/2024 10:00A",
     arrivalDate: "1/10/2024 10:00A"
   };
+
+  useEffect(() => {
+    // Fetch QR code from the server
+    axios.get(`/api/qr/${ticket.id}`)
+      .then(response => setQrCodeUrl(response.data.qrCode))
+      .catch(error => console.error('Error fetching QR code:', error));
+  }, [ticket.id]);
 
   return (
     <div style={{ overflow: 'hidden', height: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -46,8 +54,12 @@ const MyTickets = () => {
 
       {/* QR Code Image Section */}
       <div style={styles.qrCodeContainer}>
-        <p>QR Code Image Here</p>
-        <div style={styles.qrCodePlaceholder}></div>
+        <p>QR Code Image:</p>
+        {qrCodeUrl ? (
+          <img src={qrCodeUrl} alt="QR Code" style={styles.qrCodeImage} />
+        ) : (
+          <p>Loading QR Code...</p>
+        )}
       </div>
     </div>
   );
@@ -114,10 +126,6 @@ const styles = {
     height: '200px',
     border: '1px solid #ddd',
     borderRadius: '8px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#f4f4f4',
     marginTop: '10px',
   }
 };
