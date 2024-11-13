@@ -20,15 +20,6 @@ const MyTickets = () => {
       {/* Header component */}
       <Header />
 
-      {/* Ticket Info Section */}
-      <div style={styles.ticketInfo}>
-        <h2 style={styles.ticketTitle}>Ticket #{ticket.id}</h2>
-        <p><strong>Origin:</strong> {ticket.origin}</p>
-        <p><strong>Destination:</strong> {ticket.destination}</p>
-        <p><strong>Departure Date:</strong> {ticket.departureDate}</p>
-        <p><strong>Departure Time:</strong> {ticket.departureTime}</p>
-      </div>
-
       {/* Button to return to home */}
       <br />
       <div className="d-flex justify-content-center mt-3">
@@ -43,7 +34,15 @@ const MyTickets = () => {
         />
       </div>
       <br />
-          
+
+      {/* Ticket Info Section */}
+      <div style={styles.ticketInfo}>
+        <h2 style={styles.ticketTitle}>Ticket #{ticket.id}</h2>
+        <p><strong>Origin:</strong> {ticket.origin}</p>
+        <p><strong>Destination:</strong> {ticket.destination}</p>
+        <p><strong>Departure Date:</strong> {ticket.departureDate}</p>
+        <p><strong>Departure Time:</strong> {ticket.departureTime}</p>
+      </div>     
 
       {/* QR Code Image Section */}
       <div style={styles.qrCodeContainer}>
