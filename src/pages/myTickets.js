@@ -18,11 +18,16 @@ const MyTickets = () => {
   };
 
   useEffect(() => {
-    // Fetch QR code from the server
-    axios.get(`/api/qr/${ticket.id}`)
-      .then(response => setQrCodeUrl(response.data.qrCode))
-      .catch(error => console.error('Error fetching QR code:', error));
-  }, [ticket.id]);
+  // Fetch QR code from the server
+  axios.get(`/api/qr/${ticket.id}`)
+    .then(response => {
+      console.log(response.data); // Log the response to check the data
+      setQrCodeUrl(response.data.qrCode);
+    })
+    .catch(error => {
+      console.error('Error fetching QR code:', error);
+    });
+}, [ticket.id]);
 
   return (
     <div style={{ overflow: 'hidden', height: '100vh', display: 'flex', flexDirection: 'column' }}>
