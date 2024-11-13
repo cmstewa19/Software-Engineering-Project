@@ -32,6 +32,17 @@ function Home() {
             marginTop: '20px',
           }}
         />
+
+        {/* Navigate to My Tickets */}
+        <NavigationButton 
+          text="My Tickets" 
+          path="/my-tickets" 
+          style={{
+            padding: '10px 20px',
+            fontSize: '18px',
+            marginTop: '20px',
+          }}
+        />
     </div>
   );
 }
