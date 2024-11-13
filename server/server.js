@@ -6,10 +6,12 @@ const app = express(); //instance of our app
 const port = 3000; //local hosting port
 
 //middleware to handle JSON and URL-encoded data
+// Middleware
+app.use(cors());
 app.use(express.json());
 
 //connect to  database
-const db = //initialize database here
+const db = new sqlite3.Database('.../server/tickets.db');
 
 
 //Block of code with app endpoints for retireving tickets, not sure if we would want these here as well as the endpoint for the qrcode
@@ -61,6 +63,25 @@ app.get('/api/qr/:ticketId', (req, res) => {
 });
 */
 
+// Endpoint to generate QR code for a ticket
+app.get('/api/qr/:ticketId', (req, res) => {
+    const ticketId = req.params.ticketId;
+
+    // Fetch ticket data from the database
+    db.get('SELECT * FROM tickets WHERE id = ?', [ticketId], (err, row) => {
+        if (err || !row) {
+            return res.status(404).json({ error: 'Ticket not found' });
+        }
+
+        // Generate a QR code containing the ticket info
+        QRCode.toDataURL(JSON.stringify(row), (err, url) => {
+            if (err) {
+                return res.status(500).json({ error: 'Failed to generate QR code' });
+            }
+            res.json({ qrCode: url });  // Return the QR code data URL
+        });
+    });
+});
 
 
 // Start server
