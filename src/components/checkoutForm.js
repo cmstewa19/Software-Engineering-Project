@@ -1,4 +1,4 @@
-// CheckoutForm.js
+// CheckoutForm for payment processing
 
 /*
 When you make a payment through the front end (React) it sends a request to

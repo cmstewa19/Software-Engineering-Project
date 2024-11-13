@@ -1,5 +1,5 @@
 // takes text (the display text on the button) and path (where the website will be redirected to)
-// for example, to get to home, text = "Home"; path = "/home", button takes you to 'localhost:3000/home'
+// for example, to get to home, text = "Home"; path = "/home", button takes you to 'localhost:xxxx/home'
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
