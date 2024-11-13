@@ -40,8 +40,6 @@ app.get('TICKETID PATHL OCATION', (req, res) => {
     });
 });
 
-*/
-
 //endpoint to generate QR code for a ticket
 app.get('/api/qr/:ticketId', (req, res) => {
     const ticketId = req.params.ticketId; // Get ticket ID from request parameters
@@ -61,6 +59,9 @@ app.get('/api/qr/:ticketId', (req, res) => {
         });
     });
 });
+*/
+
+
 
 // Start server
 app.listen(port, () => {
