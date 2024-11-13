@@ -9,7 +9,7 @@ const MyTickets = () => {
 
   //add header
   {/* Header component */}
-        <Header />
+  <Header />
   
   const ticket = {
     id: "0001",
