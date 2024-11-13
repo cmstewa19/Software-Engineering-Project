@@ -6,6 +6,11 @@ import NavigationButton from '../components/navigationButton.js'; // nav button
 import Header from '../components/header.js'; // header
 
 const MyTickets = () => {
+
+  //add header
+  {/* Header component */}
+        <Header />
+  
   const ticket = {
     id: "0001",
     origin: "Sioux Falls",
