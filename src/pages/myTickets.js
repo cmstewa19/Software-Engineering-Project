@@ -17,17 +17,17 @@ const MyTickets = () => {
     arrivalDate: "1/10/2024 10:00A"
   };
 
+  // Fetch QR code from the backend server
   useEffect(() => {
-  // Fetch QR code from the server
-  axios.get(`/api/qr/${ticket.id}`)
-    .then(response => {
-      console.log(response.data); // Log the response to check the data
-      setQrCodeUrl(response.data.qrCode);
-    })
-    .catch(error => {
-      console.error('Error fetching QR code:', error);
-    });
-}, [ticket.id]);
+    axios.get(`http://localhost:3000/api/qr/${ticket.id}`)
+      .then(response => {
+        console.log(response.data); // Log response to check for correct data
+        setQrCodeUrl(response.data.qrCode);
+      })
+      .catch(error => {
+        console.error('Error fetching QR code:', error);
+      });
+  }, [ticket.id]);
 
   return (
     <div style={{ overflow: 'hidden', height: '100vh', display: 'flex', flexDirection: 'column' }}>
