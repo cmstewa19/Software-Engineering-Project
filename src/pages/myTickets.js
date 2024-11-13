@@ -11,8 +11,8 @@ const MyTickets = () => {
     id: "0001",
     origin: "Sioux Falls",
     destination: "Rapid City",
-    departureDate: "1/1/2024",
-    departureTime: "10:00A"
+    departureDate: "1/1/2024 10:00A",
+    arrivalDate: "1/10/2024 10:00A"
   };
 
   return (
