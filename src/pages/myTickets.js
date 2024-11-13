@@ -1,5 +1,5 @@
 import React from 'react';
-
+import trainPhoto from '../assets/train.jpg'; // photo for login page
 //import Nav Button
 import NavigationButton from '../components/navigationButton.js'; // nav button
 //import header
