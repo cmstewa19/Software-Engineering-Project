@@ -7,7 +7,7 @@ import Login from './pages/loginPage.js';
 import Signup from './pages/signupPage.js';
 import BrowseTrains from './pages/browseTrainsPage.js';
 import Profile from "./pages/profilePage.js";
-import MyTickets from './pages/MyTickets';
+import MyTickets from './pages/myTickets';
 
 function LoginPageWithNavigation() {
   const navigate = useNavigate();
