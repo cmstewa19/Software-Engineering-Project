@@ -29,6 +29,18 @@ function Home() {
             cursor: 'pointer'
           }}
         />
+
+        {/* Navigate to My Tickets */}
+        <NavigationButton 
+          text="My Tickets" 
+          path="/myTickets" 
+          style={{
+            padding: '10px 20px',
+            fontSize: '18px',
+            marginTop: '20px',
+          }}
+        />
+
       </div>
 
       {/* div that holds profile card */}
