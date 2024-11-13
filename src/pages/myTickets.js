@@ -29,12 +29,6 @@ const MyTickets = () => {
         <p><strong>Departure Time:</strong> {ticket.departureTime}</p>
       </div>
 
-      {/* QR Code Image Section */}
-      <div style={styles.qrCodeContainer}>
-        <p>QR Code Image Here</p>
-        <div style={styles.qrCodePlaceholder}></div>
-      </div>
-
       {/* Button to return to home */}
       <br />
       <div className="d-flex justify-content-center mt-3">
@@ -49,6 +43,13 @@ const MyTickets = () => {
         />
       </div>
       <br />
+          
+
+      {/* QR Code Image Section */}
+      <div style={styles.qrCodeContainer}>
+        <p>QR Code Image Here</p>
+        <div style={styles.qrCodePlaceholder}></div>
+      </div>
     </div>
   );
 };
