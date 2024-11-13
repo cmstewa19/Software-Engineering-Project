@@ -16,7 +16,7 @@ const MyTickets = () => {
   };
 
   return (
-    <div style={styles.container}>
+    <div style={{ overflow: 'hidden', height: '100vh', display: 'flex', flexDirection: 'column' }}>
       {/* Header component */}
       <Header />
 
