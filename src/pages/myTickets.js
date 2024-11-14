@@ -29,110 +29,81 @@ const MyTickets = () => {
       });
   }, [ticket.id]);
 
-  return (
-    <div style={{ overflow: 'hidden', height: '100vh', display: 'flex', flexDirection: 'column' }}>
-      {/* Header component */}
+ return (
+    <div style={{ overflow: 'hidden', height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <Header />
-
-      {/* Button to return to home */}
       <br />
-      <div className="d-flex justify-content-center mt-3">
-        <NavigationButton
-          text="Return to Home"
-          path="/home"
-          style={{
-            backgroundColor: 'black',
-            color: 'white',
-            border: '1px solid black',
-          }}
-        />
-      </div>
+      <NavigationButton
+        text="Return to Home"
+        path="/home"
+        style={{
+          backgroundColor: 'black',
+          color: 'white',
+          border: '1px solid black',
+        }}
+      />
       <br />
+      <div style={styles.ticketContainer}>
+        {/* Ticket Header */}
+        <div style={styles.ticketHeader}>
+          <h2 style={styles.ticketTitle}>Ticket ID: {ticket.id}</h2>
+          <div style={styles.ticketRoute}>
+            <p><strong>{ticket.origin}</strong> → <strong>{ticket.destination}</strong></p>
+          </div>
+        </div>
 
-      {/* Ticket Info Section */}
-      <div style={styles.ticketInfo}>
-        <h2 style={styles.ticketTitle}>Ticket ID:{ticket.id}</h2>
-        <p><strong>Origin:</strong> {ticket.origin}</p>
-        <p><strong>Destination:</strong> {ticket.destination}</p>
-        <p><strong>Departure Date:</strong> {ticket.departureDate}</p>
-        <p><strong>Arrival Date:</strong> {ticket.arrivalDate}</p>
-      </div>     
-
-      {/* QR Code Image Section */}
-      <div style={styles.qrCodeContainer}>
-        <p>QR Code Image:</p>
-        {qrCodeUrl ? (
-          <img src={qrCodeUrl} alt="QR Code" style={styles.qrCodeImage} />
-        ) : (
-          <p>Loading QR Code...</p>
-        )}
+        {/* Ticket Information */}
+        <div style={styles.ticketDetails}>
+          <p><strong>Departure:</strong> {ticket.departureDate}</p>
+          <p><strong>Arrival:</strong> {ticket.arrivalDate}</p>
+          {qrCodeUrl ? (
+            <img src={qrCodeUrl} alt="QR Code" style={styles.qrCodeImage} />
+          ) : (
+            <p>Loading QR Code...</p>
+          )}
+        </div>
       </div>
     </div>
   );
 };
 
 const styles = {
-  container: {
-    fontFamily: 'Arial, sans-serif',
-    margin: '20px',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    textAlign: 'left',
+  ticketContainer: {
+    width: '90%',
     maxWidth: '500px',
-    marginLeft: 'auto',
-    marginRight: 'auto'
-  },
-  header: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '100%',
-    borderBottom: '1px solid #ccc',
-    paddingBottom: '10px',
-    marginBottom: '20px'
-  },
-  logo: {
-    width: '40px',
-    height: '40px'
-  },
-  appName: {
-    fontSize: '24px',
-    fontWeight: 'bold',
-    margin: '0'
-  },
-  profileButton: {
-    backgroundColor: '#333',
-    color: '#fff',
-    padding: '8px 16px',
-    border: 'none',
-    borderRadius: '4px',
-    cursor: 'pointer'
-  },
-  ticketInfo: {
-    width: '100%',
-    padding: '20px',
-    border: '1px solid #ddd',
+    border: '2px solid #000',
     borderRadius: '8px',
-    marginBottom: '20px',
+    padding: '20px',
+    backgroundColor: '#f5f5f5',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+  },
+  ticketHeader: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderBottom: '1px solid #ddd',
+    paddingBottom: '10px',
+    marginBottom: '10px',
   },
   ticketTitle: {
-    fontSize: '24px',
+    fontSize: '20px',
     fontWeight: 'bold',
-    marginBottom: '10px'
+    color: '#333',
   },
-  qrCodeContainer: {
-    width: '100%',
+  ticketRoute: {
+    fontSize: '16px',
+    fontWeight: 'bold',
+    color: '#555',
+  },
+  ticketDetails: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
   },
-  qrCodePlaceholder: {
-    width: '200px',
-    height: '200px',
-    border: '1px solid #ddd',
-    borderRadius: '8px',
-    marginTop: '10px',
+  qrCodeImage: {
+    marginTop: '15px',
+    width: '120px',
+    height: '120px',
   }
 };
 
