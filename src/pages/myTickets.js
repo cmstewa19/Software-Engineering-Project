@@ -5,6 +5,7 @@ import trainPhoto from '../assets/train.jpg'; // photo for login page
 import NavigationButton from '../components/navigationButton.js'; // nav button
 //import header
 import Header from '../components/header.js'; // header
+import Sidebar from '../components/sidebar.js'; // sidebar
 
 const MyTickets = () => {
 
@@ -32,6 +33,8 @@ const MyTickets = () => {
  return (
     <div style={{ overflow: 'hidden', height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <Header />
+      {/* Sidebar component */}
+      <Sidebar />
       <br />
       <NavigationButton
         text="Return to Home"
