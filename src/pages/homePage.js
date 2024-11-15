@@ -10,6 +10,9 @@ function Home() {
       {/* Header component */}
       <Header />
 
+      {/* Sidebar component */}
+      <Sidebar />
+  
       {/* Profile Page Button at the top-right corner */}
       <div style={{
         position: 'absolute',
