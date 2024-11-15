@@ -32,6 +32,7 @@ function Profile() {
       {/* Sidebar component */}
       <Sidebar />
 
+    /*
       {/* Button to return to home */}
       <br />
       <div className="d-flex justify-content-center mt-3">
@@ -45,7 +46,7 @@ function Profile() {
           }}
         />
       </div>
-      <br />
+      <br /> */
 
       {/* Flex container for the main row */}
       <div className="container-fluid">
