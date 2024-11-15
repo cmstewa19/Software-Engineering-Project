@@ -12,6 +12,8 @@ function Home() {
 
       {/* Sidebar component */}
       <Sidebar />
+
+    </div>
   
       {/* Profile Page Button at the top-right corner */}
       // <div style={{
@@ -45,7 +47,7 @@ function Home() {
       //     }}
       //   />
 
-      </div>
+      
 
       {/* div that holds profile card */}
       <div className="profile-div" style={{
