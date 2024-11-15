@@ -11,7 +11,7 @@ const Sidebar = () => {
       alignItems: 'stretch',
     },
     sidebar: {
-      height: isExpanded ? '100vh' : '20vh', // Expand or collapse length
+      height: isExpanded ? '100vh' : '7vh', // Expand or collapse length
       width: isExpanded ? '250px' : '50px', // Expand or collapse width
       backgroundColor: 'black',
       color: '#40826D',
