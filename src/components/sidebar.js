@@ -35,12 +35,11 @@ const Sidebar = () => {
   return (
     <div style={styles.sidebar}>
       <div style={styles.header}>Navigation</div>
-      <Link to="/browse" style={styles.button}>Browse Trains</Link>
-      <Link to="/my-tickets" style={styles.button}>My Tickets</Link>
-      <Link to="/checkout" style={styles.button}>Checkout</Link>
-      <Link to="/profile" style={styles.button}>Profile Page</Link>
-      <Link to="/login" style={styles.button}>Login</Link>
-      <Link to="/sign-up" style={styles.button}>Sign Up</Link>
+      <Link to='./pages/browseTrainsPage.js' style={styles.button}>Browse Trains</Link>
+      <Link to='./pages/myTickets' style={styles.button}>My Tickets</Link>
+      <Link to="./pages/profilePage.js" style={styles.button}>Profile Page</Link>
+      <Link to='./pages/loginPage.js' style={styles.button}>Login</Link>
+      <Link to='./pages/signupPage.js' style={styles.button}>Sign Up</Link>
     </div>
   );
 };
