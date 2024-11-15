@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import NavigationButton from '../components/navigationButton.js';
 import Header from '../components/header.js';
+import Sidebar from '../components/sidebar.js'; // sidebar
 
 // Profile Page Component
 function Profile() {
@@ -27,6 +28,9 @@ function Profile() {
     <div>
       {/* Header component */}
       <Header />
+
+      {/* Sidebar component */}
+      <Sidebar />
 
       {/* Button to return to home */}
       <br />
