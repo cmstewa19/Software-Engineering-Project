@@ -2,3 +2,4 @@ contains credits for assets used in this project. all assets are copyright free 
 
 rail.png: <a href="https://www.flaticon.com/free-icons/train" title="train icons">Train icons created by DinosoftLabs - Flaticon</a>
 train.jpg: Photo by Chris Yang on Unsplash
+profile-icon.jpg: <a href="https://www.vecteezy.com/vector-art/5544718-profile-icon-design-vector"> profile icon created by m.masud05.m24471</a>

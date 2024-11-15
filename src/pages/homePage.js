@@ -15,31 +15,7 @@ function Home() {
         top: '35px',
         right: '40px',
         zIndex: 1000
-      }}>
-        <NavigationButton 
-          text="Profile Page" 
-          path="/profile" 
-          style={{
-            padding: '10px 20px',
-            fontSize: '18px',
-            color: '#FFF',
-            backgroundColor: 'black',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer'
-          }}
-        />
-
-        {/* Navigate to My Tickets */}
-        <NavigationButton 
-          text="My Tickets" 
-          path="/myTickets" 
-          style={{
-            padding: '10px 20px',
-            fontSize: '18px',
-            marginTop: '20px',
-          }}
-        />
+      }}>        
 
       </div>
 
@@ -70,12 +46,22 @@ function Home() {
         }}>
           <h4 className="ticket-list">List of tickets...</h4>
         </div>
+        {/* Navigate to My Tickets */}
+        <NavigationButton 
+          text="My Tickets" 
+          path="/myTickets" 
+          style={{
+            padding: '10px 20px',
+            fontSize: '18px',
+            marginTop: '20px',
+          }}
+        />
       </div>
 
       <div className="find-train-Div" style={{
         display:'flex',
         flexDirection:"column",
-        justifyContent:"space-around", 
+        justifyContent:"center", 
         marginLeft: "50%", 
         marginTop:"2%", 
         width:"40%", 
