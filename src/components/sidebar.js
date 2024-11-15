@@ -70,11 +70,12 @@ const Sidebar = () => {
 
         {/* Navigation Links */}
         <div style={styles.header}>Navigation</div>
-        <Link to='./pages/browseTrainsPage.js' style={styles.button}>Browse Trains</Link>
-        <Link to='./pages/myTickets' style={styles.button}>My Tickets</Link>
-        <Link to="./pages/profilePage.js" style={styles.button}>Profile Page</Link>
-        <Link to='./pages/loginPage.js' style={styles.button}>Login</Link>
-        <Link to='./pages/signupPage.js' style={styles.button}>Sign Up</Link>
+        Link to="/home" style={styles.button}>Home</Link>
+        <Link to="/browse" style={styles.button}>Browse Trains</Link>
+        <Link to="/myTickets" style={styles.button}>My Tickets</Link>
+        <Link to="/profile" style={styles.button}>Profile Page</Link>
+        <Link to="/" style={styles.button}>Login</Link>
+        <Link to="/signup" style={styles.button}>Sign Up</Link>
       </div>
     </div>
   );
