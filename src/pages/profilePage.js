@@ -32,23 +32,6 @@ function Profile() {
       {/* Sidebar component */}
       <Sidebar />
 
-
-      {/* Button to return to home */}
-      // <br />
-      // <div className="d-flex justify-content-center mt-3">
-      //   <NavigationButton
-      //     text="Return to Home"
-      //     path="/home"
-      //     style={{
-      //       backgroundColor: 'black',
-      //       color: 'white',
-      //       border: '1px solid black',
-      //     }}
-      //   />
-      // </div>
-      // <br /> 
-
-
       {/* Flex container for the main row */}
       <div className="container-fluid">
         <div className="row" style={{ display: 'flex' }}>
