@@ -31,7 +31,7 @@ const MyTickets = () => {
   }, [ticket.id]);
 
  return (
-    <div style={{ overflow: 'hidden', height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <div style={{ overflow: 'hidden', height: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Header />
       {/* Sidebar component */}
       <Sidebar />
