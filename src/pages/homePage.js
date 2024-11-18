@@ -95,24 +95,32 @@ function Home() {
       </div>
 
 
-      {/* Find Train Div */}
-      <div
-        className="find-train-Div"
+      <input
+        type="text"
+        placeholder="From"
         style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-around',
-          marginLeft: '50%',
-          marginTop: '2%',
-          width: '40%',
-          maxWidth: '600px',
+          width: '75%',
           padding: '10px',
+          margin: '5px',
+          fontSize: '16px',
+          border: '1px solid black',
           borderRadius: '5px',
-          backgroundColor: '#40826D',
         }}
-      >
-        <input
-
+      />
+      
+      <input
+        type="text"
+        placeholder="To"
+        style={{
+          width: '75%',
+          padding: '10px',
+          margin: '5px',
+          fontSize: '16px',
+          border: '1px solid black',
+          borderRadius: '5px',
+        }}
+      />
+      
       <div 
         className="find-train-Div" 
         style={{
@@ -128,31 +136,7 @@ function Home() {
           backgroundColor:"#40826D"
         }}
       >
-        <input 
 
-          type="text"
-          placeholder="From"
-          style={{
-            width: '75%',
-            padding: '10px',
-            margin: '5px',
-            fontSize: '16px',
-            border: '1px solid black',
-            borderRadius: '5px',
-          }}
-        />
-        <input
-          type="text"
-          placeholder="To"
-          style={{
-            width: '75%',
-            padding: '10px',
-            margin: '5px',
-            fontSize: '16px',
-            border: '1px solid black',
-            borderRadius: '5px',
-          }}
-        />
         <div>
           {/* Navigate to Browse Trains */}
           <NavigationButton
