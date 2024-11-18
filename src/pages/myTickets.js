@@ -100,6 +100,7 @@ const styles = {
     padding: "20px",
     backgroundColor: "white",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+    marginLeft: "75px",
   },
   ticketHeader: {
     display: "flex",
