@@ -63,11 +63,11 @@ const MyTickets = () => {
 const styles = {
   ticketContainer: {
     width: '90%',
-    maxWidth: '500px',
-    border: '2px solid #000',
+    maxWidth: '400px',
+    border: '5px solid #000',
     borderRadius: '8px',
     padding: '20px',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: 'white',
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
   },
   ticketHeader: {
@@ -81,17 +81,17 @@ const styles = {
   ticketTitle: {
     fontSize: '20px',
     fontWeight: 'bold',
-    color: '#333',
+    color: 'black',
   },
   ticketRoute: {
     fontSize: '16px',
     fontWeight: 'bold',
-    color: '#555',
+    color: 'black',
   },
   ticketDetails: {
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
+    alignItems: 'left',
   },
   qrCodeImage: {
     marginTop: '15px',
