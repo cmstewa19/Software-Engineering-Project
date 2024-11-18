@@ -127,7 +127,8 @@ function BrowseTrainsPage() {
       
         {/* Sidebar component */}
         <Sidebar />
-        <h1>Browse Trains</h1>
+        <h1 style={{ marginLeft: '150px' }}>Browse Trains</h1>
+
         <div style={{ overflowX: 'auto' }}>
             <table border="1" cellPadding="10" style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
