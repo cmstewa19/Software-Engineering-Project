@@ -43,9 +43,57 @@ function Home() {
             backgroundColor: '#FFFFFF',
           }}
         >
+
+      {/* Profile Page Button at the top-right corner */}
+      <div style={{
+        position: 'absolute',
+        top: '35px',
+        right: '40px',
+        zIndex: 1000
+      }}>        
+
+      </div>
+
+      {/* div that holds profile card */}
+      <div className="profile-div" style={{
+        display:'flex',
+        flexDirection:"column",
+        justifyContent:"center", 
+        float:'left',
+        width:"40%", 
+        maxWidth:"600px",
+        marginTop: "2%", 
+        marginLeft: "5%", 
+        padding:"10px", 
+        borderRadius:"5px", 
+        backgroundColor:"#40826D"
+      }}>
+
+        {/* div that holds user's tickets */}
+        <div className="ticket-div" style={{
+          display:'flex',
+          flexDirection:'column',
+          width:"95%",
+          padding:"5px",
+          border:"1px solid black",
+          borderRadius:"5px", 
+          backgroundColor:"#FFFFFF"
+        }}>
+
           <h4 className="ticket-list">List of tickets...</h4>
         </div>
+        {/* Navigate to My Tickets */}
+        <NavigationButton 
+          text="My Tickets" 
+          path="/myTickets" 
+          style={{
+            padding: '10px 20px',
+            fontSize: '18px',
+            marginTop: '20px',
+          }}
+        />
       </div>
+
 
       {/* Find Train Div */}
       <div
@@ -64,6 +112,21 @@ function Home() {
         }}
       >
         <input
+
+      <div className="find-train-Div" style={{
+        display:'flex',
+        flexDirection:"column",
+        justifyContent:"center", 
+        marginLeft: "50%", 
+        marginTop:"2%", 
+        width:"40%", 
+        maxWidth:"600px",
+        padding:"10px", 
+        borderRadius:"5px", 
+        backgroundColor:"#40826D"
+      }}>
+        <input 
+
           type="text"
           placeholder="From"
           style={{

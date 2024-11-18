@@ -1,10 +1,12 @@
+require('dotenv').config();
+
 const express = require('express'); // required node package
 const sqlite3 = require('sqlite3').verbose(); //require package
 const QRCode = require('qrcode'); //require package for the qr code generator
 const cors = require('cors'); //require cors so frontend and backend play nice
 //const bootstrap = require('bootstrap'); //require bootstrap package
 const Stripe = require('stripe'); // require stripe for payment simulation
-const stripe = Stripe('sk_test_51QKjDaKo2xrmK8G6VK9JHLkL7uKV4tK3dGPVGk7nIvWwZEXIOkPz5N79bbZ7jM0BSuv1OO77jJ0mxLcTCjQXwFgY00NodVXvIH'); // cadence's stripe auth key testing
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY); // uses your secret env key
 const app = express(); //instance of our app
 const port = 3000; //local hosting port
 
