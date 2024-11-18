@@ -1,6 +1,8 @@
 import React from 'react';
 import NavigationButton from '../components/navigationButton.js'; // nav button
 import Header from '../components/header.js'; // header
+import ArrowIcon from '../assets/arrows-icon.webp'
+
 
 // Home Page Component
 function Home() {
@@ -9,21 +11,12 @@ function Home() {
       {/* Header component */}
       <Header />
 
-      {/* Profile Page Button at the top-right corner */}
-      <div style={{
-        position: 'absolute',
-        top: '35px',
-        right: '40px',
-        zIndex: 1000
-      }}>        
-
-      </div>
-
       {/* div that holds profile card */}
       <div className="profile-div" style={{
         display:'flex',
         flexDirection:"column",
         justifyContent:"center", 
+        alignItems:'center',
         float:'left',
         width:"40%", 
         maxWidth:"600px",
@@ -44,12 +37,15 @@ function Home() {
           borderRadius:"5px", 
           backgroundColor:"#FFFFFF"
         }}>
-          <h4 className="ticket-list">List of tickets...</h4>
+          {/* div that displays the user's next 5 tickets */}
+          <div>
+
+          </div>
         </div>
         {/* Navigate to My Tickets */}
         <NavigationButton 
           text="My Tickets" 
-          path="/myTickets" 
+          path="/user-tickets" 
           style={{
             padding: '10px 20px',
             fontSize: '18px',
@@ -61,7 +57,8 @@ function Home() {
       <div className="find-train-Div" style={{
         display:'flex',
         flexDirection:"column",
-        justifyContent:"center", 
+        justifyContent:"center",
+        alignItems:'center', 
         marginLeft: "50%", 
         marginTop:"2%", 
         width:"40%", 
@@ -81,6 +78,11 @@ function Home() {
             border: '1px solid black',
             borderRadius: '5px'
         }}/>
+        <img src={ ArrowIcon }
+          style={{
+            width:"30px",
+            height:"30px",
+          }}/>
         <input 
           type="text"
           placeholder='To'
