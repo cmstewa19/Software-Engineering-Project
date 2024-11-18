@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import trainPhoto from '../assets/train.jpg'; // photo for login page
-import NavigationButton from '../components/navigationButton.js'; // nav button
-import Header from '../components/header.js'; // header
-import Sidebar from '../components/sidebar.js'; // sidebar
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Header from "../components/header.js"; // header
+import Sidebar from "../components/sidebar.js"; // sidebar
 
 const MyTickets = () => {
-  const [qrCodeUrl, setQrCodeUrl] = useState(null);
+  const [qrCodes, setQrCodes] = useState({}); // Store QR codes by ticket ID
+  const [loading, setLoading] = useState(true);
 
-  // Sample tickets for demonstration
   const tickets = [
     {
       id: "0001",
@@ -34,33 +32,55 @@ const MyTickets = () => {
   ];
 
   useEffect(() => {
-    // Replace with your backend QR code fetching logic
-    axios
-      .get(`http://localhost:3000/api/qr/${tickets[0].id}`)
-      .then((response) => {
-        console.log(response.data); // Log response to check for correct data
-        setQrCodeUrl(response.data.qrCode);
-      })
-      .catch((error) => {
-        console.error("Error fetching QR code:", error);
-      });
-  }, []);
+    const fetchQRCodes = async () => {
+      try {
+        const qrCodePromises = tickets.map((ticket) =>
+          axios
+            .get(`http://localhost:3000/api/qr/${ticket.id}`)
+            .then((response) => ({ id: ticket.id, qrCode: response.data.qrCode }))
+        );
+
+        const qrCodeData = await Promise.all(qrCodePromises);
+
+        // Map QR code URLs to ticket IDs
+        const qrCodeMap = {};
+        qrCodeData.forEach(({ id, qrCode }) => {
+          qrCodeMap[id] = qrCode;
+        });
+
+        setQrCodes(qrCodeMap);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching QR codes:", error);
+      }
+    };
+
+    fetchQRCodes();
+  }, [tickets]);
 
   return (
-    <div style={{ overflow: "hidden", height: "100vh", display: "flex", flexDirection: "column" }}>
+    <div
+      style={{
+        overflow: "hidden",
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       <Header />
       <Sidebar />
 
       {/* Ticket Container Wrapper */}
       <div style={styles.ticketsWrapper}>
-        {tickets.map((ticket, index) => (
-          <div key={index} style={styles.ticketContainer}>
+        {tickets.map((ticket) => (
+          <div key={ticket.id} style={styles.ticketContainer}>
             {/* Ticket Header */}
             <div style={styles.ticketHeader}>
               <h2 style={styles.ticketTitle}>Ticket ID: {ticket.id}</h2>
               <div style={styles.ticketRoute}>
                 <p>
-                  <strong>{ticket.origin}</strong> → <strong>{ticket.destination}</strong>
+                  <strong>{ticket.origin}</strong> →{" "}
+                  <strong>{ticket.destination}</strong>
                 </p>
               </div>
             </div>
@@ -73,10 +93,14 @@ const MyTickets = () => {
               <p>
                 <strong>Arrival:</strong> {ticket.arrivalDate}
               </p>
-              {qrCodeUrl ? (
-                <img src={qrCodeUrl} alt="QR Code" style={styles.qrCodeImage} />
-              ) : (
+              {loading || !qrCodes[ticket.id] ? (
                 <p>Loading QR Code...</p>
+              ) : (
+                <img
+                  src={qrCodes[ticket.id]}
+                  alt={`QR Code for ticket ${ticket.id}`}
+                  style={styles.qrCodeImage}
+                />
               )}
             </div>
           </div>
@@ -133,3 +157,4 @@ const styles = {
 };
 
 export default MyTickets;
+
