@@ -9,7 +9,7 @@ import BrowseTrains from './pages/browseTrainsPage.js';
 import Profile from "./pages/profilePage.js";
 import PurchaseTickets from './pages/purchaseTickets.js';
 import MyTickets from './pages/myTickets';
-import Footer from "./components/footerTesting.js"
+
 
 
 function LoginPageWithNavigation() {
@@ -34,8 +34,7 @@ function App() {
             <Route path="/checkout" element={<PurchaseTickets />} />
             <Route path ="/myTickets" element={<MyTickets />} />
           </Routes>
-        </main>
-        <Footer /> 
+        </main> 
       </div>
     </Router>
   );
