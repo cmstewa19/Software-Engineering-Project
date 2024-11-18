@@ -7,6 +7,7 @@
 import React, { useEffect, useState } from 'react';
 import { fetchTrainData } from '../services/api.js';  // import amtrack api call
 import Header from '../components/header.js'; // header
+import Sidebar from '../components/sidebar.js'; // sidebar
 
 function BrowseTrainsPage() {
   const [data, setData] = useState(null);           // store the fetched data
@@ -123,7 +124,11 @@ function BrowseTrainsPage() {
   return (
     <div>
         <Header />
-        <h1>Browse Trains</h1>
+      
+        {/* Sidebar component */}
+        <Sidebar />
+        <h1 style={{ marginLeft: '75px' }}>Browse Trains</h1>
+
         <div style={{ overflowX: 'auto' }}>
             <table border="1" cellPadding="10" style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>

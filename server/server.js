@@ -103,16 +103,21 @@ app.get('/api/qr/:ticketId', (req, res) => {
 
     // Fetch ticket data from the database
     db.get('SELECT * FROM tickets WHERE id = ?', [ticketId], (err, row) => {
-        if (err || !row) {
+        if (err) {
+            console.error("Database error:", err);
+            return res.status(500).json({ error: 'Database error' });
+        }
+        if (!row) {
             return res.status(404).json({ error: 'Ticket not found' });
         }
 
         // Generate a QR code containing the ticket info
         QRCode.toDataURL(JSON.stringify(row), (err, url) => {
             if (err) {
+                console.error("QR Code generation error:", err);
                 return res.status(500).json({ error: 'Failed to generate QR code' });
             }
-            res.json({ qrCode: url });  // Return the QR code data URL
+            res.json({ qrCode: url });  // Return the QR code as a data URL
         });
     });
 });
