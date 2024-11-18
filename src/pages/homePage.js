@@ -113,18 +113,21 @@ function Home() {
       >
         <input
 
-      <div className="find-train-Div" style={{
-        display:'flex',
-        flexDirection:"column",
-        justifyContent:"center", 
-        marginLeft: "50%", 
-        marginTop:"2%", 
-        width:"40%", 
-        maxWidth:"600px",
-        padding:"10px", 
-        borderRadius:"5px", 
-        backgroundColor:"#40826D"
-      }}>
+      <div 
+        className="find-train-Div" 
+        style={{
+          display:'flex',
+          flexDirection:"column",
+          justifyContent:"center", 
+          marginLeft: "50%", 
+          marginTop:"2%", 
+          width:"40%", 
+          maxWidth:"600px",
+          padding:"10px", 
+          borderRadius:"5px", 
+          backgroundColor:"#40826D"
+        }}
+      >
         <input 
 
           type="text"
