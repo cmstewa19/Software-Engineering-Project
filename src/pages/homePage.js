@@ -52,8 +52,6 @@ function Home() {
         zIndex: 1000
       }}>        
 
-      </div>
-
       {/* div that holds profile card */}
       <div className="profile-div" style={{
         display:'flex',
@@ -149,8 +147,8 @@ function Home() {
             }}
           />
         </div>
-      </div>
-    />
+      </>
+    
   );
 }
 
