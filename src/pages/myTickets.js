@@ -35,17 +35,7 @@ const MyTickets = () => {
       <Header />
       {/* Sidebar component */}
       <Sidebar />
-      <br />
-      <NavigationButton
-        text="Return to Home"
-        path="/home"
-        style={{
-          backgroundColor: 'black',
-          color: 'white',
-          border: '1px solid black',
-        }}
-      />
-      <br />
+     
       <div style={styles.ticketContainer}>
         {/* Ticket Header */}
         <div style={styles.ticketHeader}>
