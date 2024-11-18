@@ -33,36 +33,35 @@ const MyTickets = () => {
   ];
 
   useEffect(() => {
-    const fetchQRCodes = async () => {
-      try {
-        const qrCodePromises = tickets.map((ticket) =>
-          axios
-            .get(`http://localhost:3000/api/qr/${tickets[0].id}`)
-            .then((response) => {
-              console.log("QR Code Response:", response.data); // Debug log
-              setQrCodeUrl(response.data.qrCode);
-            })
-            .catch((error) => {
-              console.error("Error fetching QR code:", error); // Debug log for error
-            });
+  const fetchQRCodes = async () => {
+    try {
+      // Map tickets to promises and await their resolution
+      const qrCodePromises = tickets.map(async (ticket) => {
+        const response = await axios.get(`http://localhost:3000/api/qr/${ticket.id}`);
+        console.log("QR Code Response for ticket", ticket.id, ":", response.data);
+        return { id: ticket.id, qrCode: response.data.qrCode }; // Map ticket ID to QR code
+      });
 
-        const qrCodeData = await Promise.all(qrCodePromises);
+      // Await all promises
+      const qrCodeData = await Promise.all(qrCodePromises);
 
-        // Map QR code URLs to ticket IDs
-        const qrCodeMap = {};
-        qrCodeData.forEach(({ id, qrCode }) => {
-          qrCodeMap[id] = qrCode;
-        });
+      // Map QR code URLs to ticket IDs
+      const qrCodeMap = {};
+      qrCodeData.forEach(({ id, qrCode }) => {
+        qrCodeMap[id] = qrCode;
+      });
 
-        setQrCodes(qrCodeMap);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching QR codes:", error);
-      }
-    };
+      // Update state
+      setQrCodes(qrCodeMap);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching QR codes:", error);
+    }
+  };
 
-    fetchQRCodes();
-  }, [tickets]);
+  fetchQRCodes();
+}, [tickets]);
+
 
   return (
     <div
