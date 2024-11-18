@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import NavigationButton from '../components/navigationButton.js'; // nav button
 import Header from "../components/header.js"; // header
 import Sidebar from "../components/sidebar.js"; // sidebar
 
@@ -36,9 +37,14 @@ const MyTickets = () => {
       try {
         const qrCodePromises = tickets.map((ticket) =>
           axios
-            .get(`http://localhost:3000/api/qr/${ticket.id}`)
-            .then((response) => ({ id: ticket.id, qrCode: response.data.qrCode }))
-        );
+            .get(`http://localhost:3000/api/qr/${tickets[0].id}`)
+            .then((response) => {
+              console.log("QR Code Response:", response.data); // Debug log
+              setQrCodeUrl(response.data.qrCode);
+            })
+            .catch((error) => {
+              console.error("Error fetching QR code:", error); // Debug log for error
+            });
 
         const qrCodeData = await Promise.all(qrCodePromises);
 
