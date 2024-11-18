@@ -94,13 +94,13 @@ const styles = {
     padding: "20px",
   },
   ticketContainer: {
-    width: "300px", // Sets a fixed width for tickets
+    width: "400px", // Sets a fixed width for tickets
     border: "5px solid #000",
     borderRadius: "8px",
     padding: "20px",
     backgroundColor: "white",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-    marginLeft: "75px",
+    marginLeft: "50px",
   },
   ticketHeader: {
     display: "flex",
