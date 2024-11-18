@@ -44,7 +44,7 @@ const MyTickets = () => {
             })
             .catch((error) => {
               console.error("Error fetching QR code:", error); // Debug log for error
-            });
+          });
 
         const qrCodeData = await Promise.all(qrCodePromises);
 
