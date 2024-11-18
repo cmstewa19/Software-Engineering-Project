@@ -49,7 +49,7 @@ function Home() {
 
       
 
-      {/* div that holds profile card */}
+     
       <div className="profile-div" style={{
         display:'flex',
         flexDirection:"column",
