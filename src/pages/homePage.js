@@ -13,6 +13,7 @@ function Home() {
       <Header />
       <Sidebar />
 
+
       {/* div that holds profile card */}
       <div className="profile-div" style={{
         display:'flex',
@@ -57,6 +58,7 @@ function Home() {
         <NavigationButton
           text='My Tickets'
           path='/user-tickets'
+
           style={{
             padding: '10px 20px',
             fontSize: '18px',
