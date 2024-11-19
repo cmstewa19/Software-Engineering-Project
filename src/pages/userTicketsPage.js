@@ -6,6 +6,7 @@ function UserTickets() {
 
     const navigate = useNavigate();
 
+    {/* Eventually a funtion to add a row to the table */}
     function addRows() {
         const tablebody = document.getElementById('ticket-table');
         const row = document.createElement('tr');
@@ -24,9 +25,11 @@ function UserTickets() {
         <div>
             <Header />
             <Sidebar />
+            {/* table to store all of user's tickets */}
             <table id='ticket-table' border="1" cellPadding="10" style={{ width: '90%', margin: '50px', borderCollapse: 'collapse' }}>
             <thead>
-                <tr style={styles.TableHeader}>
+                {/* header row */}
+                <tr>
                     <th>Ticket ID</th>
                     <th>Origin</th>
                     <th>Destination</th>
@@ -35,6 +38,8 @@ function UserTickets() {
                 </tr>
             </thead>
             <tbody>
+                {/* static entry to figure out formatting. Once database 
+                is set up I can make a function to dynamically create a table */}
                 <tr onClick={() => navigate('/myTickets')} style={{cursor:'pointer'}}>
                     <td>0001</td>
                     <td>Sioux Falls</td>
@@ -46,24 +51,6 @@ function UserTickets() {
             </table>
         </div>
     );
-};
-
-const styles = {
-    TicketTable: {
-        width: '90%',
-        margin:'50px',
-        border:'1px solid black'
-    },
-    TableHeader: {
-        
-    },
-    TableRow: {
-        textDecoration:'none',
-        color:'black'
-    },
-    TableData: {
-
-    }
 };
 
 export default UserTickets;
