@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import NavigationButton from '../components/navigationButton.js';
 import Header from '../components/header.js';
+import Sidebar from '../components/sidebar.js'; // sidebar
 
 // Profile Page Component
 function Profile() {
@@ -28,20 +29,8 @@ function Profile() {
       {/* Header component */}
       <Header />
 
-      {/* Button to return to home */}
-      <br />
-      <div className="d-flex justify-content-center mt-3">
-        <NavigationButton
-          text="Return to Home"
-          path="/home"
-          style={{
-            backgroundColor: 'black',
-            color: 'white',
-            border: '1px solid black',
-          }}
-        />
-      </div>
-      <br />
+      {/* Sidebar component */}
+      <Sidebar />
 
       {/* Flex container for the main row */}
       <div className="container-fluid">

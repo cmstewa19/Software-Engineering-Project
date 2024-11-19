@@ -3,15 +3,15 @@ import NavigationButton from '../components/navigationButton.js'; // nav button
 import Header from '../components/header.js'; // header
 import ArrowIcon from '../assets/arrows-icon.webp'
 import { useNavigate } from 'react-router-dom';
-
+import Sidebar from '../components/sidebar.js'; // sidebar
 
 // Home Page Component
 function Home() {
   const navigate = useNavigate();
   return (
-    <div>
-      {/* Header component */}
+    <>
       <Header />
+      <Sidebar />
 
       {/* div that holds profile card */}
       <div className="profile-div" style={{
@@ -27,7 +27,7 @@ function Home() {
         padding:"10px", 
         borderRadius:"5px", 
         backgroundColor:"#40826D"
-      }}>
+        }}>
 
         {/* div that holds user's tickets */}
         <div className="ticket-div" style={{
@@ -38,8 +38,8 @@ function Home() {
           border:"1px solid black",
           borderRadius:"5px", 
           backgroundColor:"#FFFFFF"
-        }}>
-          {/* div that displays the user's next 5 tickets */}
+          }}>
+          {/* div that displays the user's next ticket */}
           <div>
             <table id='ticket-table' border="1" cellPadding="10" style={{ width: '100%', borderCollapse: 'collapse' }}>
             <caption style={{fontSize:'24px',fontWeight:'bold',margin:'5px'}}>Upcoming Ticket</caption>
@@ -54,18 +54,18 @@ function Home() {
             </table>
           </div>
         </div>
-        {/* Navigate to My Tickets */}
-        <NavigationButton 
-          text="My Tickets" 
-          path="/user-tickets" 
+        <NavigationButton
+          text='My Tickets'
+          path='/user-tickets'
           style={{
             padding: '10px 20px',
             fontSize: '18px',
-            marginTop: '20px',
-          }}
-        />
+            margin: '5px',}} />
       </div>
 
+
+
+      {/* Container for searching for trains */}
       <div className="find-train-Div" style={{
         display:'flex',
         flexDirection:"column",
@@ -78,14 +78,15 @@ function Home() {
         padding:"10px", 
         borderRadius:"5px", 
         backgroundColor:"#40826D"
-      }}>
-        <input 
+        }}>
+        {/* Input field for origin key */}
+        <input
           type="text"
-          placeholder='From'
+          placeholder="From"
           style={{
-            width:"75%",
+            width: '75%',
             padding: '10px',
-            margin:'5px',
+            margin: '5px',
             fontSize: '16px',
             border: '1px solid black',
             borderRadius: '5px'
@@ -94,14 +95,15 @@ function Home() {
           style={{
             width:"30px",
             height:"30px",
-          }}/>
-        <input 
+        }}/>
+        {/* input field for destination key */}
+        <input
           type="text"
-          placeholder='To'
+          placeholder="To"
           style={{
-            width:"75%",
+            width: '75%',
             padding: '10px',
-            margin:"5px",
+            margin: '5px',
             fontSize: '16px',
             border: '1px solid black',
             borderRadius: '5px'
@@ -109,7 +111,7 @@ function Home() {
         <div>
           {/* Navigate to Browse Trains */}
           <NavigationButton 
-            text="Search" 
+            text="Search Trains" 
             path="/browse" 
             style={{
               padding: '10px 20px',
@@ -119,8 +121,9 @@ function Home() {
           />
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
 export default Home;
+

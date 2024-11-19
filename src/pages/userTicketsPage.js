@@ -1,5 +1,6 @@
 import Header from '../components/header.js'; // header
 import { useNavigate } from 'react-router-dom';
+import Sidebar from '../components/sidebar.js'; // sidebar
 
 function UserTickets() {
 
@@ -22,6 +23,7 @@ function UserTickets() {
     return (
         <div>
             <Header />
+            <Sidebar />
             <table id='ticket-table' border="1" cellPadding="10" style={{ width: '90%', margin: '50px', borderCollapse: 'collapse' }}>
             <thead>
                 <tr style={styles.TableHeader}>
