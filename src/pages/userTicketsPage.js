@@ -1,8 +1,9 @@
 import Header from '../components/header.js'; // header
+import { useNavigate } from 'react-router-dom';
 
 function UserTickets() {
 
-    const table = 
+    const navigate = useNavigate();
 
     function addRows() {
         const tablebody = document.getElementById('ticket-table');
@@ -21,7 +22,8 @@ function UserTickets() {
     return (
         <div>
             <Header />
-            <table id='ticket-table' style={styles.TicketTable}>
+            <table id='ticket-table' border="1" cellPadding="10" style={{ width: '90%', margin: '50px', borderCollapse: 'collapse' }}>
+            <thead>
                 <tr style={styles.TableHeader}>
                     <th>Ticket ID</th>
                     <th>Origin</th>
@@ -29,22 +31,16 @@ function UserTickets() {
                     <th>Departure Time</th>
                     <th>Quantity</th>
                 </tr>
-                <tr style={styles.TableHeader}>
-                    <td>Col 1</td>
-                    <td>Col 2</td>
-                    <td>Col 3</td>
-                    <td>Col 4</td>
-                    <td>Col 5</td>
+            </thead>
+            <tbody>
+                <tr onClick={() => navigate('/myTickets')} style={{cursor:'pointer'}}>
+                    <td>0001</td>
+                    <td>Sioux Falls</td>
+                    <td>Rapid City</td>
+                    <td>1/1/2024 10:00A</td>
+                    <td>x2</td>
                 </tr>
-                <a href='/myTickets' style={styles.TableRow}>
-                    <tr style={styles.TableHeader}>
-                        <td style={styles.TableData}>001</td>
-                        <td>Sioux Falls</td>
-                        <td>Brookings</td>
-                        <td>12:00 p.m.</td>
-                        <td>x3</td>
-                    </tr>
-                </a>
+            </tbody>
             </table>
         </div>
     );
@@ -57,13 +53,11 @@ const styles = {
         border:'1px solid black'
     },
     TableHeader: {
-        border:'1px solid black'
+        
     },
     TableRow: {
-        border:'1px solid black',
         textDecoration:'none',
-        color:'black', 
-        backgroundColor:'grey'
+        color:'black'
     },
     TableData: {
 

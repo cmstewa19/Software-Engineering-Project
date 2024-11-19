@@ -2,10 +2,12 @@ import React from 'react';
 import NavigationButton from '../components/navigationButton.js'; // nav button
 import Header from '../components/header.js'; // header
 import ArrowIcon from '../assets/arrows-icon.webp'
+import { useNavigate } from 'react-router-dom';
 
 
 // Home Page Component
 function Home() {
+  const navigate = useNavigate();
   return (
     <div>
       {/* Header component */}
@@ -39,7 +41,17 @@ function Home() {
         }}>
           {/* div that displays the user's next 5 tickets */}
           <div>
-
+            <table id='ticket-table' border="1" cellPadding="10" style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <caption style={{fontSize:'24px',fontWeight:'bold',margin:'5px'}}>Upcoming Ticket</caption>
+            <tbody>
+              <tr onClick={() => navigate('/myTickets')} style={{cursor:'pointer'}}>
+              <td>Departure Time</td>
+              <td>Origin</td>
+              <td>Destination</td>
+              <td>Quantity</td>
+              </tr>
+            </tbody>
+            </table>
           </div>
         </div>
         {/* Navigate to My Tickets */}
@@ -97,7 +109,7 @@ function Home() {
         <div>
           {/* Navigate to Browse Trains */}
           <NavigationButton 
-            text="Browse Trains" 
+            text="Search" 
             path="/browse" 
             style={{
               padding: '10px 20px',

@@ -22,6 +22,7 @@ function NavigationButton({ text, path, style }) {
         color: 'white',
         border: '2px solid black',
         borderRadius: '5px',
+        cursor:'pointer',
         ...style,
       }}
     >

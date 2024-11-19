@@ -25,6 +25,7 @@ function Header() {
                 alt="Train Logo" 
                 style={{ height: '60px', marginLeft: '20px', marginRight: '20px' }} 
               />
+              
             </a>
             {/* Title */}
             <p style={{
@@ -32,7 +33,8 @@ function Header() {
               fontWeight: 'bold',  
               margin: 0,           
               fontFamily: 'Courier', 
-              marginLeft: '10px',  
+              marginLeft: '10px',
+              cursor:'default'  
             }}>
               Train Track
             </p>
