@@ -9,7 +9,7 @@ import BrowseTrains from './pages/browseTrainsPage.js';
 import Profile from "./pages/profilePage.js";
 import PurchaseTickets from './pages/purchaseTickets.js';
 import MyTickets from './pages/myTickets';
-
+import UserTickets from './pages/userTicketsPage.js'
 
 
 function LoginPageWithNavigation() {
@@ -33,6 +33,7 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/checkout" element={<PurchaseTickets />} />
             <Route path ="/myTickets" element={<MyTickets />} />
+            <Route path="/user-tickets" element={<UserTickets/>} />
           </Routes>
         </main> 
       </div>
