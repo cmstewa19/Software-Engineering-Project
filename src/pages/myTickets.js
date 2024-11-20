@@ -7,6 +7,7 @@ import Sidebar from "../components/sidebar.js"; // sidebar
 const MyTickets = ({ tickets, loading }) => {
   const [qrCodes, setQrCodes] = useState({}); // Store QR codes by ticket ID
   const [loadingQR, setLoadingQR] = useState(true); // Track QR loading state
+  const [enlargedTicketId, setEnlargedTicketId] = useState(null); // Track enlarged ticket state
 
   // Fetch QR codes on component mount
   useEffect(() => {
@@ -38,6 +39,11 @@ const MyTickets = ({ tickets, loading }) => {
     fetchQRCodes();
   }, [tickets]);
 
+  // Function to handle ticket click to enlarge/shrink
+  const handleTicketClick = (ticketId) => {
+    setEnlargedTicketId((prevId) => (prevId === ticketId ? null : ticketId)); // Toggle between enlarged and normal
+  };
+
   return (
     <div style={{ overflow: "hidden", height: "100vh", display: "flex", flexDirection: "column" }}>
       <Header />
@@ -46,7 +52,14 @@ const MyTickets = ({ tickets, loading }) => {
       <div style={styles.ticketsWrapper}>
         {loading ? <p>Loading tickets...</p> : (
           tickets.map((ticket) => (
-            <div key={ticket.id} style={styles.ticketContainer}>
+            <div 
+              key={ticket.id} 
+              style={{
+                ...styles.ticketContainer, 
+                ...(enlargedTicketId === ticket.id ? styles.enlargedTicket : {}),
+              }}
+              onClick={() => handleTicketClick(ticket.id)} // On click, toggle the enlarged state
+            >
               <div style={styles.ticketHeader}>
                 <h2 style={styles.ticketTitle}>Ticket ID: {ticket.id}</h2>
                 <div style={styles.ticketRoute}>
@@ -94,6 +107,11 @@ const styles = {
     backgroundColor: "white",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
     marginLeft: "50px",
+    transition: "transform 0.3s ease", // Smooth transition when enlarging
+  },
+  enlargedTicket: {
+    transform: "scale(1.5)", // Enlarge the ticket
+    zIndex: 1, // Ensure enlarged ticket is on top
   },
   ticketHeader: {
     display: "flex",
