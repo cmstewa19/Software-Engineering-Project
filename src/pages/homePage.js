@@ -43,6 +43,14 @@ const Home = ({ tickets, loading }) => {
           <div>
             <table id='ticket-table' border="1" cellPadding="10" style={{ width: '100%', borderCollapse: 'collapse' }}>
               <caption style={{ fontSize: '24px', fontWeight: 'bold', margin: '5px' }}>Upcoming Ticket</caption>
+              <thead>
+                <tr>
+                  <th>Departure Time</th>
+                  <th>Origin</th>
+                  <th>Destination</th>
+                  <th>Quantity</th>
+                </tr>
+              </thead>
               <tbody>
                 {!loading && tickets.length > 0 ? (
                   tickets.map((ticket) => (
