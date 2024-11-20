@@ -4,117 +4,36 @@ import NavigationButton from '../components/navigationButton.js'; // nav button
 import Header from "../components/header.js"; // header
 import Sidebar from "../components/sidebar.js"; // sidebar
 
-const MyTickets = () => {
-  const [qrCodes, setQrCodes] = useState({}); // Store QR codes by ticket ID
-  const [loading, setLoading] = useState(true);
+import React from "react";
+import Header from "../components/header.js";
+import Sidebar from "../components/sidebar.js";
 
-  const tickets = [
-    {
-      id: "0001",
-      origin: "Sioux Falls",
-      destination: "Rapid City",
-      departureDate: "1/1/2024 10:00A",
-      arrivalDate: "1/10/2024 10:00A",
-    },
-    {
-      id: "0002",
-      origin: "Omaha",
-      destination: "Lincoln",
-      departureDate: "1/2/2024 10:00A",
-      arrivalDate: "1/2/2024 12:00P",
-    },
-    {
-      id: "0003",
-      origin: "Chicago",
-      destination: "Detroit",
-      departureDate: "1/3/2024 10:00A",
-      arrivalDate: "1/3/2024 2:00P",
-    },
-  ];
-
-  useEffect(() => {
-  const fetchQRCodes = async () => {
-    try {
-      // Map tickets to promises and await their resolution
-      const qrCodePromises = tickets.map(async (ticket) => {
-        const response = await axios.get(`http://localhost:3000/api/qr/${ticket.id}`);
-        console.log("QR Code Response for ticket", ticket.id, ":", response.data);
-        return { id: ticket.id, qrCode: response.data.qrCode }; // Map ticket ID to QR code
-      });
-
-      // Await all promises
-      const qrCodeData = await Promise.all(qrCodePromises);
-
-      // Map QR code URLs to ticket IDs
-      const qrCodeMap = {};
-      qrCodeData.forEach(({ id, qrCode }) => {
-        qrCodeMap[id] = qrCode;
-      });
-
-      // Update state
-      setQrCodes(qrCodeMap);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching QR codes:", error);
-    }
-  };
-
-  fetchQRCodes();
-}, [tickets]);
-
-
+const MyTickets = ({ tickets, loading }) => {
   return (
-    <div
-      style={{
-        overflow: "hidden",
-        height: "100vh",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
+    <div style={{ overflow: "hidden", height: "100vh", display: "flex", flexDirection: "column" }}>
       <Header />
       <Sidebar />
 
-      {/* Ticket Container Wrapper */}
-      <div style={styles.ticketsWrapper}>
-        {tickets.map((ticket) => (
-          <div key={ticket.id} style={styles.ticketContainer}>
-            {/* Ticket Header */}
-            <div style={styles.ticketHeader}>
-              <h2 style={styles.ticketTitle}>Ticket ID: {ticket.id}</h2>
-              <div style={styles.ticketRoute}>
-                <p>
-                  <strong>{ticket.origin}</strong> →{" "}
-                  <strong>{ticket.destination}</strong>
-                </p>
+      <div style={{ padding: "20px" }}>
+        {loading ? <p>Loading tickets...</p> : (
+          <div>
+            {tickets.map((ticket) => (
+              <div key={ticket.id} style={{ marginBottom: "20px" }}>
+                <p><strong>{ticket.origin}</strong> → <strong>{ticket.destination}</strong></p>
+                <p><strong>Departure:</strong> {ticket.departureDate}</p>
+                <p><strong>Arrival:</strong> {ticket.arrivalDate}</p>
               </div>
-            </div>
-
-            {/* Ticket Information */}
-            <div style={styles.ticketDetails}>
-              <p>
-                <strong>Departure:</strong> {ticket.departureDate}
-              </p>
-              <p>
-                <strong>Arrival:</strong> {ticket.arrivalDate}
-              </p>
-              {loading || !qrCodes[ticket.id] ? (
-                <p>Loading QR Code...</p>
-              ) : (
-                <img
-                  src={qrCodes[ticket.id]}
-                  alt={`QR Code for ticket ${ticket.id}`}
-                  style={styles.qrCodeImage}
-                />
-              )}
-            </div>
+            ))}
           </div>
-        ))}
+        )}
       </div>
     </div>
   );
 };
 
+
+
+/*
 const styles = {
   ticketsWrapper: {
     display: "flex",
@@ -160,6 +79,6 @@ const styles = {
     height: "120px",
   },
 };
-
+*/
 export default MyTickets;
 
