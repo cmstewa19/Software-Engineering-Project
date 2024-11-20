@@ -74,7 +74,7 @@ const Home = ({ tickets, loading }) => {
         {/* Button to navigate to My Tickets */}
         <NavigationButton
           text='My Tickets'
-          path='/user-tickets'
+          path='/myTickets'
           style={{
             padding: '10px 20px',
             fontSize: '18px',
