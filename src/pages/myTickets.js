@@ -110,8 +110,9 @@ const styles = {
     transition: "transform 0.3s ease", // Smooth transition when enlarging
   },
   enlargedTicket: {
-    transform: "scale(4.0)", // Enlarge the ticket
+    transform: "scale(2.0)", // Enlarge the ticket
     zIndex: 1, // Ensure enlarged ticket is on top
+    alignItems: "center",
   },
   ticketHeader: {
     display: "flex",
