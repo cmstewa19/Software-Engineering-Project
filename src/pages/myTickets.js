@@ -4,132 +4,115 @@ import NavigationButton from '../components/navigationButton.js'; // nav button
 import Header from "../components/header.js"; // header
 import Sidebar from "../components/sidebar.js"; // sidebar
 
-const MyTickets = () => {
+const MyTickets = ({ tickets, loading }) => {
   const [qrCodes, setQrCodes] = useState({}); // Store QR codes by ticket ID
-  const [loading, setLoading] = useState(true);
+  const [loadingQR, setLoadingQR] = useState(true); // Track QR loading state
+  const [enlargedTicketId, setEnlargedTicketId] = useState(null); // Track enlarged ticket state
 
-  const tickets = [
-    {
-      id: "0001",
-      origin: "Sioux Falls",
-      destination: "Rapid City",
-      departureDate: "1/1/2024 10:00A",
-      arrivalDate: "1/10/2024 10:00A",
-    },
-    {
-      id: "0002",
-      origin: "Omaha",
-      destination: "Lincoln",
-      departureDate: "1/2/2024 10:00A",
-      arrivalDate: "1/2/2024 12:00P",
-    },
-    {
-      id: "0003",
-      origin: "Chicago",
-      destination: "Detroit",
-      departureDate: "1/3/2024 10:00A",
-      arrivalDate: "1/3/2024 2:00P",
-    },
-  ];
-
+  // Fetch QR codes on component mount
   useEffect(() => {
-  const fetchQRCodes = async () => {
-    try {
-      // Map tickets to promises and await their resolution
-      const qrCodePromises = tickets.map(async (ticket) => {
-        const response = await axios.get(`http://localhost:3000/api/qr/${ticket.id}`);
-        console.log("QR Code Response for ticket", ticket.id, ":", response.data);
-        return { id: ticket.id, qrCode: response.data.qrCode }; // Map ticket ID to QR code
-      });
+    const fetchQRCodes = async () => {
+      try {
+        // Map tickets to promises and await their resolution
+        const qrCodePromises = tickets.map(async (ticket) => {
+          const response = await axios.get(`http://localhost:3000/api/qr/${ticket.id}`);
+          return { id: ticket.id, qrCode: response.data.qrCode }; // Map ticket ID to QR code
+        });
 
-      // Await all promises
-      const qrCodeData = await Promise.all(qrCodePromises);
+        // Await all promises
+        const qrCodeData = await Promise.all(qrCodePromises);
 
-      // Map QR code URLs to ticket IDs
-      const qrCodeMap = {};
-      qrCodeData.forEach(({ id, qrCode }) => {
-        qrCodeMap[id] = qrCode;
-      });
+        // Map QR code URLs to ticket IDs
+        const qrCodeMap = {};
+        qrCodeData.forEach(({ id, qrCode }) => {
+          qrCodeMap[id] = qrCode;
+        });
 
-      // Update state
-      setQrCodes(qrCodeMap);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching QR codes:", error);
-    }
+        // Update state
+        setQrCodes(qrCodeMap);
+        setLoadingQR(false);
+      } catch (error) {
+        console.error("Error fetching QR codes:", error);
+      }
+    };
+
+    fetchQRCodes();
+  }, [tickets]);
+
+  // Function to handle ticket click to enlarge/shrink
+  const handleTicketClick = (ticketId) => {
+    setEnlargedTicketId((prevId) => (prevId === ticketId ? null : ticketId)); // Toggle between enlarged and normal
   };
 
-  fetchQRCodes();
-}, [tickets]);
-
-
   return (
-    <div
-      style={{
-        overflow: "hidden",
-        height: "100vh",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
+    <div style={{ overflow: "hidden", height: "100vh", display: "flex", flexDirection: "column" }}>
       <Header />
       <Sidebar />
 
-      {/* Ticket Container Wrapper */}
       <div style={styles.ticketsWrapper}>
-        {tickets.map((ticket) => (
-          <div key={ticket.id} style={styles.ticketContainer}>
-            {/* Ticket Header */}
-            <div style={styles.ticketHeader}>
-              <h2 style={styles.ticketTitle}>Ticket ID: {ticket.id}</h2>
-              <div style={styles.ticketRoute}>
-                <p>
-                  <strong>{ticket.origin}</strong> →{" "}
-                  <strong>{ticket.destination}</strong>
-                </p>
+        {loading ? <p>Loading tickets...</p> : (
+          tickets.map((ticket) => (
+            <div 
+              key={ticket.id} 
+              style={{
+                ...styles.ticketContainer, 
+                ...(enlargedTicketId === ticket.id ? styles.enlargedTicket : {}),
+              }}
+              onClick={() => handleTicketClick(ticket.id)} // On click, toggle the enlarged state
+            >
+              <div style={styles.ticketHeader}>
+                <h2 style={styles.ticketTitle}>Ticket ID: {ticket.id}</h2>
+                <div style={styles.ticketRoute}>
+                  <p><strong>{ticket.origin}</strong> → <strong>{ticket.destination}</strong></p>
+                </div>
+              </div>
+
+              <div style={styles.ticketDetails}>
+                <p><strong>Departure:</strong> {ticket.departureDate}</p>
+                <p><strong>Arrival:</strong> {ticket.arrivalDate}</p>
+                
+                {/* Display QR code or loading state */}
+                {loadingQR || !qrCodes[ticket.id] ? (
+                  <p>Loading QR Code...</p>
+                ) : (
+                  <img
+                    src={qrCodes[ticket.id]}
+                    alt={`QR Code for ticket ${ticket.id}`}
+                    style={styles.qrCodeImage}
+                  />
+                )}
               </div>
             </div>
-
-            {/* Ticket Information */}
-            <div style={styles.ticketDetails}>
-              <p>
-                <strong>Departure:</strong> {ticket.departureDate}
-              </p>
-              <p>
-                <strong>Arrival:</strong> {ticket.arrivalDate}
-              </p>
-              {loading || !qrCodes[ticket.id] ? (
-                <p>Loading QR Code...</p>
-              ) : (
-                <img
-                  src={qrCodes[ticket.id]}
-                  alt={`QR Code for ticket ${ticket.id}`}
-                  style={styles.qrCodeImage}
-                />
-              )}
-            </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );
 };
 
+// Styles for the ticket display
 const styles = {
   ticketsWrapper: {
     display: "flex",
-    flexWrap: "wrap", // Allows items to wrap to the next row
-    gap: "20px", // Adds spacing between tickets
+    flexWrap: "wrap",
+    gap: "20px",
     padding: "20px",
+    justifyContent: "center", // Center tickets within the wrapper
   },
   ticketContainer: {
-    width: "400px", // Sets a fixed width for tickets
+    width: "400px",
     border: "5px solid #000",
     borderRadius: "8px",
     padding: "20px",
     backgroundColor: "white",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
     marginLeft: "50px",
+    transition: "transform 0.3s ease", // Smooth transition when enlarging
+  },
+  enlargedTicket: {
+    transform: "scale(2.0)", // Enlarge the ticket
+    zIndex: 1, // Ensure enlarged ticket is on top
+    alignItems: "center",
   },
   ticketHeader: {
     display: "flex",
@@ -152,7 +135,7 @@ const styles = {
   ticketDetails: {
     display: "flex",
     flexDirection: "column",
-    alignItems: "left",
+    alignItems: "flex-start",
   },
   qrCodeImage: {
     marginTop: "15px",
@@ -162,4 +145,3 @@ const styles = {
 };
 
 export default MyTickets;
-
