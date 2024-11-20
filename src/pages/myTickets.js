@@ -49,6 +49,11 @@ const MyTickets = ({ tickets, loading }) => {
       <Header />
       <Sidebar />
 
+      <h1 style={{ marginLeft: '75px' }}>Ticket ID: {ticket.id}</h1>
+      <div style={styles.ticketDetails}>
+                <p><strong>Departure:</strong> {ticket.departureDate}</p>
+                <p><strong>Arrival:</strong> {ticket.arrivalDate}</p>
+      </div>
       <div style={styles.ticketsWrapper}>
         {loading ? <p>Loading tickets...</p> : (
           tickets.map((ticket) => (
