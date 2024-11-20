@@ -3,6 +3,7 @@ import NavigationButton from '../components/navigationButton.js';
 import Header from '../components/header.js';
 import Divider from '../components/divider.js';
 import ProfileHeader from '../components/profileHeader.js';
+//import TempIcon from '../assets/TempIcon2.jpg';
 
 // Profile Page Component
 function Profile() {
@@ -97,14 +98,6 @@ function Profile() {
           {/* Left Column & All Info Held Within It */}
           <div
             className="col-md-6 d-flex flex-column align-items-center me-3"
-
-      {/* Flex container for the main row */}
-      <div className="container-fluid">
-        <div className="row" style={{ display: 'flex' }}>
-          
-          {/* Left Column - Center Aligned with Padding, Border, and Minimum Width */}
-          <div 
-            className="col-md-6 d-flex align-items-center me-3" 
             style={{
               padding: '20px',
               border: '2px solid #40826D',
