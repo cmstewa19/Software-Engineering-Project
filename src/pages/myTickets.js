@@ -4,9 +4,6 @@ import NavigationButton from '../components/navigationButton.js'; // nav button
 import Header from "../components/header.js"; // header
 import Sidebar from "../components/sidebar.js"; // sidebar
 
-import React from "react";
-import Header from "../components/header.js";
-import Sidebar from "../components/sidebar.js";
 
 const MyTickets = ({ tickets, loading }) => {
   return (
