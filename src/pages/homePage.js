@@ -4,6 +4,8 @@ import Header from '../components/header.js'; // header
 import ArrowIcon from '../assets/arrows-icon.webp';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/sidebar.js'; // sidebar
+import QRCode from '../components/QRCode.js';
+
 
 // Home Page Component
 const Home = ({ tickets, loading }) => {
@@ -20,6 +22,7 @@ const Home = ({ tickets, loading }) => {
 
   return (
     <>
+      
       <Header />
       <Sidebar />
 
@@ -35,68 +38,43 @@ const Home = ({ tickets, loading }) => {
         marginTop: '2%',
         marginLeft: '5%',
         padding: '10px',
+        border:'1px solid black',
         borderRadius: '5px',
         backgroundColor: '#40826D',
       }}>
         {/* Ticket Display Section */}
-        <div className="ticket-div" style={{
+        <div className="ticket-div" onClick={() => navigate('/myTickets')}
+         style={{
           display: 'flex',
           flexDirection: 'column',
+          alignItems:"center",
+          cursor:"pointer",
           width: '95%',
           padding: '5px',
+          paddingBottom: "15px",
           border: '1px solid black',
           borderRadius: '5px',
-          backgroundColor: '#FFFFFF',
+          backgroundColor: '#FEFEFE',
         }}>
-          {/* Display Upcoming Ticket */}
-          <div>
-            <caption style={{ fontSize: '24px', fontWeight: 'bold', margin: '5px' }}>Upcoming Ticket:</caption>
-            <div style={styles.ticketsWrapper}>
-              {loading ? <p>Loading tickets...</p> : soonestTicket ? (
-                <div 
-                  key={soonestTicket.id} 
-                  style={{
-                    ...styles.ticketContainer,
-                  }}
-                >
-                  <div style={styles.ticketHeader}>
-                    <h2 style={styles.ticketTitle}>Ticket ID: {soonestTicket.id}</h2>
-                    <div style={styles.ticketRoute}>
-                      <p><strong>{soonestTicket.origin}</strong> → <strong>{soonestTicket.destination}</strong></p>
-                    </div>
-                  </div>
-    
-                  <div style={styles.ticketDetails}>
-                    <p><strong>Departure:</strong> {soonestTicket.departureDate}</p>
-                    <p><strong>Arrival:</strong> {soonestTicket.arrivalDate}</p>
-                    
-                    {/* Display QR code or loading state */}
-                    {loadingQR || !qrCodes[soonestTicket.id] ? (
-                      <p>Loading QR Code...</p>
-                    ) : (
-                      <img
-                        src={qrCodes[soonestTicket.id]}
-                        alt={`QR Code for ticket ${soonestTicket.id}`}
-                        style={styles.qrCodeImage}
-                      />
-                    )}
-                  </div>
-                </div>
-              ) : (
-                <p>No tickets available.</p>
-              )}
-            </div>
-          </div>
+          {tickets.length > 0 ? (
+            <reactFragment>
+              <h2>{tickets[0].origin} → {tickets[0].destination}</h2>
+              <h2>{tickets[0].departureDate}</h2>
+              <QRCode/>
+            </reactFragment>
+          ) : (
+            <h2>No tickets to display</h2>
+          )}
         </div>
         
         {/* Button to navigate to My Tickets */}
         <NavigationButton
           text='My Tickets'
-          path='/myTickets'
+          path='/user-tickets'
           style={{
             padding: '10px 20px',
             fontSize: '18px',
-            margin: '5px',
+            margin: '10px',
           }} 
         />
       </div>
@@ -112,6 +90,7 @@ const Home = ({ tickets, loading }) => {
         width: '40%',
         maxWidth: '600px',
         padding: '10px',
+        border:'1px solid black',
         borderRadius: '5px',
         backgroundColor: '#40826D',
       }}>
