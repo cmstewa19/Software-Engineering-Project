@@ -22,7 +22,7 @@ function Header() {
               src={logo} 
               onClick={() => navigate("/home")}
               alt="Train Logo" 
-              style={{ height: '60px', marginLeft: '20px', marginRight: '20px' }} 
+              style={{ height: '60px', marginLeft: '20px', marginRight: '20px', cursor:'pointer' }} 
             />
             {/* Title */}
             <p style={{

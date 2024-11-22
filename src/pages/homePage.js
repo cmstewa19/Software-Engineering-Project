@@ -22,6 +22,7 @@ const Home = ({ tickets, loading }) => {
 
   return (
     <>
+      
       <Header />
       <Sidebar />
 
@@ -55,9 +56,15 @@ const Home = ({ tickets, loading }) => {
           borderRadius: '5px',
           backgroundColor: '#FEFEFE',
         }}>
-          <h2>{tickets[0].origin} → {tickets[0].destination}</h2>
-          <h2>{tickets[0].departureDate}</h2>
-          <QRCode/>
+          {tickets.length > 0 ? (
+            <reactFragment>
+              <h2>{tickets[0].origin} → {tickets[0].destination}</h2>
+              <h2>{tickets[0].departureDate}</h2>
+              <QRCode/>
+            </reactFragment>
+          ) : (
+            <h2>No tickets to display</h2>
+          )}
         </div>
         
         {/* Button to navigate to My Tickets */}
