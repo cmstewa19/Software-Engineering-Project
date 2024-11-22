@@ -176,7 +176,6 @@ const styles = {
     padding: "20px",
     backgroundColor: "white",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-    marginLeft: "50px",
     transition: "transform 0.3s ease", // Smooth transition when enlarging
   },
   ticketHeader: {
