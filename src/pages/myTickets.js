@@ -45,55 +45,53 @@ const MyTickets = ({ tickets, loading }) => {
   };
 
   return (
-    <div style={{ overflow: "hidden", height: "100vh", display: "flex", flexDirection: "column" }}>
-      <Header />
-      <Sidebar />
+  <div style={{ overflow: "hidden", height: "100vh", display: "flex", flexDirection: "column" }}>
+    <Header />
+    <Sidebar />
 
-      <h1 style={{ marginLeft: '75px' }}>Ticket ID: {ticket.id}</h1>
-      <div style={styles.ticketDetails}>
-                <p><strong>Departure:</strong> {ticket.departureDate}</p>
-                <p><strong>Arrival:</strong> {ticket.arrivalDate}</p>
-      </div>
-      <div style={styles.ticketsWrapper}>
-        {loading ? <p>Loading tickets...</p> : (
-          tickets.map((ticket) => (
-            <div 
-              key={ticket.id} 
-              style={{
-                ...styles.ticketContainer, 
-                ...(enlargedTicketId === ticket.id ? styles.enlargedTicket : {}),
-              }}
-              onClick={() => handleTicketClick(ticket.id)} // On click, toggle the enlarged state
-            >
-              <div style={styles.ticketHeader}>
-                <h2 style={styles.ticketTitle}>Ticket ID: {ticket.id}</h2>
-                <div style={styles.ticketRoute}>
-                  <p><strong>{ticket.origin}</strong> → <strong>{ticket.destination}</strong></p>
-                </div>
-              </div>
-
-              <div style={styles.ticketDetails}>
-                <p><strong>Departure:</strong> {ticket.departureDate}</p>
-                <p><strong>Arrival:</strong> {ticket.arrivalDate}</p>
-                
-                {/* Display QR code or loading state */}
-                {loadingQR || !qrCodes[ticket.id] ? (
-                  <p>Loading QR Code...</p>
-                ) : (
-                  <img
-                    src={qrCodes[ticket.id]}
-                    alt={`QR Code for ticket ${ticket.id}`}
-                    style={styles.qrCodeImage}
-                  />
-                )}
+    {/* Tickets Wrapper */}
+    <div style={styles.ticketsWrapper}>
+      {loading ? (
+        <p>Loading tickets...</p>
+      ) : (
+        tickets.map((ticket) => (
+          <div 
+            key={ticket.id} 
+            style={{
+              ...styles.ticketContainer, 
+              ...(enlargedTicketId === ticket.id ? styles.enlargedTicket : {}),
+            }}
+            onClick={() => handleTicketClick(ticket.id)} // On click, toggle the enlarged state
+          >
+            <div style={styles.ticketHeader}>
+              <h2 style={styles.ticketTitle}>Ticket ID: {ticket.id}</h2>
+              <div style={styles.ticketRoute}>
+                <p><strong>{ticket.origin}</strong> → <strong>{ticket.destination}</strong></p>
               </div>
             </div>
-          ))
-        )}
-      </div>
+
+            <div style={styles.ticketDetails}>
+              <p><strong>Departure:</strong> {ticket.departureDate}</p>
+              <p><strong>Arrival:</strong> {ticket.arrivalDate}</p>
+
+              {/* Display QR code or loading state */}
+              {loadingQR || !qrCodes[ticket.id] ? (
+                <p>Loading QR Code...</p>
+              ) : (
+                <img
+                  src={qrCodes[ticket.id]}
+                  alt={`QR Code for ticket ${ticket.id}`}
+                  style={styles.qrCodeImage}
+                />
+              )}
+            </div>
+          </div>
+        ))
+      )}
     </div>
-  );
-};
+  </div>
+);
+
 
 // Styles for the ticket display
 const styles = {
