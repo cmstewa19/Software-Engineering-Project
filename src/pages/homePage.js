@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import NavigationButton from '../components/navigationButton.js'; // nav button
 import Header from '../components/header.js'; // header
 import ArrowIcon from '../assets/arrows-icon.webp';
@@ -9,7 +9,16 @@ import QRCode from '../components/QRCode.js';
 
 // Home Page Component
 const Home = ({ tickets, loading }) => {
+  const [qrCodes, setQrCodes] = useState({}); // Store QR codes by ticket ID
+  const [loadingQR, setLoadingQR] = useState(true); // Track QR loading state
   const navigate = useNavigate();
+
+  // Find the ticket with the soonest departure date
+  const soonestTicket = !loading && tickets.length > 0 
+    ? tickets.reduce((earliest, current) => {
+        return new Date(current.departureDate) < new Date(earliest.departureDate) ? current : earliest;
+      }, tickets[0])
+    : null;
 
   return (
     <>
@@ -123,5 +132,52 @@ const Home = ({ tickets, loading }) => {
   );
 };
 
-export default Home;
+// Styles for the ticket display
+const styles = {
+  ticketsWrapper: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "20px",
+    padding: "20px",
+    justifyContent: "center", // Center tickets within the wrapper
+  },
+  ticketContainer: {
+    width: "400px",
+    border: "5px solid #000",
+    borderRadius: "8px",
+    padding: "20px",
+    backgroundColor: "white",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+    transition: "transform 0.3s ease", // Smooth transition when enlarging
+  },
+  ticketHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    borderBottom: "1px solid #ddd",
+    paddingBottom: "10px",
+    marginBottom: "10px",
+  },
+  ticketTitle: {
+    fontSize: "20px",
+    fontWeight: "bold",
+    color: "black",
+  },
+  ticketRoute: {
+    fontSize: "16px",
+    fontWeight: "bold",
+    color: "black",
+  },
+  ticketDetails: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
+  },
+  qrCodeImage: {
+    marginTop: "15px",
+    width: "120px",
+    height: "120px",
+  },
+};
 
+export default Home;
