@@ -48,6 +48,7 @@ const Home = ({ tickets, loading }) => {
           display: 'flex',
           flexDirection: 'column',
           alignItems:"center",
+          justifyContent:"center",
           cursor:"pointer",
           width: '95%',
           padding: '5px',
@@ -57,11 +58,11 @@ const Home = ({ tickets, loading }) => {
           backgroundColor: '#FEFEFE',
         }}>
           {tickets.length > 0 ? (
-            <reactFragment>
+            <div style={{display:"flex",alignItems:"center",flexDirection:"column"}}>
               <h2>{tickets[0].origin} → {tickets[0].destination}</h2>
               <h2>{tickets[0].departureDate}</h2>
-              <QRCode/>
-            </reactFragment>
+              <QRCode />
+            </div>
           ) : (
             <h2>No tickets to display</h2>
           )}
