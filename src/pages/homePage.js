@@ -1,16 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import NavigationButton from '../components/navigationButton.js'; // nav button
 import Header from '../components/header.js'; // header
 import ArrowIcon from '../assets/arrows-icon.webp';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/sidebar.js'; // sidebar
+import QRCode from '../components/QRCode.js';
+
 
 // Home Page Component
 const Home = ({ tickets, loading }) => {
+  const [qrCodes, setQrCodes] = useState({}); // Store QR codes by ticket ID
+  const [loadingQR, setLoadingQR] = useState(true); // Track QR loading state
   const navigate = useNavigate();
+
+  // Find the ticket with the soonest departure date
+  const soonestTicket = !loading && tickets.length > 0 
+    ? tickets.reduce((earliest, current) => {
+        return new Date(current.departureDate) < new Date(earliest.departureDate) ? current : earliest;
+      }, tickets[0])
+    : null;
 
   return (
     <>
+      
       <Header />
       <Sidebar />
 
@@ -26,59 +38,43 @@ const Home = ({ tickets, loading }) => {
         marginTop: '2%',
         marginLeft: '5%',
         padding: '10px',
+        border:'1px solid black',
         borderRadius: '5px',
         backgroundColor: '#40826D',
       }}>
         {/* Ticket Display Section */}
-        <div className="ticket-div" style={{
+        <div className="ticket-div" onClick={() => navigate('/myTickets')}
+         style={{
           display: 'flex',
           flexDirection: 'column',
+          alignItems:"center",
+          cursor:"pointer",
           width: '95%',
           padding: '5px',
+          paddingBottom: "15px",
           border: '1px solid black',
           borderRadius: '5px',
-          backgroundColor: '#FFFFFF',
+          backgroundColor: '#FEFEFE',
         }}>
-          {/* Display Upcoming Ticket */}
-          <div>
-            <table id='ticket-table' border="1" cellPadding="10" style={{ width: '100%', borderCollapse: 'collapse' }}>
-              <caption style={{ fontSize: '24px', fontWeight: 'bold', margin: '5px' }}>Upcoming Ticket</caption>
-              <thead>
-                <tr>
-                  <th>Departure Time</th>
-                  <th>Origin</th>
-                  <th>Destination</th>
-                  <th>Quantity</th>
-                </tr>
-              </thead>
-              <tbody>
-                {!loading && tickets.length > 0 ? (
-                  tickets.map((ticket) => (
-                    <tr key={ticket.id} onClick={() => navigate('/myTickets')} style={{ cursor: 'pointer' }}>
-                      <td>{ticket.departureDate}</td>
-                      <td>{ticket.origin}</td>
-                      <td>{ticket.destination}</td>
-                      <td>1</td> {/* Assuming Quantity is always 1 */}
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="4">Loading tickets...</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+          {tickets.length > 0 ? (
+            <reactFragment>
+              <h2>{tickets[0].origin} → {tickets[0].destination}</h2>
+              <h2>{tickets[0].departureDate}</h2>
+              <QRCode/>
+            </reactFragment>
+          ) : (
+            <h2>No tickets to display</h2>
+          )}
         </div>
         
         {/* Button to navigate to My Tickets */}
         <NavigationButton
           text='My Tickets'
-          path='/myTickets'
+          path='/user-tickets'
           style={{
             padding: '10px 20px',
             fontSize: '18px',
-            margin: '5px',
+            margin: '10px',
           }} 
         />
       </div>
@@ -94,6 +90,7 @@ const Home = ({ tickets, loading }) => {
         width: '40%',
         maxWidth: '600px',
         padding: '10px',
+        border:'1px solid black',
         borderRadius: '5px',
         backgroundColor: '#40826D',
       }}>
@@ -142,5 +139,52 @@ const Home = ({ tickets, loading }) => {
   );
 };
 
-export default Home;
+// Styles for the ticket display
+const styles = {
+  ticketsWrapper: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "20px",
+    padding: "20px",
+    justifyContent: "center", // Center tickets within the wrapper
+  },
+  ticketContainer: {
+    width: "400px",
+    border: "5px solid #000",
+    borderRadius: "8px",
+    padding: "20px",
+    backgroundColor: "white",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+    transition: "transform 0.3s ease", // Smooth transition when enlarging
+  },
+  ticketHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    borderBottom: "1px solid #ddd",
+    paddingBottom: "10px",
+    marginBottom: "10px",
+  },
+  ticketTitle: {
+    fontSize: "20px",
+    fontWeight: "bold",
+    color: "black",
+  },
+  ticketRoute: {
+    fontSize: "16px",
+    fontWeight: "bold",
+    color: "black",
+  },
+  ticketDetails: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
+  },
+  qrCodeImage: {
+    marginTop: "15px",
+    width: "120px",
+    height: "120px",
+  },
+};
 
+export default Home;
