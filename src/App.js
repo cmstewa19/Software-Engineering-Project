@@ -71,7 +71,7 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/checkout" element={<PurchaseTickets />} />
             <Route path="/myTickets" element={<MyTickets tickets={tickets} loading={loading} />} />
-            <Route path="/user-tickets" element={<UserTickets />} />
+            <Route path="/user-tickets" element={<UserTickets tickets={tickets} loading={loading} />} />
           </Routes>
         </main> 
       </div>

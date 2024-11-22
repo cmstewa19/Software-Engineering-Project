@@ -4,6 +4,8 @@ import Header from '../components/header.js'; // header
 import ArrowIcon from '../assets/arrows-icon.webp';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/sidebar.js'; // sidebar
+import QRCode from '../components/QRCode.js';
+
 
 // Home Page Component
 const Home = ({ tickets, loading }) => {
@@ -26,59 +28,37 @@ const Home = ({ tickets, loading }) => {
         marginTop: '2%',
         marginLeft: '5%',
         padding: '10px',
+        border:'1px solid black',
         borderRadius: '5px',
         backgroundColor: '#40826D',
       }}>
         {/* Ticket Display Section */}
-        <div className="ticket-div" style={{
+        <div className="ticket-div" onClick={() => navigate('/myTickets')}
+         style={{
           display: 'flex',
           flexDirection: 'column',
+          alignItems:"center",
+          cursor:"pointer",
           width: '95%',
           padding: '5px',
+          paddingBottom: "15px",
           border: '1px solid black',
           borderRadius: '5px',
-          backgroundColor: '#FFFFFF',
+          backgroundColor: '#FEFEFE',
         }}>
-          {/* Display Upcoming Ticket */}
-          <div>
-            <table id='ticket-table' border="1" cellPadding="10" style={{ width: '100%', borderCollapse: 'collapse' }}>
-              <caption style={{ fontSize: '24px', fontWeight: 'bold', margin: '5px' }}>Upcoming Ticket</caption>
-              <thead>
-                <tr>
-                  <th>Departure Time</th>
-                  <th>Origin</th>
-                  <th>Destination</th>
-                  <th>Quantity</th>
-                </tr>
-              </thead>
-              <tbody>
-                {!loading && tickets.length > 0 ? (
-                  tickets.map((ticket) => (
-                    <tr key={ticket.id} onClick={() => navigate('/myTickets')} style={{ cursor: 'pointer' }}>
-                      <td>{ticket.departureDate}</td>
-                      <td>{ticket.origin}</td>
-                      <td>{ticket.destination}</td>
-                      <td>1</td> {/* Assuming Quantity is always 1 */}
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="4">Loading tickets...</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+          <h2>{tickets[0].origin} → {tickets[0].destination}</h2>
+          <h2>{tickets[0].departureDate}</h2>
+          <QRCode/>
         </div>
         
         {/* Button to navigate to My Tickets */}
         <NavigationButton
           text='My Tickets'
-          path='/myTickets'
+          path='/user-tickets'
           style={{
             padding: '10px 20px',
             fontSize: '18px',
-            margin: '5px',
+            margin: '10px',
           }} 
         />
       </div>
@@ -94,6 +74,7 @@ const Home = ({ tickets, loading }) => {
         width: '40%',
         maxWidth: '600px',
         padding: '10px',
+        border:'1px solid black',
         borderRadius: '5px',
         backgroundColor: '#40826D',
       }}>

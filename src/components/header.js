@@ -18,15 +18,12 @@ function Header() {
             justifyContent:'space-between'
         }}>
           <div style={{display:'flex'}}>
-            <a href='/home'>
-              {/* Logo */}
-              <img 
-                src={logo} 
-                alt="Train Logo" 
-                style={{ height: '60px', marginLeft: '20px', marginRight: '20px' }} 
-              />
-              
-            </a>
+            <img 
+              src={logo} 
+              onClick={() => navigate("/home")}
+              alt="Train Logo" 
+              style={{ height: '60px', marginLeft: '20px', marginRight: '20px' }} 
+            />
             {/* Title */}
             <p style={{
               fontSize: '3rem',    
