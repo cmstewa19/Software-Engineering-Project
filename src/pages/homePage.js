@@ -11,6 +11,13 @@ const Home = ({ tickets, loading }) => {
   const [loadingQR, setLoadingQR] = useState(true); // Track QR loading state
   const navigate = useNavigate();
 
+  // Find the ticket with the soonest departure date
+  const soonestTicket = !loading && tickets.length > 0 
+    ? tickets.reduce((earliest, current) => {
+        return new Date(current.departureDate) < new Date(earliest.departureDate) ? current : earliest;
+      }, tickets[0])
+    : null;
+
   return (
     <>
       <Header />
@@ -45,38 +52,38 @@ const Home = ({ tickets, loading }) => {
           <div>
             <caption style={{ fontSize: '24px', fontWeight: 'bold', margin: '5px' }}>Upcoming Ticket:</caption>
             <div style={styles.ticketsWrapper}>
-              {loading ? <p>Loading tickets...</p> : (
-                tickets.map((ticket) => (
-                  <div 
-                    key={ticket.id} 
-                    style={{
-                      ...styles.ticketContainer,
-                    }}
-                  >
-                    <div style={styles.ticketHeader}>
-                      <h2 style={styles.ticketTitle}>Ticket ID: {ticket.id}</h2>
-                      <div style={styles.ticketRoute}>
-                        <p><strong>{ticket.origin}</strong> → <strong>{ticket.destination}</strong></p>
-                      </div>
-                    </div>
-      
-                    <div style={styles.ticketDetails}>
-                      <p><strong>Departure:</strong> {ticket.departureDate}</p>
-                      <p><strong>Arrival:</strong> {ticket.arrivalDate}</p>
-                      
-                      {/* Display QR code or loading state */}
-                      {loadingQR || !qrCodes[ticket.id] ? (
-                        <p>Loading QR Code...</p>
-                      ) : (
-                        <img
-                          src={qrCodes[ticket.id]}
-                          alt={`QR Code for ticket ${ticket.id}`}
-                          style={styles.qrCodeImage}
-                        />
-                      )}
+              {loading ? <p>Loading tickets...</p> : soonestTicket ? (
+                <div 
+                  key={soonestTicket.id} 
+                  style={{
+                    ...styles.ticketContainer,
+                  }}
+                >
+                  <div style={styles.ticketHeader}>
+                    <h2 style={styles.ticketTitle}>Ticket ID: {soonestTicket.id}</h2>
+                    <div style={styles.ticketRoute}>
+                      <p><strong>{soonestTicket.origin}</strong> → <strong>{soonestTicket.destination}</strong></p>
                     </div>
                   </div>
-                ))
+    
+                  <div style={styles.ticketDetails}>
+                    <p><strong>Departure:</strong> {soonestTicket.departureDate}</p>
+                    <p><strong>Arrival:</strong> {soonestTicket.arrivalDate}</p>
+                    
+                    {/* Display QR code or loading state */}
+                    {loadingQR || !qrCodes[soonestTicket.id] ? (
+                      <p>Loading QR Code...</p>
+                    ) : (
+                      <img
+                        src={qrCodes[soonestTicket.id]}
+                        alt={`QR Code for ticket ${soonestTicket.id}`}
+                        style={styles.qrCodeImage}
+                      />
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <p>No tickets available.</p>
               )}
             </div>
           </div>
