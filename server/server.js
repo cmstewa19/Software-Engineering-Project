@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(cors());
 
 //connect to  database
-const db = new sqlite3.Database('.../server/tickets.db');
+//const db = new sqlite3.Database('.../server/tickets.db');
 
 // Create a payment intent using stripe
 app.post('/create-payment-intent', async (req, res) => {
