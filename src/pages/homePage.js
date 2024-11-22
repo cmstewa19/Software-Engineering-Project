@@ -7,6 +7,8 @@ import Sidebar from '../components/sidebar.js'; // sidebar
 
 // Home Page Component
 const Home = ({ tickets, loading }) => {
+  const [qrCodes, setQrCodes] = useState({}); // Store QR codes by ticket ID
+  const [loadingQR, setLoadingQR] = useState(true); // Track QR loading state
   const navigate = useNavigate();
 
   return (
