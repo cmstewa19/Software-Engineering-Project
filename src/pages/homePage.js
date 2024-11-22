@@ -41,33 +41,43 @@ const Home = ({ tickets, loading }) => {
         }}>
           {/* Display Upcoming Ticket */}
           <div>
-            <table id='ticket-table' border="1" cellPadding="10" style={{ width: '100%', borderCollapse: 'collapse' }}>
-              <caption style={{ fontSize: '24px', fontWeight: 'bold', margin: '5px' }}>Upcoming Ticket</caption>
-              <thead>
-                <tr>
-                  <th>Departure Time</th>
-                  <th>Origin</th>
-                  <th>Destination</th>
-                  <th>Quantity</th>
-                </tr>
-              </thead>
-              <tbody>
-                {!loading && tickets.length > 0 ? (
+            <caption style={{ fontSize: '24px', fontWeight: 'bold', margin: '5px' }}>Upcoming Ticket:</caption>
+              <div style={styles.ticketsWrapper}>
+                {loading ? <p>Loading tickets...</p> : (
                   tickets.map((ticket) => (
-                    <tr key={ticket.id} onClick={() => navigate('/myTickets')} style={{ cursor: 'pointer' }}>
-                      <td>{ticket.departureDate}</td>
-                      <td>{ticket.origin}</td>
-                      <td>{ticket.destination}</td>
-                      <td>1</td> {/* Assuming Quantity is always 1 */}
-                    </tr>
+                    <div 
+                      key={ticket.id} 
+                      style={{
+                        ...styles.ticketContainer,
+                      }}
+                    >
+                      <div style={styles.ticketHeader}>
+                        <h2 style={styles.ticketTitle}>Ticket ID: {ticket.id}</h2>
+                        <div style={styles.ticketRoute}>
+                          <p><strong>{ticket.origin}</strong> → <strong>{ticket.destination}</strong></p>
+                        </div>
+                      </div>
+        
+                      <div style={styles.ticketDetails}>
+                        <p><strong>Departure:</strong> {ticket.departureDate}</p>
+                        <p><strong>Arrival:</strong> {ticket.arrivalDate}</p>
+                        
+                        {/* Display QR code or loading state */}
+                        {loadingQR || !qrCodes[ticket.id] ? (
+                          <p>Loading QR Code...</p>
+                        ) : (
+                          <img
+                            src={qrCodes[ticket.id]}
+                            alt={`QR Code for ticket ${ticket.id}`}
+                            style={styles.qrCodeImage}
+                          />
+                        )}
+                      </div>
+                    </div>
                   ))
-                ) : (
-                  <tr>
-                    <td colSpan="4">Loading tickets...</td>
-                  </tr>
                 )}
-              </tbody>
-            </table>
+              </div>
+            </div>
           </div>
         </div>
         
@@ -140,6 +150,55 @@ const Home = ({ tickets, loading }) => {
       </div>
     </>
   );
+};
+
+// Styles for the ticket display
+const styles = {
+  ticketsWrapper: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "20px",
+    padding: "20px",
+    justifyContent: "center", // Center tickets within the wrapper
+  },
+  ticketContainer: {
+    width: "400px",
+    border: "5px solid #000",
+    borderRadius: "8px",
+    padding: "20px",
+    backgroundColor: "white",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+    marginLeft: "50px",
+    transition: "transform 0.3s ease", // Smooth transition when enlarging
+  },
+  ticketHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    borderBottom: "1px solid #ddd",
+    paddingBottom: "10px",
+    marginBottom: "10px",
+  },
+  ticketTitle: {
+    fontSize: "20px",
+    fontWeight: "bold",
+    color: "black",
+  },
+  ticketRoute: {
+    fontSize: "16px",
+    fontWeight: "bold",
+    color: "black",
+  },
+  ticketDetails: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
+  },
+  qrCodeImage: {
+    marginTop: "15px",
+    width: "120px",
+    height: "120px",
+  },
 };
 
 export default Home;
