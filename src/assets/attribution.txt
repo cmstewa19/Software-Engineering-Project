@@ -1,4 +1,4 @@
-contains credits for assets used in this project. all assets are copyright free for use with attribution.
+> contains credits for assets used in this project. all assets are copyright free for use with attribution.
 
 rail.png: <a href="https://www.flaticon.com/free-icons/train" title="train icons">Train icons created by DinosoftLabs - Flaticon</a>
 train.jpg: Photo by Chris Yang on Unsplash
