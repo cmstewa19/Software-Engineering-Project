@@ -10,6 +10,8 @@ import Profile from "./pages/profilePage.js";
 import PurchaseTickets from './pages/purchaseTickets.js';
 import MyTickets from './pages/myTickets';
 import UserTickets from './pages/userTicketsPage.js'
+import TrainInfoPage from './pages/trainInfoPage.js'; 
+
 
 function LoginPageWithNavigation() {
   const navigate = useNavigate();
@@ -70,8 +72,13 @@ function App() {
             <Route path="/browse" element={<BrowseTrains />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/checkout" element={<PurchaseTickets />} />
+
+            {/* Tickets */}
             <Route path="/myTickets" element={<MyTickets tickets={tickets} loading={loading} />} />
             <Route path="/user-tickets" element={<UserTickets tickets={tickets} loading={loading} />} />
+
+            {/* Train details page */}
+            <Route path="/train/:trainCode" element={<TrainInfoPage />} />
           </Routes>
         </main> 
       </div>

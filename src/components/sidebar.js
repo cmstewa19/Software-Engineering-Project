@@ -76,6 +76,7 @@ const Sidebar = () => {
         <Link to="/profile" style={styles.button}>Profile Page</Link>
         <Link to="/" style={styles.button}>Login</Link>
         <Link to="/signup" style={styles.button}>Sign Up</Link>
+        <Link to="/checkout" style={styles.button}>Checkout</Link>
       </div>
     </div>
   );
