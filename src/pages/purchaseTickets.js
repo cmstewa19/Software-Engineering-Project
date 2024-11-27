@@ -76,8 +76,8 @@ const handlePaymentChange = (e) => {
   const handleExpDateChange = (e) => {
     const dateInput = e.target.value;
     const regex = /^[01][0-9]\/[0-9]{2}$/;
-    setDateNumber(codeDate);
-    setIsDateValid(regex.test(codeDate));
+    setDateNumber(dateInput);
+    setIsDateValid(regex.test(dateInput));
   };
 
   // Remove item from cart
