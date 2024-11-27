@@ -28,8 +28,45 @@ function PurchaseTicketsPage() {
     const paymentType = e.target.value;
     setSelectedPayment(paymentType);
 
-    if (paymentType === "Credit Card") {
-      setPaymentImage(paymentImage1);
+    if (paymentType === "New Credit Card") {
+      // Function to get the MII (Major Industry Identifier)
+      const getMII = (e) => {
+        return getIssuer(e.substring(0, 1));
+      }
+
+      // Function to determine the card issuer based on the MII
+      function getIssuer(mii) {
+        let issuer;
+        switch (mii) {
+          case "3":
+            issuer = "American Express";
+            break;
+          case "4":
+            issuer = "Visa";
+            break;
+          case "5":
+            issuer = "MasterCard";
+            break;
+          case "6":
+            issuer = "Discover";
+            break;
+          default:
+            issuer = "Invalid MII";
+        }
+        return issuer;
+      }
+
+      if (issuer == "Visa") {
+        setPaymentImage(paymentImage1);
+      } else if (issuer == "American Express") {
+        setPaymentImage(paymentImage3);
+      } else if (issuer == "Discover") {
+        setPaymentImage(paymentImage4);
+      } else if (issuer == "MasterCard") {
+        setPaymentImage(paymentImage5);
+      } else {
+      setPaymentImage(null);
+      };
     } else if (paymentType === "PayPal") {
       setPaymentImage(paymentImage2);
     } else {
@@ -118,7 +155,8 @@ function PurchaseTicketsPage() {
             }}
           >
             <option value="">Select Payment Option</option>
-            <option value="Credit Card">Credit Card</option>
+            <option value="Credit Card">New Credit Card</option>
+            <option value="Credit Card">Saved Credit Card - Visa ****</option>
             <option value="PayPal">PayPal</option>
           </select>
           {paymentImage && (
