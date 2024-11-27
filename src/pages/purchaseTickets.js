@@ -26,35 +26,47 @@ function PurchaseTicketsPage() {
   const [dateNumber, setDateNumber] = useState("");
   const [isDateValid, setIsDateValid] = useState(true);
 
-  // Updated handlePaymentChange
-const handlePaymentChange = (e) => {
-  const paymentType = e.target.value;
-  setSelectedPayment(paymentType);
+  // Utility function to get card issuer
+  const getIssuer = (cardNumber) => {
+    if (!cardNumber) return null;
+    if (/^4/.test(cardNumber)) return "Visa";
+    if (/^5[1-5]/.test(cardNumber)) return "MasterCard";
+    if (/^3[47]/.test(cardNumber)) return "American Express";
+    if (/^6(?:011|5)/.test(cardNumber)) return "Discover";
+    return null;
+  };
 
-  if (paymentType === "New Credit Card") {
-    const issuer = getIssuer(cardNumber[0]); // Use the first digit of the card number
-    switch (issuer) {
-      case "Visa":
-        setPaymentImage(paymentImage1);
-        break;
-      case "American Express":
-        setPaymentImage(paymentImage3);
-        break;
-      case "Discover":
-        setPaymentImage(paymentImage4);
-        break;
-      case "MasterCard":
-        setPaymentImage(paymentImage5);
-        break;
-      default:
-        setPaymentImage(null);
+  // Update payment image when card number changes
+  useEffect(() => {
+    if (selectedPayment === "New Credit Card") {
+      const issuer = getIssuer(cardNumber);
+      switch (issuer) {
+        case "Visa":
+          setPaymentImage(paymentImage1);
+          break;
+        case "American Express":
+          setPaymentImage(paymentImage3);
+          break;
+        case "Discover":
+          setPaymentImage(paymentImage4);
+          break;
+        case "MasterCard":
+          setPaymentImage(paymentImage5);
+          break;
+        default:
+          setPaymentImage(null);
+      }
+    } else if (selectedPayment === "PayPal") {
+      setPaymentImage(paymentImage2);
+    } else {
+      setPaymentImage(null);
     }
-  } else if (paymentType === "PayPal") {
-    setPaymentImage(paymentImage2);
-  } else {
-    setPaymentImage(null);
-  }
-};
+  }, [cardNumber, selectedPayment]);
+
+  // Handle payment option change
+  const handlePaymentChange = (e) => {
+    setSelectedPayment(e.target.value);
+  };
 
   // Regex validation for card number
   const handleCardNumberChange = (e) => {
@@ -64,7 +76,7 @@ const handlePaymentChange = (e) => {
     setIsCardValid(regex.test(cardInput));
   };
 
-  // Regex validation for security date number
+  // Regex validation for security code
   const handleSecurityCodeChange = (e) => {
     const codeInput = e.target.value;
     const regex = /^[0-9]{3}$/;
@@ -72,7 +84,7 @@ const handlePaymentChange = (e) => {
     setIsCodeValid(regex.test(codeInput));
   };
 
-  // Regex validation for exp date number
+  // Regex validation for expiration date
   const handleExpDateChange = (e) => {
     const dateInput = e.target.value;
     const regex = /^[01][0-9]\/[0-9]{2}$/;
@@ -92,207 +104,136 @@ const handlePaymentChange = (e) => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
 
-return (
-  <div
-    style={{
-      overflowY: "auto", // Allow vertical scrolling
-      height: "100vh",   // Make it full height of the viewport
-      display: "flex",
-      flexDirection: "column",
-    }}
-  >
-    <Header />
-    <Sidebar />
-
+  return (
     <div
       style={{
+        overflowY: "auto", // Allow vertical scrolling
+        height: "100vh", // Make it full height of the viewport
         display: "flex",
-        justifyContent: "space-around",
-        marginTop: "20px",
+        flexDirection: "column",
       }}
     >
-      {/* Left Section - Payment */}
+      <Header />
+      <Sidebar />
       <div
         style={{
-          width: "40%",
-          maxWidth: "600px",
-          margin: "20px",
-          padding: "20px",
-          border: "1px solid black",
-          borderRadius: "5px",
-          backgroundColor: "#40826D",
-          color: "white",
+          display: "flex",
+          justifyContent: "space-around",
+          marginTop: "20px",
         }}
       >
-        <h2>Payment Details</h2>
-        {/* Payment details section */}
-        <select
-          value={selectedPayment}
-          onChange={handlePaymentChange}
+        {/* Left Section - Payment */}
+        <div
           style={{
-            width: "100%",
-            padding: "10px",
-            margin: "10px 0",
-            fontSize: "16px",
+            width: "40%",
+            maxWidth: "600px",
+            margin: "20px",
+            padding: "20px",
+            border: "1px solid black",
             borderRadius: "5px",
+            backgroundColor: "#40826D",
+            color: "white",
           }}
         >
-          <option value="">Select Payment Option</option>
-          <option value="Credit Card">New Credit Card</option>
-          <option value="Credit Card">Saved Credit Card - Visa ****</option>
-          <option value="PayPal">PayPal</option>
-        </select>
-        {paymentImage && (
-          <img
-            src={paymentImage}
-            alt="Payment Method"
-            style={{
-              width: "80px",
-              height: "40px",
-              margin: "10px 0",
-            }}
-          />
-        )}
-
-        {/* Card input fields */}
-        <div>
-          <label htmlFor="card-number" style={{ display: "block" }}>
-            Card Number
-          </label>
-          <input
-            id="card-number"
-            type="text"
-            value={cardNumber}
-            onChange={handleCardNumberChange}
+          <h2>Payment Details</h2>
+          <select
+            value={selectedPayment}
+            onChange={handlePaymentChange}
             style={{
               width: "100%",
               padding: "10px",
               margin: "10px 0",
-              borderRadius: "5px",
-            }}
-          />
-          {!isCardValid && (
-            <p style={{ color: "red", fontSize: "12px" }}>Invalid card number</p>
-          )}
-        </div>
-
-        <div>
-          <label htmlFor="security-code" style={{ display: "block" }}>
-            Security Code
-          </label>
-          <input
-            id="security-code"
-            type="text"
-            value={codeNumber}
-            onChange={handleSecurityCodeChange}
-            style={{
-              width: "100%",
-              padding: "10px",
-              margin: "10px 0",
-              borderRadius: "5px",
-            }}
-          />
-          {!isCodeValid && (
-            <p style={{ color: "red", fontSize: "12px" }}>
-              Invalid security code
-            </p>
-          )}
-        </div>
-
-        <div>
-          <label htmlFor="exp-date" style={{ display: "block" }}>
-            Expiration Date (mm/yy)
-          </label>
-          <input
-            id="exp-date"
-            type="text"
-            value={dateNumber}
-            onChange={handleExpDateChange}
-            style={{
-              width: "100%",
-              padding: "10px",
-              margin: "10px 0",
-              borderRadius: "5px",
-            }}
-          />
-          {!isDateValid && (
-            <p style={{ color: "red", fontSize: "12px" }}>
-              Invalid expiration date
-            </p>
-          )}
-        </div>
-      </div>
-
-      {/* Right Section - Cart */}
-      <div
-        style={{
-          width: "40%",
-          maxWidth: "600px",
-          margin: "20px",
-          padding: "20px",
-          border: "1px solid black",
-          borderRadius: "5px",
-          backgroundColor: "#40826D",
-          color: "white",
-        }}
-      >
-        <h2>Your Cart</h2>
-        {cart.map((item, index) => (
-          <div
-            key={index}
-            style={{
-              backgroundColor: "#FEFEFE",
-              color: "black",
-              padding: "10px",
-              margin: "10px 0",
+              fontSize: "16px",
               borderRadius: "5px",
             }}
           >
-            <p>Ticket #{item.ticketId}</p>
-            <p>{item.details}</p>
-            <p>${item.price}</p>
-            <button
-              onClick={() => handleRemoveFromCart(index)}
+            <option value="">Select Payment Option</option>
+            <option value="New Credit Card">New Credit Card</option>
+            <option value="Saved Credit Card">Saved Credit Card - Visa ****</option>
+            <option value="PayPal">PayPal</option>
+          </select>
+          {paymentImage && (
+            <img
+              src={paymentImage}
+              alt="Payment Method"
               style={{
-                backgroundColor: "#D9534F",
-                color: "white",
-                border: "none",
-                padding: "5px 10px",
-                borderRadius: "5px",
-                cursor: "pointer",
+                width: "80px",
+                height: "40px",
+                margin: "10px 0",
               }}
-            >
-              Remove
-            </button>
+            />
+          )}
+          {/* Card input fields */}
+          <div>
+            <label htmlFor="card-number" style={{ display: "block" }}>
+              Card Number
+            </label>
+            <input
+              id="card-number"
+              type="text"
+              value={cardNumber}
+              onChange={handleCardNumberChange}
+              style={{
+                width: "100%",
+                padding: "10px",
+                margin: "10px 0",
+                borderRadius: "5px",
+              }}
+            />
+            {!isCardValid && (
+              <p style={{ color: "red", fontSize: "12px" }}>
+                Invalid card number
+              </p>
+            )}
           </div>
-        ))}
-          
-        <h3>Order Summary</h3>
-        <p>Subtotal: ${cart.reduce((acc, item) => acc + item.price, 0)}</p>
-        <p>Handling Fee: $3.99</p>
-        <p>Tax: $2.99</p>
-        <h4>
-          Total: $
-          {(
-            cart.reduce((acc, item) => acc + item.price, 0) +
-            3.99 +
-            2.99
-          ).toFixed(2)}
-        </h4>
-        <NavigationButton
-          text="Back to Browse"
-          path="/browse"
-          style={{
-            padding: "10px 20px",
-            fontSize: "18px",
-            marginTop: "10px",
-            display: "block",
-            textAlign: "center",
-          }}
-        />
+          <div>
+            <label htmlFor="security-code" style={{ display: "block" }}>
+              Security Code
+            </label>
+            <input
+              id="security-code"
+              type="text"
+              value={codeNumber}
+              onChange={handleSecurityCodeChange}
+              style={{
+                width: "100%",
+                padding: "10px",
+                margin: "10px 0",
+                borderRadius: "5px",
+              }}
+            />
+            {!isCodeValid && (
+              <p style={{ color: "red", fontSize: "12px" }}>
+                Invalid security code
+              </p>
+            )}
+          </div>
+          <div>
+            <label htmlFor="exp-date" style={{ display: "block" }}>
+              Expiration Date (mm/yy)
+            </label>
+            <input
+              id="exp-date"
+              type="text"
+              value={dateNumber}
+              onChange={handleExpDateChange}
+              style={{
+                width: "100%",
+                padding: "10px",
+                margin: "10px 0",
+                borderRadius: "5px",
+              }}
+            />
+            {!isDateValid && (
+              <p style={{ color: "red", fontSize: "12px" }}>
+                Invalid expiration date
+              </p>
+            )}
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-);
-};
+  );
+}
+
 export default PurchaseTicketsPage;
