@@ -6,6 +6,9 @@ import Header from "../components/header.js"; // Header
 import Sidebar from "../components/sidebar.js"; // Sidebar
 import paymentImage2 from "../assets/paypal_PNG9.png"; // Example image
 import paymentImage1 from "../assets/Visa-Logo-2014-present.jpg"; // Example image
+import paymentImage3 from "../assets/American-Express-Logo.png"; // Example image
+import paymentImage4 from "../assets/Discover-Bank-logo-review-featured-image.png"; // Example image
+import paymentImage5 from "../assets/Mastercard-Logo.png"; // Example image
 import NavigationButton from "../components/navigationButton.js";
 
 function PurchaseTicketsPage() {
