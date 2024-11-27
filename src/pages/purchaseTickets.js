@@ -221,19 +221,6 @@ return (
             </p>
           )}
         </div>
-
-        <h3>Order Summary</h3>
-        <p>Subtotal: ${cart.reduce((acc, item) => acc + item.price, 0)}</p>
-        <p>Handling Fee: $3.99</p>
-        <p>Tax: $2.99</p>
-        <h4>
-          Total: $
-          {(
-            cart.reduce((acc, item) => acc + item.price, 0) +
-            3.99 +
-            2.99
-          ).toFixed(2)}
-        </h4>
       </div>
 
       {/* Right Section - Cart */}
@@ -279,6 +266,19 @@ return (
             </button>
           </div>
         ))}
+          
+        <h3>Order Summary</h3>
+        <p>Subtotal: ${cart.reduce((acc, item) => acc + item.price, 0)}</p>
+        <p>Handling Fee: $3.99</p>
+        <p>Tax: $2.99</p>
+        <h4>
+          Total: $
+          {(
+            cart.reduce((acc, item) => acc + item.price, 0) +
+            3.99 +
+            2.99
+          ).toFixed(2)}
+        </h4>
         <NavigationButton
           text="Back to Browse"
           path="/browse"
