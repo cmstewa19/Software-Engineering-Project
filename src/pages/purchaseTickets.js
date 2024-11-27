@@ -26,56 +26,35 @@ function PurchaseTicketsPage() {
   const [dateNumber, setDateNumber] = useState("");
   const [isDateValid, setIsDateValid] = useState(true);
 
-  // Handle payment type selection
-  const handlePaymentChange = (e) => {
-    const paymentType = e.target.value;
-    setSelectedPayment(paymentType);
+  // Updated handlePaymentChange
+const handlePaymentChange = (e) => {
+  const paymentType = e.target.value;
+  setSelectedPayment(paymentType);
 
-    if (paymentType === "New Credit Card") {
-      // Function to get the MII (Major Industry Identifier)
-      const getMII = (e) => {
-        return getIssuer(e.substring(0, 1));
-      }
-
-      // Function to determine the card issuer based on the MII
-      function getIssuer(mii) {
-        let issuer;
-        switch (mii) {
-          case "3":
-            issuer = "American Express";
-            break;
-          case "4":
-            issuer = "Visa";
-            break;
-          case "5":
-            issuer = "MasterCard";
-            break;
-          case "6":
-            issuer = "Discover";
-            break;
-          default:
-            issuer = "Invalid MII";
-        }
-        return issuer;
-      }
-
-      if (issuer == "Visa") {
+  if (paymentType === "New Credit Card") {
+    const issuer = getIssuer(cardNumber[0]); // First digit of card
+    switch (issuer) {
+      case "Visa":
         setPaymentImage(paymentImage1);
-      } else if (issuer == "American Express") {
+        break;
+      case "American Express":
         setPaymentImage(paymentImage3);
-      } else if (issuer == "Discover") {
+        break;
+      case "Discover":
         setPaymentImage(paymentImage4);
-      } else if (issuer == "MasterCard") {
+        break;
+      case "MasterCard":
         setPaymentImage(paymentImage5);
-      } else {
-      setPaymentImage(null);
-      };
-    } else if (paymentType === "PayPal") {
-      setPaymentImage(paymentImage2);
-    } else {
-      setPaymentImage(null);
+        break;
+      default:
+        setPaymentImage(null);
     }
-  };
+  } else if (paymentType === "PayPal") {
+    setPaymentImage(paymentImage2);
+  } else {
+    setPaymentImage(null);
+  }
+};
 
   // Regex validation for card number
   const handleCardNumberChange = (e) => {
