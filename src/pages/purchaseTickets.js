@@ -32,7 +32,7 @@ const handlePaymentChange = (e) => {
   setSelectedPayment(paymentType);
 
   if (paymentType === "New Credit Card") {
-    const issuer = getIssuer(cardNumber[0]); // First digit of card
+    const issuer = getIssuer(cardNumber[0]); // Use the first digit of the card number
     switch (issuer) {
       case "Visa":
         setPaymentImage(paymentImage1);
@@ -75,7 +75,7 @@ const handlePaymentChange = (e) => {
   // Regex validation for exp date number
   const handleExpDateChange = (e) => {
     const dateInput = e.target.value;
-    const regex = /^[01][0-9]/[0-9][0-9]$/;
+    const regex = /^[01][0-9]\/[0-9]{2}$/;
     setDateNumber(codeDate);
     setIsDateValid(regex.test(codeDate));
   };
