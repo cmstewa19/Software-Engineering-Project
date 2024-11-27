@@ -18,6 +18,10 @@ function PurchaseTicketsPage() {
   const [paymentImage, setPaymentImage] = useState(null);
   const [cardNumber, setCardNumber] = useState("");
   const [isCardValid, setIsCardValid] = useState(true);
+  const [codeNumber, setCodeNumber] = useState("");
+  const [isCodeValid, setIsCodeValid] = useState(true);
+  const [dateNumber, setDateNumber] = useState("");
+  const [isDateValid, setIsDateValid] = useState(true);
 
   // Handle payment type selection
   const handlePaymentChange = (e) => {
@@ -39,6 +43,22 @@ function PurchaseTicketsPage() {
     const regex = /^[0-9]{16}$/;
     setCardNumber(cardInput);
     setIsCardValid(regex.test(cardInput));
+  };
+
+  // Regex validation for security date number
+  const handleSecurityCodeChange = (e) => {
+    const codeInput = e.target.value;
+    const regex = /^[0-9]{3}$/;
+    setCodeNumber(codeInput);
+    setIsCodeValid(regex.test(codeInput));
+  };
+
+  // Regex validation for exp date number
+  const handleExpDateChange = (e) => {
+    const dateInput = e.target.value;
+    const regex = /^[01][0-9]/[0-9][0-9]$/;
+    setDateNumber(codeDate);
+    setIsDateValid(regex.test(codeDate));
   };
 
   // Remove item from cart
@@ -112,6 +132,7 @@ function PurchaseTicketsPage() {
               }}
             />
           )}
+            
           <div>
             <label htmlFor="card-number" style={{ display: "block" }}>
               Card Number
@@ -134,6 +155,53 @@ function PurchaseTicketsPage() {
               </p>
             )}
           </div>
+
+            <div>
+            <label htmlFor="security-code" style={{ display: "block" }}>
+              Security Code
+            </label>
+            <input
+              id="security-code"
+              type="text"
+              value={securityCode}
+              onChange={handleSecurityCodeChange}
+              style={{
+                width: "100%",
+                padding: "10px",
+                margin: "10px 0",
+                borderRadius: "5px",
+              }}
+            />
+            {!isCodeValid && (
+              <p style={{ color: "red", fontSize: "12px" }}>
+                Invalid secuirty code
+              </p>
+            )}
+          </div>
+
+          <div>
+            <label htmlFor="exp-date" style={{ display: "block" }}>
+              Expiration Date (mm/yy)
+            </label>
+            <input
+              id="exp-date"
+              type="text"
+              value={expDate}
+              onChange={handleExpDateChange}
+              style={{
+                width: "100%",
+                padding: "10px",
+                margin: "10px 0",
+                borderRadius: "5px",
+              }}
+            />
+            {!isDateValid && (
+              <p style={{ color: "red", fontSize: "12px" }}>
+                Invalid expiration date
+              </p>
+            )}
+          </div>
+              
           <h3>Order Summary</h3>
           <p>Subtotal: ${cart.reduce((acc, item) => acc + item.price, 0)}</p>
           <p>Handling Fee: $3.99</p>
