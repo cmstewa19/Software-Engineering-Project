@@ -183,7 +183,7 @@ const handlePaymentChange = (e) => {
             <input
               id="security-code"
               type="text"
-              value={securityCode}
+              value={codeNumber}
               onChange={handleSecurityCodeChange}
               style={{
                 width: "100%",
@@ -206,7 +206,7 @@ const handlePaymentChange = (e) => {
             <input
               id="exp-date"
               type="text"
-              value={expDate}
+              value={dateNumber}
               onChange={handleExpDateChange}
               style={{
                 width: "100%",
