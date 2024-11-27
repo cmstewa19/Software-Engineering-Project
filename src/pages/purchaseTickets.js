@@ -294,4 +294,5 @@ return (
     </div>
   </div>
 );
-};
+
+export default PurchaseTicketsPage;
