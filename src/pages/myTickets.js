@@ -17,6 +17,62 @@ const MyTickets = ({ tickets, loading }) => {
       <Header />
       <Sidebar />
 
+      <div style={styles.ticketHeader}>
+        <h2 style={styles.ticketTitle}>Ticket ID: {ticket.id}</h2>
+        <div style={styles.ticketRoute}>
+          <p>
+            <strong>{ticket.origin}</strong> →{" "}
+            <strong>{ticket.destination}</strong>
+          </p>
+        </div>
+      </div>
+
+      <div style={styles.ticketDetails}>
+        <p>
+          <strong>Departure:</strong> {ticket.departureDate}
+        </p>
+        <p>
+          <strong>Arrival:</strong> {ticket.arrivalDate}
+        </p>
+
+        {/* Display QR code or loading state */}
+        <QRCode/>
+
+        
+      </div>
+
+
+      {/* Profile Card Section */}
+      <div className="profile-div" style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        float: 'right',
+        width: '40%',
+        maxWidth: '600px',
+        marginTop: '2%',
+        marginLeft: '5%',
+        padding: '10px',
+        border:'1px solid black',
+        borderRadius: '5px',
+        backgroundColor: '#40826D',
+      }}>
+        {/* Ticket Display Section */}
+        <div className="ticket-div" onClick={() => navigate('/myTickets')}
+         style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems:"center",
+          cursor:"pointer",
+          width: '95%',
+          padding: '5px',
+          paddingBottom: "15px",
+          border: '1px solid black',
+          borderRadius: '5px',
+          backgroundColor: '#FEFEFE',
+        }}>
+
       {/* Tickets Wrapper */}
       <div style={styles.ticketsWrapper}>
         {loading ? (
