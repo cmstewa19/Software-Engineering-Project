@@ -2,7 +2,7 @@ import React from "react";
 import NavigationButton from "../components/navigationButton.js"; // nav button
 import Header from "../components/header.js"; // header
 import Sidebar from "../components/sidebar.js"; // sidebar
-import QRCode from "qrcode.react"; // Assuming you're using this library for QR code generation
+import QRCode from "../components/QRCode.js"; // Assuming you're using this library for QR code generation
 
 const MyTickets = ({ tickets, loading }) => {
   return (
