@@ -83,10 +83,10 @@ const MyTickets = ({ tickets, loading }) => {
 	            <div
 	              key={ticket.id}
 	              style={{
-	                ...styles.ticketContainer,
-	                  : {}),
-	              }}
-	              onClick={() => handleTicketClick(ticket.id)} // CHANGE TO NAVIGATE TOO QR CODE
+			  ...styles.ticketContainer,
+			}}
+
+	              //onClick={() => handleTicketClick(ticket.id)} // CHANGE TO NAVIGATE TOO QR CODE
 	            >
 	              <div style={styles.ticketHeader}>
 	                <h2 style={styles.ticketTitle}>Ticket ID: {ticket.id}</h2>
