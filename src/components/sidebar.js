@@ -72,7 +72,7 @@ const Sidebar = () => {
         <div style={styles.header}>Navigation</div>
         <Link to="/home" style={styles.button}>Home</Link>
         <Link to="/browse" style={styles.button}>Browse Trains</Link>
-        <Link to="/myTickets" style={styles.button}>My Tickets</Link>
+        <Link to="/user-tickets" style={styles.button}>My Tickets</Link>
         <Link to="/profile" style={styles.button}>Profile Page</Link>
         <Link to="/" style={styles.button}>Login</Link>
         <Link to="/signup" style={styles.button}>Sign Up</Link>
