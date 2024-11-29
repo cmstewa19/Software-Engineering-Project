@@ -9,7 +9,7 @@ const MyTickets = ({ tickets, loading }) => {
     <div
       style={{
         overflow: "auto", //scroll
-        height: "100vh", 
+        height: "100vh",
         display: "flex",
         flexDirection: "column",
       }}
@@ -38,26 +38,26 @@ const MyTickets = ({ tickets, loading }) => {
           }}
         >
           {/* Ticket info Display Section */}
-        <div 
-         style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems:"center",
-          cursor:"pointer",
-          width: '95%',
-          padding: '5px',
-          paddingBottom: "15px",
-          border: '1px solid black',
-          borderRadius: '5px',
-          backgroundColor: '#FEFEFE',
-        }}
-      >
-           
-          <h2 style={styles.ticketTitle}>Ticket ID: {tickets[0]?.id}</h2>
-          <h2 style={styles.ticketTitle}>Origin: {tickets[0]?.origin}</h2>
-          <h2 style={styles.ticketTitle}>Destination: {tickets[0]?.destination}</h2>
-          <h2 style={styles.ticketTitle}>Departure Date: {tickets[0]?.departureDate}</h2>
-          <h2 style={styles.ticketTitle}>Departure Time: {tickets[0]?.departureTime}</h2>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              cursor: "pointer",
+              width: "95%",
+              padding: "5px",
+              paddingBottom: "15px",
+              border: "1px solid black",
+              borderRadius: "5px",
+              backgroundColor: "#FEFEFE",
+            }}
+          >
+            <h2 style={styles.ticketTitle}>Ticket ID: {tickets[0]?.id}</h2>
+            <h2 style={styles.ticketTitle}>Origin: {tickets[0]?.origin}</h2>
+            <h2 style={styles.ticketTitle}>Destination: {tickets[0]?.destination}</h2>
+            <h2 style={styles.ticketTitle}>Departure Date: {tickets[0]?.departureDate}</h2>
+            <h2 style={styles.ticketTitle}>Departure Time: {tickets[0]?.departureTime}</h2>
+          </div>
         </div>
 
         {/* Right Section - Present Ticket Container */}
@@ -125,12 +125,19 @@ const styles = {
   },
   ticketContainer: {
     width: "400px",
+    height: "150px", // Adjust to make it taller when rotated
+    transform: "rotate(90deg)", // Rotate the ticket 90 degrees
+    transformOrigin: "center center", // Rotate around its center
     border: "5px solid #000",
     borderRadius: "8px",
     padding: "20px",
     backgroundColor: "white",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
     margin: "10px",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
   },
   ticketHeader: {
     display: "flex",
