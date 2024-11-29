@@ -38,7 +38,7 @@ const MyTickets = ({ tickets, loading }) => {
           }}
         >
           {/* Ticket info Display Section */}
-        <div className="ticket-div" onClick={() => navigate('/myTickets')}
+        <div 
          style={{
           display: 'flex',
           flexDirection: 'column',
@@ -50,7 +50,8 @@ const MyTickets = ({ tickets, loading }) => {
           border: '1px solid black',
           borderRadius: '5px',
           backgroundColor: '#FEFEFE',
-        }}>
+        }}
+      >
            
           <h2 style={styles.ticketTitle}>Ticket ID: {tickets[0]?.id}</h2>
           <h2 style={styles.ticketTitle}>Origin: {tickets[0]?.origin}</h2>
