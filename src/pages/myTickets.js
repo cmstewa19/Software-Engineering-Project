@@ -18,80 +18,82 @@ const MyTickets = ({ tickets, loading }) => {
       <Sidebar />
 
       <div
-      style={{
-        display: "flex",
-        justifyContent: "space-around",
-        marginTop: "20px",
-      }}
-    >
-      {/* Left Section - Payment */}
-      <div
         style={{
-          width: "40%",
-          maxWidth: "600px",
-          margin: "20px",
-          padding: "20px",
-          border: "1px solid black",
-          borderRadius: "5px",
-          backgroundColor: "#40826D",
-          color: "white",
+          display: "flex",
+          justifyContent: "space-around",
+          marginTop: "20px",
         }}
       >
-        <h2 style={styles.ticketTitle}>Ticket ID: {ticket.id}</h2>
-        <h2 style={styles.ticketTitle}>Origin: {ticket.origin}</h2>
-        <h2 style={styles.ticketTitle}>Destination: {ticket.destination}</h2>
-        <h2 style={styles.ticketTitle}>Departure Date: {ticket.origin}</h2>
-        <h2 style={styles.ticketTitle}>Departure Time: {ticket.departureDate}</h2>
+        {/* Left Section - Ticket Information */}
+        <div
+          style={{
+            width: "40%",
+            maxWidth: "600px",
+            margin: "20px",
+            padding: "20px",
+            border: "1px solid black",
+            borderRadius: "5px",
+            backgroundColor: "#40826D",
+            color: "white",
+          }}
+        >
+          <h2 style={styles.ticketTitle}>Ticket ID: {tickets[0]?.id}</h2>
+          <h2 style={styles.ticketTitle}>Origin: {tickets[0]?.origin}</h2>
+          <h2 style={styles.ticketTitle}>Destination: {tickets[0]?.destination}</h2>
+          <h2 style={styles.ticketTitle}>Departure Date: {tickets[0]?.departureDate}</h2>
+          <h2 style={styles.ticketTitle}>Departure Time: {tickets[0]?.departureTime}</h2>
+        </div>
 
-      {/* Right Section - Cart */}
-      <div
-        style={{
-          width: "40%",
-          maxWidth: "600px",
-          margin: "20px",
-          padding: "20px",
-          border: "1px solid black",
-          borderRadius: "5px",
-          backgroundColor: "#40826D",
-          color: "white",
-        }}
-      >
+        {/* Right Section - Present Ticket Container */}
+        <div
+          style={{
+            width: "40%",
+            maxWidth: "600px",
+            margin: "20px",
+            padding: "20px",
+            border: "1px solid black",
+            borderRadius: "5px",
+            backgroundColor: "#40826D",
+            color: "white",
+          }}
+        >
+          <div style={styles.ticketsWrapper}>
+            {loading ? (
+              <p>Loading tickets...</p>
+            ) : (
+              tickets.map((ticket) => (
+                <div
+                  key={ticket.id}
+                  style={styles.ticketContainer}
+                  onClick={() => console.log(`Navigate to ticket ${ticket.id}`)} // Example navigation
+                >
+                  <div style={styles.ticketHeader}>
+                    <h2 style={styles.ticketTitle}>Ticket ID: {ticket.id}</h2>
+                    <div style={styles.ticketRoute}>
+                      <p>
+                        <strong>{ticket.origin}</strong> →{" "}
+                        <strong>{ticket.destination}</strong>
+                      </p>
+                    </div>
+                  </div>
 
-        <div style={styles.ticketsWrapper}>
-          {loading ? (
-            <p>Loading tickets...</p>
-          ) : (
-            tickets.map((ticket) => (
-              <div
-                key={ticket.id}
-                style={styles.ticketContainer}
-                onClick={() => console.log(`Navigate to ticket ${ticket.id}`)} // Example navigation
-              >
-                <div style={styles.ticketHeader}>
-                  <h2 style={styles.ticketTitle}>Ticket ID: {ticket.id}</h2>
-                  <div style={styles.ticketRoute}>
+                  <div style={styles.ticketDetails}>
                     <p>
-                      <strong>{ticket.origin}</strong> →{" "}
-                      <strong>{ticket.destination}</strong>
+                      <strong>Departure:</strong> {ticket.departureDate}
                     </p>
+                    <p>
+                      <strong>Arrival:</strong> {ticket.arrivalDate}
+                    </p>
+
+                    {/* QR Code */}
+                    <QRCode value={`Ticket-${ticket.id}`} />
                   </div>
                 </div>
-  
-                <div style={styles.ticketDetails}>
-                  <p>
-                    <strong>Departure:</strong> {ticket.departureDate}
-                  </p>
-                  <p>
-                    <strong>Arrival:</strong> {ticket.arrivalDate}
-                  </p>
-  
-                  {/* QR Code */}
-                  <QRCode value={`Ticket-${ticket.id}`} />
-                </div>
-              </div>
-            ))
-          )}
+              ))
+            )}
+          </div>
         </div>
+      </div>
     </div>
   );
 };
