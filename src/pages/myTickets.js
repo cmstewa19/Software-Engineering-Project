@@ -42,7 +42,7 @@ const MyTickets = ({ tickets, loading }) => {
             style={{
               display: "flex",
               flexDirection: "column",
-              alignItems: "center",
+              alignItems: "left",
               cursor: "pointer",
               width: "95%",
               padding: "5px",
@@ -81,32 +81,30 @@ const MyTickets = ({ tickets, loading }) => {
                 <div
                   key={ticket.id}
                   style={styles.ticketContainer}
-                  onClick={() => console.log(`Navigate to ticket ${ticket.id}`)} // Example navigation
                 >
-                  <div style={styles.ticketHeader}>
+                  <div style={styles.ticketContent}>
                     <h2 style={styles.ticketTitle}>Ticket ID: {ticket.id}</h2>
-                    <div style={styles.ticketRoute}>
-                      <p>
-                        <strong>{ticket.origin}</strong> →{" "}
-                        <strong>{ticket.destination}</strong>
-                      </p>
-                    </div>
-                  </div>
-
-                  <div style={styles.ticketDetails}>
-                    <p>
-                      <strong>Departure:</strong> {ticket.departureDate}
+                    <p style={styles.ticketText}>
+                      <strong>From:</strong> {ticket.origin}
                     </p>
-                    <p>
+                    <p style={styles.ticketText}>
+                      <strong>To:</strong> {ticket.destination}
+                    </p>
+                    <p style={styles.ticketText}>
+                      <strong>Departure:</strong> {ticket.departureDate}{" "}
+                      {ticket.departureTime}
+                    </p>
+                    <p style={styles.ticketText}>
                       <strong>Arrival:</strong> {ticket.arrivalDate}
                     </p>
-
-                    {/* QR Code */}
-                    <QRCode value={`Ticket-${ticket.id}`} />
+                    <div style={styles.qrCodeWrapper}>
+                      <QRCode value={`Ticket-${ticket.id}`} />
+                    </div>
                   </div>
                 </div>
               ))
             )}
+            
           </div>
         </div>
       </div>
@@ -124,20 +122,18 @@ const styles = {
     justifyContent: "center", // Center tickets within the wrapper
   },
   ticketContainer: {
-    width: "400px",
-    height: "150px", // Adjust to make it taller when rotated
-    transform: "rotate(90deg)", // Rotate the ticket 90 degrees
+    width: "300px",
+    height: "500px", // Adjust to make it vertical
+    transform: "rotate(90deg)", // Rotate the ticket
     transformOrigin: "center center", // Rotate around its center
     border: "5px solid #000",
     borderRadius: "8px",
-    padding: "20px",
     backgroundColor: "white",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-    margin: "10px",
     display: "flex",
-    flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
+    margin: "20px",
   },
   ticketHeader: {
     display: "flex",
