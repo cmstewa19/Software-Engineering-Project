@@ -8,8 +8,8 @@ const MyTickets = ({ tickets, loading }) => {
   return (
     <div
       style={{
-        overflow: "hidden",
-        height: "100vh",
+        overflow: "auto", //scroll
+        height: "100vh", 
         display: "flex",
         flexDirection: "column",
       }}
@@ -37,6 +37,21 @@ const MyTickets = ({ tickets, loading }) => {
             color: "white",
           }}
         >
+          {/* Ticket info Display Section */}
+        <div className="ticket-div" onClick={() => navigate('/myTickets')}
+         style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems:"center",
+          cursor:"pointer",
+          width: '95%',
+          padding: '5px',
+          paddingBottom: "15px",
+          border: '1px solid black',
+          borderRadius: '5px',
+          backgroundColor: '#FEFEFE',
+        }}>
+           
           <h2 style={styles.ticketTitle}>Ticket ID: {tickets[0]?.id}</h2>
           <h2 style={styles.ticketTitle}>Origin: {tickets[0]?.origin}</h2>
           <h2 style={styles.ticketTitle}>Destination: {tickets[0]?.destination}</h2>
