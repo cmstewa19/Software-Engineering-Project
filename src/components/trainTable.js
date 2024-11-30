@@ -5,7 +5,7 @@ import { sortTrains } from '../utils/trainUtils';
 
 function TrainTable({ trains }) {
     const [sortConfig, setSortConfig] = useState({ key: 'trainID', direction: 'asc' });
-    const [filteredTrains, setFilteredTrains] = useState(trains); // Filtered trains state
+    const [filteredTrains] = useState(trains); 
     const navigate = useNavigate();
 
     const requestSort = (key) => {
@@ -23,21 +23,7 @@ function TrainTable({ trains }) {
         return '';
     };
 
-    const handleSearch = (from, to) => {
-        // Filter trains based on search criteria
-        const result = trains.filter((train) => {
-            const matchesFrom = !from || train.origin === from;
-            const matchesTo = !to || train.destination === to;
-            return matchesFrom && matchesTo;
-        });
-        setFilteredTrains(result);
-    };
-
     const sortedTrains = sortTrains(filteredTrains, sortConfig.key, sortConfig.direction);
-
-    // Get unique origins and destinations
-    const uniqueOrigins = Array.from(new Set(trains.map((train) => train.origin)));
-    const uniqueDestinations = Array.from(new Set(trains.map((train) => train.destination)));
 
     return (
         <>
