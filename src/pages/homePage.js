@@ -7,6 +7,7 @@ import QRCode from '../components/QRCode.js';
 import TrainSearch from '../components/trainSearch.js';
 import { fetchTrainData } from '../services/api.js'; // import Amtrak API call
 import { formatDate } from '../utils/trainUtils'; // Utility functions
+import styles from '../style/homePage.module.css'; // styling
 
 // Home Page Component
 const Home = ({ tickets, loading: ticketLoading, trains, setFilteredTrains }) => {
@@ -75,17 +76,18 @@ const Home = ({ tickets, loading: ticketLoading, trains, setFilteredTrains }) =>
   }
 
   return (
-    <div className="home-page">
+    <div className={styles.homePage}>
       {/* Header */}
       <Header />
 
       {/* Sidebar */}
       <Sidebar />
 
-      <div className="content-wrapper">
+      {/* Main content wrapper */}
+      <div className={styles.contentWrapper}>
         {/* Profile Card Section */}
-        <div className="profile-card">
-          <div className="ticket-card" onClick={() => navigate('/myTickets')}>
+        <div className={styles.profileCard}>
+          <div className={styles.ticketCard} onClick={() => navigate('/myTickets')}>
             {tickets.length > 0 ? (
               <>
                 <h2>{tickets[0].origin} → {tickets[0].destination}</h2>
@@ -109,8 +111,8 @@ const Home = ({ tickets, loading: ticketLoading, trains, setFilteredTrains }) =>
           />
         </div>
 
-        <div>
-          {/* Train Search Section */}
+        {/* Train Search Section */}
+        <div className={styles.trainSearchContainer}>
           <TrainSearch trains={allTrains} setFilteredTrains={setFilteredTrainsState} />
         </div>
       </div>

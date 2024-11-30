@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Select from 'react-select';
 import { useNavigate } from 'react-router-dom';
+import arrowIcon from '../assets/arrows-icon.webp'; // Assuming the arrow icon is in your assets folder
+import styles from '../style/trainSearch.module.css';
 
 const TrainSearch = ({ trains = [], setFilteredTrains }) => {
   const [from, setFrom] = useState('');
@@ -29,24 +31,40 @@ const TrainSearch = ({ trains = [], setFilteredTrains }) => {
     .map((destination) => ({ label: destination, value: destination }));
 
   return (
-    <div style={{ marginBottom: '20px' }}>
-      {/* Searchable From Dropdown */}
-      <Select
-        value={from ? { label: from, value: from } : null}
-        onChange={(selectedOption) => setFrom(selectedOption ? selectedOption.value : '')}
-        options={originOptions}
-        placeholder="Origin"
-        noOptionsMessage={() => 'No trains available from this location.'}
-      />
-      {/* Searchable To Dropdown */}
-      <Select
-        value={to ? { label: to, value: to } : null}
-        onChange={(selectedOption) => setTo(selectedOption ? selectedOption.value : '')}
-        options={destinationOptions}
-        placeholder="Destination"
-        noOptionsMessage={() => 'No trains available from this location.'}
-      />
-      <button onClick={handleSearch}>Search</button>
+    <div className={styles.trainSearchContainer}>
+      {/* From Dropdown */}
+      <div className="dropdown-container">
+        <Select
+          id="from"
+          value={from ? { label: from, value: from } : null}
+          onChange={(selectedOption) => setFrom(selectedOption ? selectedOption.value : '')}
+          options={originOptions}
+          placeholder="Origin"
+          noOptionsMessage={() => 'No trains available from this location.'}
+        />
+      </div>
+
+      {/* Arrow Icon */}
+      <div className="arrow-container">
+        <img src={arrowIcon} alt="Arrow" className="arrow-icon" />
+      </div>
+
+      {/* To Dropdown */}
+      <div className="dropdown-container">
+        <Select
+          id="to"
+          value={to ? { label: to, value: to } : null}
+          onChange={(selectedOption) => setTo(selectedOption ? selectedOption.value : '')}
+          options={destinationOptions}
+          placeholder="Destination"
+          noOptionsMessage={() => 'No trains available from this location.'}
+        />
+      </div>
+
+      {/* Search Button */}
+      <div className="search-button-container">
+        <button className="search-button" onClick={handleSearch}>Search</button>
+      </div>
     </div>
   );
 };

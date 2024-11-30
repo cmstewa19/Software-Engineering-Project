@@ -1,0 +1,25 @@
+.trainSearchContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.arrowIcon {
+  width: 30px;
+  height: 30px;
+}
+
+.searchButton {
+  padding: 8px 15px;
+  font-size: 14px;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.searchButton:hover {
+  background-color: #0056b3;
+}
