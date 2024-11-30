@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Select from 'react-select';
 import { useNavigate } from 'react-router-dom';
-import arrowIcon from '../assets/arrows-icon.webp'; // Assuming the arrow icon is in your assets folder
+import arrowIcon from '../assets/arrows-icon.webp'; 
 import styles from '../style/trainSearch.module.css';
 
 const TrainSearch = ({ trains = [], setFilteredTrains }) => {
@@ -20,7 +20,7 @@ const TrainSearch = ({ trains = [], setFilteredTrains }) => {
 
     // Navigate and force a page reload
     navigate(`/browse?from=${from}&to=${to}`);
-    window.location.reload(); // Force page reload to reflect updated filtered results
+    window.location.reload(); // force page reload to reflect updated filtered results
   };
 
   // Convert origin and destination data to options for react-select
@@ -30,10 +30,20 @@ const TrainSearch = ({ trains = [], setFilteredTrains }) => {
   const destinationOptions = [...new Set(trains.map((train) => train.destination))]
     .map((destination) => ({ label: destination, value: destination }));
 
+  // Custom styles for react-select
+  const customStyles = {
+    control: (base) => ({
+      ...base,
+      width: '100%', 
+      maxWidth: '600px', 
+      minWidth: '200px', 
+    }),
+  };
+
   return (
     <div className={styles.trainSearchContainer}>
-      {/* From Dropdown */}
-      <div className="dropdown-container">
+      {/* Origin Dropdown */}
+      <div className={styles.dropdownContainer}>
         <Select
           id="from"
           value={from ? { label: from, value: from } : null}
@@ -41,16 +51,17 @@ const TrainSearch = ({ trains = [], setFilteredTrains }) => {
           options={originOptions}
           placeholder="Origin"
           noOptionsMessage={() => 'No trains available from this location.'}
+          styles={customStyles} 
         />
       </div>
 
       {/* Arrow Icon */}
-      <div className="arrow-container">
-        <img src={arrowIcon} alt="Arrow" className="arrow-icon" />
+      <div className={styles.arrowContainer}>
+        <img src={arrowIcon} alt="Arrow" className={styles.arrowIcon} />
       </div>
 
-      {/* To Dropdown */}
-      <div className="dropdown-container">
+      {/* Destination Dropdown */}
+      <div className={styles.dropdownContainer}>
         <Select
           id="to"
           value={to ? { label: to, value: to } : null}
@@ -58,12 +69,18 @@ const TrainSearch = ({ trains = [], setFilteredTrains }) => {
           options={destinationOptions}
           placeholder="Destination"
           noOptionsMessage={() => 'No trains available from this location.'}
+          styles={customStyles} 
         />
       </div>
 
       {/* Search Button */}
-      <div className="search-button-container">
-        <button className="search-button" onClick={handleSearch}>Search</button>
+      <div className={styles.searchButtonContainer}>
+        <button
+          className={styles.searchButton}
+          onClick={handleSearch}
+        >
+          Search
+        </button>
       </div>
     </div>
   );
