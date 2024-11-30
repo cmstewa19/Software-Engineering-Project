@@ -1,17 +1,63 @@
 import React, { useState, useEffect } from "react";
-import NavigationButton from '../components/navigationButton.js'; // nav button
-import Header from '../components/header.js'; // header
-import ArrowIcon from '../assets/arrows-icon.webp';
+import NavigationButton from '../components/navigationButton.js';
+import Header from '../components/header.js';
 import { useNavigate } from 'react-router-dom';
-import Sidebar from '../components/sidebar.js'; // sidebar
+import Sidebar from '../components/sidebar.js';
 import QRCode from '../components/QRCode.js';
-
+import TrainSearch from '../components/trainSearch.js';
+import { fetchTrainData } from '../services/api.js'; // import Amtrak API call
+import { formatDate } from '../utils/trainUtils'; // Utility functions
 
 // Home Page Component
-const Home = ({ tickets, loading }) => {
-  const [qrCodes, setQrCodes] = useState({}); // Store QR codes by ticket ID
-  const [loadingQR, setLoadingQR] = useState(true); // Track QR loading state
+const Home = ({ tickets, loading: ticketLoading, trains, setFilteredTrains }) => {
+  const [allTrains, setAllTrains] = useState([]); // Full train data
+  const [filteredTrains, setFilteredTrainsState] = useState([]); // Trains after filtering
+  const [loading, setLoading] = useState(true); // Local loading state for train data
+  const [error, setError] = useState(null); // Error state for fetching data
+
   const navigate = useNavigate();
+
+  // Fetching train data using useEffect
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const trainData = await fetchTrainData();
+
+        const flattenedTrains = Object.values(trainData || {}).flat().map((train) => {
+          const departureStation = train.stations[0];
+          const arrivalStation = train.stations[train.stations.length - 1];
+
+          const departureTime = departureStation
+            ? formatDate(departureStation.schDep)
+            : 'No departure time available';
+          const arrivalTime = arrivalStation
+            ? formatDate(arrivalStation.schArr)
+            : 'No arrival time available';
+
+          const trainCode = train.trainID || 'Unknown';
+
+          return {
+            trainCode,
+            origin: departureStation?.name || 'Unknown',
+            destination: arrivalStation?.name || 'Unknown',
+            departureTime,
+            arrivalTime,
+            availableSeats: Math.floor(Math.random() * 61),
+            price: '$9.99',
+          };
+        });
+
+        setAllTrains(flattenedTrains); // Set full train data
+        setFilteredTrains(flattenedTrains); // Initialize filtered trains
+        setLoading(false);
+      } catch (error) {
+        setError(error);
+        setLoading(false);
+      }
+    };
+
+    getData();
+  }, []);
 
   // Find the ticket with the soonest departure date
   const soonestTicket = !loading && tickets.length > 0 
@@ -20,171 +66,56 @@ const Home = ({ tickets, loading }) => {
       }, tickets[0])
     : null;
 
+  if (loading) {
+    return <div>Loading train data...</div>; // Show loading state while fetching trains
+  }
+
+  if (error) {
+    return <div>Error fetching train data: {error.message}</div>;
+  }
+
   return (
-    <>
-      
+    <div className="home-page">
+      {/* Header */}
       <Header />
+
+      {/* Sidebar */}
       <Sidebar />
 
-      {/* Profile Card Section */}
-      <div className="profile-div" style={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        float: 'left',
-        width: '40%',
-        maxWidth: '600px',
-        marginTop: '2%',
-        marginLeft: '5%',
-        padding: '10px',
-        border:'1px solid black',
-        borderRadius: '5px',
-        backgroundColor: '#40826D',
-      }}>
-        {/* Ticket Display Section */}
-        <div className="ticket-div" onClick={() => navigate('/myTickets')}
-         style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems:"center",
-          cursor:"pointer",
-          width: '95%',
-          padding: '5px',
-          paddingBottom: "15px",
-          border: '1px solid black',
-          borderRadius: '5px',
-          backgroundColor: '#FEFEFE',
-        }}>
-          {tickets.length > 0 ? (
-            <reactFragment>
-              <h2>{tickets[0].origin} → {tickets[0].destination}</h2>
-              <h2>{tickets[0].departureDate}</h2>
-              <QRCode/>
-            </reactFragment>
-          ) : (
-            <h2>No tickets to display</h2>
-          )}
-        </div>
-        
-        {/* Button to navigate to My Tickets */}
-        <NavigationButton
-          text='My Tickets'
-          path='/user-tickets'
-          style={{
-            padding: '10px 20px',
-            fontSize: '18px',
-            margin: '10px',
-          }} 
-        />
-      </div>
+      <div className="content-wrapper">
+        {/* Profile Card Section */}
+        <div className="profile-card">
+          <div className="ticket-card" onClick={() => navigate('/myTickets')}>
+            {tickets.length > 0 ? (
+              <>
+                <h2>{tickets[0].origin} → {tickets[0].destination}</h2>
+                <h2>{tickets[0].departureDate}</h2>
+                <QRCode />
+              </>
+            ) : (
+              <h2>No tickets to display</h2>
+            )}
+          </div>
 
-      {/* Train Search Section */}
-      <div className="find-train-Div" style={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginLeft: '50%',
-        marginTop: '2%',
-        width: '40%',
-        maxWidth: '600px',
-        padding: '10px',
-        border:'1px solid black',
-        borderRadius: '5px',
-        backgroundColor: '#40826D',
-      }}>
-        {/* Input field for origin */}
-        <input
-          type="text"
-          placeholder="From"
-          style={{
-            width: '75%',
-            padding: '10px',
-            margin: '5px',
-            fontSize: '16px',
-            border: '1px solid black',
-            borderRadius: '5px',
-          }}
-        />
-        {/* Arrow Icon for separator */}
-        <img src={ArrowIcon} style={{ width: "30px", height: "30px", margin: "5px" }} />
-        {/* Input field for destination */}
-        <input
-          type="text"
-          placeholder="To"
-          style={{
-            width: '75%',
-            padding: '10px',
-            margin: '5px',
-            fontSize: '16px',
-            border: '1px solid black',
-            borderRadius: '5px',
-          }}
-        />
-        <div>
-          {/* Navigate to Browse Trains */}
-          <NavigationButton 
-            text="Search Trains" 
-            path="/browse" 
+          {/* Button to navigate to My Tickets */}
+          <NavigationButton
+            text="My Tickets"
+            path="/user-tickets"
             style={{
               padding: '10px 20px',
               fontSize: '18px',
-              margin: '5px',
+              margin: '10px',
             }}
           />
         </div>
-      </div>
-    </>
-  );
-};
 
-// Styles for the ticket display
-const styles = {
-  ticketsWrapper: {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: "20px",
-    padding: "20px",
-    justifyContent: "center", // Center tickets within the wrapper
-  },
-  ticketContainer: {
-    width: "400px",
-    border: "5px solid #000",
-    borderRadius: "8px",
-    padding: "20px",
-    backgroundColor: "white",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-    transition: "transform 0.3s ease", // Smooth transition when enlarging
-  },
-  ticketHeader: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    borderBottom: "1px solid #ddd",
-    paddingBottom: "10px",
-    marginBottom: "10px",
-  },
-  ticketTitle: {
-    fontSize: "20px",
-    fontWeight: "bold",
-    color: "black",
-  },
-  ticketRoute: {
-    fontSize: "16px",
-    fontWeight: "bold",
-    color: "black",
-  },
-  ticketDetails: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "flex-start",
-  },
-  qrCodeImage: {
-    marginTop: "15px",
-    width: "120px",
-    height: "120px",
-  },
+        <div>
+          {/* Train Search Section */}
+          <TrainSearch trains={allTrains} setFilteredTrains={setFilteredTrainsState} />
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default Home;
