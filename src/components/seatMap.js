@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
-import '../style/seatSelector.css';
+import styles from '../style/seatMap.module.css';
 
-function SeatMap({ trainCode, onSeatsSelected, seatRows = 12, seatCols = 4, bookedSeats = [] }) {
+function SeatMap({
+  trainCode,
+  onSeatsSelected,
+  seatRows = 12,
+  seatCols = 4,
+  bookedSeats = [],
+}) {
   // Generate initial seat states (combine booked seats with selectable seats)
   const initialSeats = Array.from({ length: seatRows * seatCols }, (_, index) => ({
     id: index + 1,
@@ -33,14 +39,21 @@ function SeatMap({ trainCode, onSeatsSelected, seatRows = 12, seatCols = 4, book
   };
 
   return (
-    <div className="seat-selection-container">
+    <div className={styles.seatSelectionContainer}>
       {trainCode && <h2>Seat Map for Train {trainCode}</h2>}
-      <div className="seat-map">
+
+      {/* Dynamically applying grid layout based on seatCols */}
+      <div
+        className={styles.seatMap}
+        style={{
+          gridTemplateColumns: `repeat(${seatCols}, 50px)`,
+        }}
+      >
         {seats.map((seat) => (
           <div
             key={seat.id}
-            className={`seat ${seat.isBooked ? 'booked' : ''} ${
-              seat.isSelected ? 'selected' : ''
+            className={`${styles.seat} ${seat.isBooked ? styles.booked : ''} ${
+              seat.isSelected ? styles.selected : ''
             }`}
             onClick={() => handleSeatClick(seat.id)}
           >
@@ -48,6 +61,8 @@ function SeatMap({ trainCode, onSeatsSelected, seatRows = 12, seatCols = 4, book
           </div>
         ))}
       </div>
+
+      {/* Display selected seats */}
       <p>
         Selected Seats: {selectedSeats.length > 0 ? selectedSeats.join(', ') : 'None'}
       </p>
