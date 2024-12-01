@@ -1,46 +1,53 @@
 .trainInfoContainer {
   display: flex;
   flex-direction: row;
-  gap: 20px;
-  padding: 20px;
+  height: 100vh;
 }
 
 .trainDetails {
   flex: 1;
-  border-right: 1px solid #ccc;
-  padding-right: 20px;
+  padding: 20px;
+  overflow-y: auto;
+  background-color: #f4f4f4; 
 }
 
 .seatMapAndBooking {
-  flex: 2;
   display: flex;
-  flex-direction: row;
-  gap: 20px;
+  flex-direction: column;
+  padding: 20px;
+  width: 300px; 
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative; 
 }
 
 .trainSeatMap {
-  flex: 3;
+  margin-bottom: 20px;
 }
 
 .bookingSection {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  gap: 10px;
+  position: fixed;
+  top: 20px;
+  right: 20px; 
+  width: 280px;
+  background-color: #fff;
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1001;
 }
 
 .bookTicketsButton {
-  padding: 10px 20px;
   background-color: #40826D;
   color: white;
   border: none;
-  border-radius: 5px;
+  padding: 10px;
   cursor: pointer;
-  font-size: 1em;
+  width: 100%;
+  font-size: 16px;
+  margin-top: 10px;
 }
 
 .bookTicketsButton:disabled {
-  background-color: #ccc;
+  background-color: #ddd;
   cursor: not-allowed;
 }

@@ -3,7 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import SeatMap from '../components/seatMap.js';
 import styles from '../style/trainInfoPage.module.css';
 import Header from '../components/header.js';
-import Sidebar from '../components/sidebar.js';
+import BookingSection from '../components/bookingSeatSelection.js'; 
+
 
 function TrainInfoPage() {
   const location = useLocation();
@@ -43,8 +44,6 @@ function TrainInfoPage() {
       {/* Header */}
       <Header />
 
-      {/* Sidebar */}
-      <Sidebar />
       {/* Left Section: Train Details */}
       <div className={styles.trainDetails}>
         <h1>{trainData.trainCode}</h1>
@@ -59,26 +58,18 @@ function TrainInfoPage() {
         <div className={styles.trainSeatMap}>
           <SeatMap
             trainCode={trainData.trainCode}
-            seatRows={12} 
-            seatCols={5} 
+            seatRows={12}
+            seatCols={5}
             bookedSeats={trainData.bookedSeats}
             onSeatsSelected={handleSeatSelection} // Pass selected seats
           />
         </div>
 
         {/* Booking Section */}
-        <div className={styles.bookingSection}>
-          <h3>Selected Seats</h3>
-          <p>{selectedSeats.length > 0 ? selectedSeats.join(', ') : 'None selected'}</p>
-          <button
-            className={styles.bookTicketsButton}
-            onClick={handleBooking}
-            disabled={selectedSeats.length === 0} // disable book button if no seats are selected yet
-          >
-            Book Tickets
-          </button>
-        </div>
-      </div>
+        <div className={styles.bookingContainer}>
+          <BookingSection selectedSeats={selectedSeats} handleBooking={handleBooking} />
+        </div>   
+        </div>   
     </div>
   );
 }
