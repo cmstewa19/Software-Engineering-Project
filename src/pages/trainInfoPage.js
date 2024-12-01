@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import SeatMap from '../components/seatMap.js';
-import styles from '../style/trainInfoPage.module.css';  // Use module CSS import
+import styles from '../style/trainInfoPage.module.css';
+import Header from '../components/header.js';
+import Sidebar from '../components/sidebar.js';
 
 function TrainInfoPage() {
   const location = useLocation();
@@ -10,27 +12,27 @@ function TrainInfoPage() {
   // Extract train data from the navigation state
   const { train } = location.state || {};
 
-  // Placeholder data
-  const placeholderTrain = {
-    trainCode: 'ABC',
-    origin: 'Sioux Falls',
-    destination: 'Rapid City',
-    departureTime: '10:00A',
-    openSeats: 24,
-    bookedSeats: [3, 6, 15],
-  };
+  // // Placeholder data
+  // const placeholderTrain = {
+  //   trainCode: 'ABC',
+  //   origin: 'Sioux Falls',
+  //   destination: 'Rapid City',
+  //   departureTime: '10:00A',
+  //   availableSeats: 24,
+  //   bookedSeats: [3, 6, 15],
+  // };
 
   const trainData = train || placeholderTrain;
 
   const [selectedSeats, setSelectedSeats] = useState([]);
 
-  // Update the selectedSeats state when seats are selected
+  // update the selectedSeats state when seats are selected
   const handleSeatSelection = (seats) => {
     setSelectedSeats(seats);
   };
 
   const handleBooking = () => {
-    // Pass the selected seats and train info to the checkout page
+    // pass the selected seats and train info to the checkout page
     navigate('/checkout', {
       state: { trainCode: trainData.trainCode, selectedSeats },
     });
@@ -38,31 +40,44 @@ function TrainInfoPage() {
 
   return (
     <div className={styles.trainInfoContainer}>
+      {/* Header */}
+      <Header />
+
+      {/* Sidebar */}
+      <Sidebar />
       {/* Left Section: Train Details */}
       <div className={styles.trainDetails}>
         <h1>{trainData.trainCode}</h1>
         <p><strong>Origin:</strong> {trainData.origin}</p>
         <p><strong>Destination:</strong> {trainData.destination}</p>
         <p><strong>Departure Time:</strong> {trainData.departureTime}</p>
-        <p><strong>Open Seats:</strong> {trainData.openSeats}</p>
+        <p><strong>Available Seats:</strong> {trainData.availableSeats}</p>
       </div>
 
       {/* Right Section: Seat Map and Booking */}
-      <div className={styles.trainSeatMap}>
-        <SeatMap
-          trainCode={trainData.trainCode}
-          seatRows={6} // Customize the number of rows
-          seatCols={4} // Customize the number of columns
-          bookedSeats={trainData.bookedSeats}
-          onSeatsSelected={handleSeatSelection} // Pass selected seats here
-        />
-        <button
-          className={styles.bookTicketsButton}
-          onClick={handleBooking} // Trigger booking
-          disabled={selectedSeats.length === 0} // Disable button if no seats are selected
-        >
-          Book Tickets
-        </button>
+      <div className={styles.seatMapAndBooking}>
+        <div className={styles.trainSeatMap}>
+          <SeatMap
+            trainCode={trainData.trainCode}
+            seatRows={12} 
+            seatCols={5} 
+            bookedSeats={trainData.bookedSeats}
+            onSeatsSelected={handleSeatSelection} // Pass selected seats
+          />
+        </div>
+
+        {/* Booking Section */}
+        <div className={styles.bookingSection}>
+          <h3>Selected Seats</h3>
+          <p>{selectedSeats.length > 0 ? selectedSeats.join(', ') : 'None selected'}</p>
+          <button
+            className={styles.bookTicketsButton}
+            onClick={handleBooking}
+            disabled={selectedSeats.length === 0} // disable book button if no seats are selected yet
+          >
+            Book Tickets
+          </button>
+        </div>
       </div>
     </div>
   );

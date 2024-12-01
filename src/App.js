@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
+import { fetchTrainData } from './services/api.js'
 
 // Import page components
 import Home from './pages/homePage.js';
@@ -99,7 +100,7 @@ function App() {
             <Route path="/user-tickets" element={<UserTickets tickets={tickets} loading={loading} />} />
 
             {/* Train details page */}
-            <Route path="/train/:trainCode" element={<TrainInfoPage />} />
+            <Route path="/train-info" element={<TrainInfoPage />} />
           </Routes>
         </main> 
       </div>
