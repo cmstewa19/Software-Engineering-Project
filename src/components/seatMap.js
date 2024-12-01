@@ -21,7 +21,7 @@ function SeatMap({ trainCode, onSeatsSelected }) {
     return Array.from(bookedSeats);
   };
 
-  const [bookedSeats, setBookedSeats] = useState(generateRandomBookedSeats(bookedSeatCount));
+  const [bookedSeats] = useState(generateRandomBookedSeats(bookedSeatCount));
 
   // create the seat layout with gaps for the aisle
   const initialSeats = Array.from({ length: totalSeats }, (_, index) => ({
@@ -50,7 +50,7 @@ function SeatMap({ trainCode, onSeatsSelected }) {
   
     setSelectedSeats(updatedSelectedSeats);
   
-    // Call the onSeatsSelected callback with the updated list
+    // call the onSeatsSelected callback with the updated list
     if (onSeatsSelected) {
       onSeatsSelected(updatedSelectedSeats);
     }
@@ -100,13 +100,7 @@ function SeatMap({ trainCode, onSeatsSelected }) {
   return (
     <div className={styles.seatSelectionContainer}>
       {trainCode && <h2>Seat Map for Train {trainCode}</h2>}
-
       <div className={styles.seatMap}>{renderSeats()}</div>
-
-      {/* Display selected and booked seats */}
-      <p>
-        Selected Seats: {selectedSeats.length > 0 ? selectedSeats.join(', ') : 'None'}
-      </p>
     </div>
   );
 }

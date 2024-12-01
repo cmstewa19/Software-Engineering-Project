@@ -4,7 +4,7 @@ import SeatMap from '../components/seatMap.js';
 import styles from '../style/trainInfoPage.module.css';
 import Header from '../components/header.js';
 import BookingSection from '../components/bookingSeatSelection.js'; 
-
+import TrainDetails from '../components/trainDetails.js';
 
 function TrainInfoPage() {
   const location = useLocation();
@@ -45,13 +45,7 @@ function TrainInfoPage() {
       <Header />
 
       {/* Left Section: Train Details */}
-      <div className={styles.trainDetails}>
-        <h1>{trainData.trainCode}</h1>
-        <p><strong>Origin:</strong> {trainData.origin}</p>
-        <p><strong>Destination:</strong> {trainData.destination}</p>
-        <p><strong>Departure Time:</strong> {trainData.departureTime}</p>
-        <p><strong>Available Seats:</strong> {trainData.availableSeats}</p>
-      </div>
+      <TrainDetails trainData={trainData} />
 
       {/* Right Section: Seat Map and Booking */}
       <div className={styles.seatMapAndBooking}>
