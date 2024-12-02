@@ -73,33 +73,39 @@ const MyTickets = ({ tickets, loading }) => {
             color: "white",
           }}
         >
-          <div style={styles.ticketsWrapper}>
-            {loading ? (
-              <p>Loading tickets...</p>
-            ) : (
-              tickets.map((ticket) => (
-                <div
-                  key={ticket.id}
-                  style={styles.ticketContainer}
-                >
-                  <div style={styles.ticketContent}>
-                    <h2 style={styles.ticketTitle}>Ticket ID: {ticket.id}</h2>
-                    <p style={styles.ticketText}>
-                      <strong>From:</strong> {ticket.origin}
+        {/* Tickets Wrapper */}
+        <div style={styles.ticketsWrapper}>
+          {loading ? (
+            <p>Loading tickets...</p>
+          ) : (
+            tickets.map((ticket) => (
+              <div
+                key={ticket.id}
+                style={{
+                  ...styles.ticketContainer,
+                }}  
+              >
+                <div style={styles.ticketHeader}>
+                  <h2 style={styles.ticketTitle}>Ticket ID: {ticket.id}</h2>
+                  <div style={styles.ticketRoute}>
+                    <p>
+                      <strong>{ticket.origin}</strong> →{" "}
+                      <strong>{ticket.destination}</strong>
                     </p>
-                    <p style={styles.ticketText}>
-                      <strong>To:</strong> {ticket.destination}
-                    </p>
-                    <p style={styles.ticketText}>
-                      <strong>Departure:</strong> {ticket.departureDate}{" "}
-                      {ticket.departureTime}
-                    </p>
-                    <p style={styles.ticketText}>
-                      <strong>Arrival:</strong> {ticket.arrivalDate}
-                    </p>
-                    <div style={styles.qrCodeWrapper}>
+                  </div>
+                </div>
+  
+                <div style={styles.ticketDetails}>
+                  <p>
+                    <strong>Departure:</strong> {ticket.departureDate}
+                  </p>
+                  <p>
+                    <strong>Arrival:</strong> {ticket.arrivalDate}
+                  </p>
+  
+                  {/* Display QR code or loading state */}
+                  <div style={styles.qrCodeWrapper}>
                       <QRCode value={`Ticket-${ticket.id}`} />
-                    </div>
                   </div>
                 </div>
               ))
@@ -111,6 +117,44 @@ const MyTickets = ({ tickets, loading }) => {
     </div>
   );
 };
+
+      {/* Tickets Wrapper */}
+      <div style={styles.ticketsWrapper}>
+        {loading ? (
+          <p>Loading tickets...</p>
+        ) : (
+          tickets.map((ticket) => (
+            <div
+              key={ticket.id}
+              style={{
+                ...styles.ticketContainer,
+              }}  
+            >
+              <div style={styles.ticketHeader}>
+                <h2 style={styles.ticketTitle}>Ticket ID: {ticket.id}</h2>
+                <div style={styles.ticketRoute}>
+                  <p>
+                    <strong>{ticket.origin}</strong> →{" "}
+                    <strong>{ticket.destination}</strong>
+                  </p>
+                </div>
+              </div>
+
+              <div style={styles.ticketDetails}>
+                <p>
+                  <strong>Departure:</strong> {ticket.departureDate}
+                </p>
+                <p>
+                  <strong>Arrival:</strong> {ticket.arrivalDate}
+                </p>
+
+                {/* Display QR code or loading state */}
+                <div style={styles.qrCodeWrapper}>
+                    <QRCode value={`Ticket-${ticket.id}`} />
+                </div>
+              </div>
+            </div>
+
 
 // Styles for the ticket display
 const styles = {
