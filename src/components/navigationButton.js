@@ -5,12 +5,18 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-function NavigationButton({ text, path, style }) {
-  const navigate = useNavigate();
+function NavigationButton({ text, path, style, onClick }) {
+  // default onClick function is navigationy
+  if(onClick === undefined) {
+    const navigate = useNavigate();
+    onClick = () => navigate(path);
+  }
+   
+
 
   return (
     <button
-      onClick={() => navigate(path)}
+      onClick={onClick}
       style={{
         width: '100%',        
         maxWidth: '300px',       

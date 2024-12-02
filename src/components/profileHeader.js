@@ -1,5 +1,5 @@
 import React from 'react';
-import TempIcon from '../assets/TempIcon2.jpg'; // Adjust the path if necessary
+import TempIcon from '../assets/TempIcon2.jpg'; 
 
 const UserProfileInfo = () => {
   return (

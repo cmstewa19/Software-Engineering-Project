@@ -1,0 +1,56 @@
+.trainSearchContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 20px 0;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 5px;
+  color: black;
+  width: 100%;
+}
+
+.dropdown-container {
+  width: 100%;
+  max-width: 100%;
+  padding: 0 10px;
+  background-color: #FEFEFE;
+  border: 1px solid black;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.arrow-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.arrowIcon {
+  width: 30px;
+  height: 30px;
+}
+
+.search-button-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.searchButton {
+  padding: 12px 25px;
+  font-size: 16px;
+  color: white;
+  background-color: #40826D;
+  border: 1px solid black;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 200px;
+  text-align: center;
+}
+
+.searchButton:hover {
+  background-color: #40826D;
+}

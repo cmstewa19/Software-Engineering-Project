@@ -23,7 +23,25 @@ function LoginPageWithNavigation() {
 
 function App() {
   const [tickets, setTickets] = useState([]);
+  const [trains, setTrains] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [filteredTrains, setFilteredTrains] = useState([]);
+
+  // train data
+  useEffect(() => {
+    const getTrainData = async () => {
+      try {
+        const data = await fetchTrainData(); // call API to get train data
+        setTrains(data);  // store fetched data in state
+      } catch (error) {
+        console.error('Failed to fetch train data:', error);
+      } finally {
+        setLoading(false);  // stop loading once data is fetched
+      }
+    };
+
+    getTrainData();
+  }, []); // Empty dependency array to run once on component mount
 
   // Hardcoded ticket data (this would normally come from an API)
   const ticketData = [
@@ -67,7 +85,10 @@ function App() {
           <Routes>
             <Route path="/" element={<LoginPageWithNavigation />} />
             {/* Pass the ticket data as props to Home and MyTickets */}
-            <Route path="/home" element={<Home tickets={tickets} loading={loading} />} />
+            <Route
+              path="/home"
+              element={<Home tickets={tickets} loading={loading} trains={trains} setFilteredTrains={setFilteredTrains} />}
+            />
             <Route path="/signup" element={<Signup />} />
             <Route path="/browse" element={<BrowseTrains />} />
             <Route path="/profile" element={<Profile />} />
