@@ -20,6 +20,15 @@ const Home = ({ tickets, loading }) => {
       }, tickets[0])
     : null;
 
+  function searchTrains() {
+    const origin = document.getElementById("origin-field").value;
+    const destination = document.getElementById("destination-field").value;
+    console.log({origin})
+    console.log({destination})
+    if(origin == null && destination == null) { navigate("/browse") }
+    navigate("/browse?origin="+{origin}+"&destination="+{destination})
+  }
+
   return (
     <>
       
@@ -99,6 +108,7 @@ const Home = ({ tickets, loading }) => {
         <input
           type="text"
           placeholder="From"
+          id="origin-field"
           style={{
             width: '75%',
             padding: '10px',
@@ -114,6 +124,7 @@ const Home = ({ tickets, loading }) => {
         <input
           type="text"
           placeholder="To"
+          id="destination-field"
           style={{
             width: '75%',
             padding: '10px',
@@ -128,6 +139,7 @@ const Home = ({ tickets, loading }) => {
           <NavigationButton 
             text="Search Trains" 
             path="/browse" 
+            onClick={searchTrains}
             style={{
               padding: '10px 20px',
               fontSize: '18px',

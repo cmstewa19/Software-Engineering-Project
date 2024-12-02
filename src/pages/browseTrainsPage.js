@@ -14,6 +14,19 @@ function BrowseTrainsPage() {
     direction: 'asc',
   });
 
+  //might not work
+  const params = new Proxy(new URLSearchParams(window.location.search), {
+    get: (searchParams, prop) => searchParams.get(prop),
+  });
+
+  while(true) {
+    console.log(params.origin);
+    console.log(params.destination);
+    break;
+  }
+  
+  
+
   useEffect(() => {
     const getData = async () => {
       try {
