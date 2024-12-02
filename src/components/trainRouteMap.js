@@ -7,7 +7,7 @@ const containerStyle = {
   height: '400px',
 };
 
-function TrainRouteMap({ origin, destination }) {
+function TrainRouteMap({ origin, destination, center }) {
   const [directionsResponse, setDirectionsResponse] = useState(null);
   const [originCoords, setOriginCoords] = useState(null);
   const [destinationCoords, setDestinationCoords] = useState(null);
@@ -48,7 +48,7 @@ function TrainRouteMap({ origin, destination }) {
       console.log('Google Maps API not ready yet');
       return;
     }
-    // got thru here successfully
+
     const fetchCoordinates = async () => {
       try {
         console.log('Fetching coordinates...');
@@ -59,10 +59,8 @@ function TrainRouteMap({ origin, destination }) {
         if (originCoords && destinationCoords) {
           setOriginCoords(originCoords);
           setDestinationCoords(destinationCoords);
-          console.log('originCoords: ',originCoords);
+          console.log('originCoords: ', originCoords);
           console.log('destinationCoords: ', destinationCoords);
-          // got to here successfully
-
         } else {
           console.error('Invalid coordinates from geocoding');
         }
@@ -95,7 +93,7 @@ function TrainRouteMap({ origin, destination }) {
           {
             origin: originCoords, // Starting point (lat/lng object)
             destination: destinationCoords, // End point (lat/lng object)
-            travelMode: window.google.maps.TravelMode.TRANSIT,
+            travelMode: window.google.maps.TravelMode.DRIVING,
           },
           (result, status) => {
             if (status === window.google.maps.DirectionsStatus.OK) {
@@ -112,17 +110,27 @@ function TrainRouteMap({ origin, destination }) {
   }, [originCoords, destinationCoords, googleMapsLoaded]);
 
   return (
-    <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY} onLoad={onLoad}>
-      <GoogleMap
-        mapContainerStyle={containerStyle}
-        center={{ lat: 39.8283, lng: -98.5795 }} // Default to USA center
-        zoom={5}
-      >
-        {directionsResponse && (
-          <DirectionsRenderer directions={directionsResponse} />
-        )}
-      </GoogleMap>
-    </LoadScript>
+    <div>
+      <h2 style={{ marginBottom: '10px', textAlign: 'left', fontSize: '30px' }}>Route Map</h2>
+      <LoadScript 
+        googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY} 
+        onError={(error) => console.error('LoadScript Error:', error)} 
+        onLoad={onLoad}>
+        <GoogleMap
+          mapContainerStyle={containerStyle}
+          center={center || { lat: 39.8283, lng: -98.5795 }} // Use center prop if available, else default to a static center
+          zoom={5}
+          onLoad={() => console.log('GoogleMap loaded')}
+          onError={(e) => console.error('GoogleMap error:', e)}
+        >
+          {directionsResponse && (
+            <DirectionsRenderer
+              directions={directionsResponse}
+            />
+          )}
+        </GoogleMap>
+      </LoadScript>
+    </div>
   );
 }
 

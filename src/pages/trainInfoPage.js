@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import SeatMap from '../components/seatMap.js';
 import styles from '../style/trainInfoPage.module.css';
@@ -14,39 +14,36 @@ function TrainInfoPage() {
   // Extract train data from the navigation state
   const { train } = location.state || {};
 
-  // // Placeholder data
-  // const placeholderTrain = {
-  //   trainCode: 'ABC',
-  //   origin: 'Sioux Falls',
-  //   destination: 'Rapid City',
-  //   departureTime: '10:00A',
-  //   availableSeats: 24,
-  //   bookedSeats: [3, 6, 15],
-  // };
-
   const trainData = train || placeholderTrain;
 
   const [selectedSeats, setSelectedSeats] = useState([]);
+  const [mapCenter, setMapCenter] = useState(null);  
 
-  // update the selectedSeats state when seats are selected
+  // Update the selectedSeats state when seats are selected
   const handleSeatSelection = (seats) => {
     setSelectedSeats(seats);
   };
 
   const handleBooking = () => {
-    // pass the selected seats and train info to the checkout page
+    // Pass the selected seats and train info to the checkout page
     navigate('/checkout', {
       state: { trainCode: trainData.trainCode, selectedSeats },
     });
   };
 
+  // Effect to update the map center based on the origin and destination
+  useEffect(() => {
+    if (trainData.origin && trainData.destination) {
+      const origin = trainData.origin; 
+      const destination = trainData.destination;
+      setMapCenter({ lat: 39.8283, lng: -98.5795 });  // Placeholder center (central US)
+    }
+  }, [trainData.origin, trainData.destination]);
+
   return (
     <div className={styles.trainInfoContainer}>
       {/* Header */}
       <Header />
-
-      {/* Left Section: Train Details
-      <TrainDetails trainData={trainData} /> */}
 
       {/* Left Section: Train Details and Train Route Map */}
       <div className={styles.leftSection}>
@@ -55,7 +52,13 @@ function TrainInfoPage() {
 
         {/* Train Route Map */}
         <div className={styles.trainRouteMapContainer}>
-          <TrainRouteMap origin="New York" destination="Los Angeles" />
+          {mapCenter && (
+            <TrainRouteMap 
+              origin={trainData.origin} 
+              destination={trainData.destination} 
+              center={mapCenter} 
+            />
+          )}
         </div>
       </div>
 
@@ -67,7 +70,7 @@ function TrainInfoPage() {
             seatRows={12}
             seatCols={5}
             bookedSeats={trainData.bookedSeats}
-            onSeatsSelected={handleSeatSelection} // Pass selected seats
+            onSeatsSelected={handleSeatSelection} 
           />
         </div>
 
@@ -75,7 +78,7 @@ function TrainInfoPage() {
         <div className={styles.bookingContainer}>
           <BookingSection selectedSeats={selectedSeats} handleBooking={handleBooking} />
         </div>   
-        </div>   
+      </div>   
     </div>
   );
 }
