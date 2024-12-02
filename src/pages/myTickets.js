@@ -78,7 +78,7 @@ const MyTickets = ({ tickets, loading }) => {
             {loading ? (
               <p>Loading tickets...</p>
             ) : (
-              tickets[0]?.map((ticket) => (
+              tickets.map((ticket) => (
                 <div
                   key={tickets[0]?.id}
                   style={{
