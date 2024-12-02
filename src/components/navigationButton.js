@@ -6,7 +6,12 @@ import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 function NavigationButton({ text, path, style, onClick }) {
-  const navigate = useNavigate();
+  // default onClick function is navigationy
+  if(onClick === undefined) {
+    const navigate = useNavigate();
+    onClick = () => navigate(path);
+  }
+   
 
 
   return (
