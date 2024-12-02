@@ -3,7 +3,6 @@ import NavigationButton from '../components/navigationButton.js';
 import Header from '../components/header.js';
 import Divider from '../components/divider.js';
 import ProfileHeader from '../components/profileHeader.js';
-//import TempIcon from '../assets/TempIcon2.jpg';
 
 // Profile Page Component
 function Profile() {
@@ -33,13 +32,6 @@ function Profile() {
     setShowTicketHistory(false);
   };
 
-  const toggleTicketHistory = () => {
-    setShowTicketHistory((prevState) => !prevState);
-    setShowUser(false);
-    setShowSavedPayments(false);
-    setShowSecurity(false);
-  };
-
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Header />
@@ -55,28 +47,6 @@ function Profile() {
           fontWeight: 'bold',
         }}
       >My Profile</div>
-
-      {/* Return to Home Button at the top-right corner */}
-      {/* <div
-        style={{
-          position: 'absolute',
-          top: '35px',
-          right: '40px',
-          zIndex: 1000,
-        }}>
-        <NavigationButton
-          text="Return to Home"
-          path="/home"
-          style={{
-            padding: '10px 20px',
-            fontSize: '18px',
-            color: '#FFF',
-            backgroundColor: 'black',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer',
-          }}
-        /></div> */}
 
       {/* Flex container for the main content */}
       <div
@@ -152,21 +122,6 @@ function Profile() {
                   cursor: 'pointer',
                   fontSize: '20px',
                 }}>Security</button>
-
-              {/* Button that toggles the ticket history */}
-              <button
-                onClick={toggleTicketHistory}
-                style={{
-                  backgroundColor: '#40826D',
-                  color: 'white',
-                  border: '1px solid #40826D',
-                  padding: '10px 0',
-                  marginTop: '20px',
-                  borderRadius: '5px',
-                  width: '100%',
-                  cursor: 'pointer',
-                  fontSize: '20px',
-                }}>Ticket History</button>
 
             </div>
           </div>
@@ -411,11 +366,6 @@ function Profile() {
                       </div>
                     </div>
                 </div>
-              )}
-
-              {/* Not exactly sure what this page is supposed to depict */}
-              {showTicketHistory && (
-                <h2>Figure out whats supposed to go here</h2>
               )}
 
             {/* 
