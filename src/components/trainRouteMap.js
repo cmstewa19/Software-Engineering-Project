@@ -118,7 +118,7 @@ function TrainRouteMap({ origin, destination, center }) {
         onLoad={onLoad}>
         <GoogleMap
           mapContainerStyle={containerStyle}
-          center={center || { lat: 39.8283, lng: -98.5795 }} // Use center prop if available, else default to a static center
+          center={center || { lat: 39.8283, lng: -98.5795 }} 
           zoom={5}
           onLoad={() => console.log('GoogleMap loaded')}
           onError={(e) => console.error('GoogleMap error:', e)}
