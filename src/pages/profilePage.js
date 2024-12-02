@@ -57,7 +57,7 @@ function Profile() {
       >My Profile</div>
 
       {/* Return to Home Button at the top-right corner */}
-      <div
+      {/* <div
         style={{
           position: 'absolute',
           top: '35px',
@@ -76,7 +76,7 @@ function Profile() {
             borderRadius: '5px',
             cursor: 'pointer',
           }}
-        /></div>
+        /></div> */}
 
       {/* Flex container for the main content */}
       <div

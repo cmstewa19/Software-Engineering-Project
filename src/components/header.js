@@ -1,53 +1,37 @@
-// Header that is displayed at the top of every page
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';  
 import logo from '../assets/rail.png';
-import profileIcon from '../assets/profile-icon.jpg'  
-import { useNavigate } from 'react-router-dom';
+import styles from '../style/header.module.css';
+import Sidebar from './sidebar.js';
 
 function Header() {
-    const navigate = useNavigate();
-    return (
-        <div style={{ margin: 0, padding: 0, boxSizing: 'border-box' }}>
-        {/* Header Section */}
-        <header style={{
-            height: '80px',
-            backgroundColor: '#40826D',
-            display: 'flex',
-            alignItems: 'center',
-            padding: '10px',
-            justifyContent:'space-between'
-        }}>
-          <div style={{display:'flex'}}>
-            <img 
-              src={logo} 
-              onClick={() => navigate("/home")}
-              alt="Train Logo" 
-              style={{ height: '60px', marginLeft: '20px', marginRight: '20px', cursor:'pointer' }} 
-            />
-            {/* Title */}
-            <p style={{
-              fontSize: '3rem',    
-              fontWeight: 'bold',  
-              margin: 0,           
-              fontFamily: 'Courier', 
-              marginLeft: '10px',
-              cursor:'default'  
-            }}>
-              Train Track
-            </p>
-          </div>
-          <a href='/profile'>
-            <img src={profileIcon} style={{
-              height:"50px",
-              width:'50px',
-              borderRadius:'50%',
-              border:'2px solid black',
-              marginRight:'10px'
-            }}/>
-          </a>
-        </header>
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
+  const navigate = useNavigate();  
+
+  // Set CSS variables based on the sidebar state
+  const sidebarStyles = {
+    '--sidebar-height': isSidebarExpanded ? '100vh' : '7vh',
+    '--sidebar-width': isSidebarExpanded ? '250px' : '50px',
+    '--sidebar-padding': isSidebarExpanded ? '20px' : '10px',
+    '--button-display': isSidebarExpanded ? 'block' : 'none',
+    '--header-display': isSidebarExpanded ? 'block' : 'none',
+  };
+
+  return (
+    <header className={styles.header}>
+      <div className={styles.logo}>
+        <img 
+          src={logo} 
+          onClick={() => navigate("/home")}  
+          alt="Train Logo" 
+        />
+        <p className={styles.title}>Train Track</p>
       </div>
-    );
+
+      {/* Sidebar */}
+      <Sidebar isExpanded={isSidebarExpanded} setIsExpanded={setIsSidebarExpanded} styles={sidebarStyles} />
+    </header>
+  );
 }
 
 export default Header;

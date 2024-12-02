@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import SeatMap from '../components/seatMap.js'
-import TrainRouteMap from '../components/trainRoute.js';
-import '../style/trainInfoPage.css';
+import SeatMap from '../components/seatMap.js';
+import styles from '../style/trainInfoPage.module.css';  // Use module CSS import
 
 function TrainInfoPage() {
   const location = useLocation();
@@ -11,7 +10,7 @@ function TrainInfoPage() {
   // Extract train data from the navigation state
   const { train } = location.state || {};
 
-  // placeholder data
+  // Placeholder data
   const placeholderTrain = {
     trainCode: 'ABC',
     origin: 'Sioux Falls',
@@ -23,14 +22,24 @@ function TrainInfoPage() {
 
   const trainData = train || placeholderTrain;
 
-  const handleBooking = (selectedSeats) => {
-    navigate('/checkout', { state: { trainCode: trainData.trainCode, selectedSeats } });
+  const [selectedSeats, setSelectedSeats] = useState([]);
+
+  // Update the selectedSeats state when seats are selected
+  const handleSeatSelection = (seats) => {
+    setSelectedSeats(seats);
+  };
+
+  const handleBooking = () => {
+    // Pass the selected seats and train info to the checkout page
+    navigate('/checkout', {
+      state: { trainCode: trainData.trainCode, selectedSeats },
+    });
   };
 
   return (
-    <div className="train-info-container">
+    <div className={styles.trainInfoContainer}>
       {/* Left Section: Train Details */}
-      <div className="train-details">
+      <div className={styles.trainDetails}>
         <h1>{trainData.trainCode}</h1>
         <p><strong>Origin:</strong> {trainData.origin}</p>
         <p><strong>Destination:</strong> {trainData.destination}</p>
@@ -39,17 +48,18 @@ function TrainInfoPage() {
       </div>
 
       {/* Right Section: Seat Map and Booking */}
-      <div className="train-seat-map">
+      <div className={styles.trainSeatMap}>
         <SeatMap
           trainCode={trainData.trainCode}
           seatRows={6} // Customize the number of rows
           seatCols={4} // Customize the number of columns
           bookedSeats={trainData.bookedSeats}
-          onSeatsSelected={(selectedSeats) => console.log('Selected Seats:', selectedSeats)}
+          onSeatsSelected={handleSeatSelection} // Pass selected seats here
         />
         <button
-          className="book-tickets-button"
-          onClick={() => handleBooking()}
+          className={styles.bookTicketsButton}
+          onClick={handleBooking} // Trigger booking
+          disabled={selectedSeats.length === 0} // Disable button if no seats are selected
         >
           Book Tickets
         </button>
