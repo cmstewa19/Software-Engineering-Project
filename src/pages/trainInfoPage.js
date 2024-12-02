@@ -5,6 +5,7 @@ import styles from '../style/trainInfoPage.module.css';
 import Header from '../components/header.js';
 import BookingSection from '../components/bookingSeatSelection.js'; 
 import TrainDetails from '../components/trainDetails.js';
+import TrainRouteMap from '../components/trainRouteMap.js';
 
 function TrainInfoPage() {
   const location = useLocation();
@@ -44,8 +45,19 @@ function TrainInfoPage() {
       {/* Header */}
       <Header />
 
-      {/* Left Section: Train Details */}
-      <TrainDetails trainData={trainData} />
+      {/* Left Section: Train Details
+      <TrainDetails trainData={trainData} /> */}
+
+      {/* Left Section: Train Details and Train Route Map */}
+      <div className={styles.leftSection}>
+        {/* Train Details */}
+        <TrainDetails trainData={trainData} />
+
+        {/* Train Route Map */}
+        <div className={styles.trainRouteMapContainer}>
+          <TrainRouteMap origin="New York" destination="Los Angeles" />
+        </div>
+      </div>
 
       {/* Right Section: Seat Map and Booking */}
       <div className={styles.seatMapAndBooking}>

@@ -5,39 +5,36 @@
   padding: 20px;
 }
 
-.trainInfoPage {
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-}
-
 .trainDetails {
   flex: 1;
-  border-right: 1px solid #ccc;
-  padding-right: 20px;
+  padding: 20px;
+  background-color: #f4f4f4; 
+  border-radius: 8px;
 }
 
-.seatMapContainer {
-  flex-grow: 1;
+.trainRouteMapContainer {
+  width: 100%;
+  margin-top: 20px; /* Adds space between the details and map */
 }
 
 .seatMapAndBooking {
-  flex: 2;
   display: flex;
-  flex-direction: row;
-  gap: 20px;
+  flex-direction: column;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  flex: 2;
 }
 
 .trainSeatMap {
-  flex: 3;  
-  margin-left: 250px;
+  margin-bottom: 20px;
 }
 
 .bookingSection {
   position: fixed;
   top: 80px; 
   right: 20px; 
-  width: 250px; 
+  width: 250px;
   padding: 20px;
   background-color: #fff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
