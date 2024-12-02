@@ -118,44 +118,7 @@ const MyTickets = ({ tickets, loading }) => {
   );
 };
 
-      {/* Tickets Wrapper */}
-      <div style={styles.ticketsWrapper}>
-        {loading ? (
-          <p>Loading tickets...</p>
-        ) : (
-          tickets.map((ticket) => (
-            <div
-              key={ticket.id}
-              style={{
-                ...styles.ticketContainer,
-              }}  
-            >
-              <div style={styles.ticketHeader}>
-                <h2 style={styles.ticketTitle}>Ticket ID: {ticket.id}</h2>
-                <div style={styles.ticketRoute}>
-                  <p>
-                    <strong>{ticket.origin}</strong> →{" "}
-                    <strong>{ticket.destination}</strong>
-                  </p>
-                </div>
-              </div>
-
-              <div style={styles.ticketDetails}>
-                <p>
-                  <strong>Departure:</strong> {ticket.departureDate}
-                </p>
-                <p>
-                  <strong>Arrival:</strong> {ticket.arrivalDate}
-                </p>
-
-                {/* Display QR code or loading state */}
-                <div style={styles.qrCodeWrapper}>
-                    <QRCode value={`Ticket-${ticket.id}`} />
-                </div>
-              </div>
-            </div>
-
-
+      
 // Styles for the ticket display
 const styles = {
   ticketsWrapper: {
@@ -166,10 +129,10 @@ const styles = {
     justifyContent: "center", // Center tickets within the wrapper
   },
   ticketContainer: {
-    width: "300px",
-    height: "500px", // Adjust to make it vertical
-    transform: "rotate(90deg)", // Rotate the ticket
-    transformOrigin: "center center", // Rotate around its center
+    width: "500px",
+    height: "300px", // leave horizontal
+    //transform: "rotate(90deg)", // Rotate the ticket
+    //transformOrigin: "center center", // Rotate around its center
     border: "5px solid #000",
     borderRadius: "8px",
     backgroundColor: "white",
