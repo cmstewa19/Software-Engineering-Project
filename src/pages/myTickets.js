@@ -112,7 +112,7 @@ const MyTickets = ({ tickets, loading }) => {
             )}
             
           </div>
-        </div>
+        </>
       </div>
     </div>
   );
