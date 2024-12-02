@@ -48,7 +48,7 @@ function TrainRouteMap({ origin, destination }) {
       console.log('Google Maps API not ready yet');
       return;
     }
-
+    // got thru here successfully
     const fetchCoordinates = async () => {
       try {
         console.log('Fetching coordinates...');
@@ -59,6 +59,10 @@ function TrainRouteMap({ origin, destination }) {
         if (originCoords && destinationCoords) {
           setOriginCoords(originCoords);
           setDestinationCoords(destinationCoords);
+          console.log('originCoords: ',originCoords);
+          console.log('destinationCoords: ', destinationCoords);
+          // got to here successfully
+
         } else {
           console.error('Invalid coordinates from geocoding');
         }
@@ -91,7 +95,7 @@ function TrainRouteMap({ origin, destination }) {
           {
             origin: originCoords, // Starting point (lat/lng object)
             destination: destinationCoords, // End point (lat/lng object)
-            travelMode: window.google.maps.TravelMode.TRANSIT, // Use TRANSIT mode for trains
+            travelMode: window.google.maps.TravelMode.TRANSIT,
           },
           (result, status) => {
             if (status === window.google.maps.DirectionsStatus.OK) {
