@@ -80,32 +80,32 @@ const MyTickets = ({ tickets, loading }) => {
             ) : (
               tickets.map((ticket) => (
                 <div
-                  key={ticket.id}
+                  key={tickets[0]?.id}
                   style={{
                     ...styles.ticketContainer,
                   }}
                 >
                   <div style={styles.ticketHeader}>
-                    <h2 style={styles.ticketTitle}>Ticket ID: {ticket.id}</h2>
+                    <h2 style={styles.ticketTitle}>Ticket ID: {tickets[0]?.id}</h2>
                     <div style={styles.ticketRoute}>
                       <p>
-                        <strong>{ticket.origin}</strong> →{" "}
-                        <strong>{ticket.destination}</strong>
+                        <strong>{tickets[0]?.origin}</strong> →{" "}
+                        <strong>{tickets[0]?.destination}</strong>
                       </p>
                     </div>
                   </div>
 
                   <div style={styles.ticketDetails}>
                     <p>
-                      <strong>Departure:</strong> {ticket.departureDate}
+                      <strong>Departure:</strong> {ticket[0]?.departureDate}
                     </p>
                     <p>
-                      <strong>Arrival:</strong> {ticket.arrivalDate}
+                      <strong>Arrival:</strong> {ticket[0]?.arrivalDate}
                     </p>
 
                     {/* Display QR code */}
                     <div style={styles.qrCodeWrapper}>
-                      <QRCode value={`Ticket-${ticket.id}`} />
+                      <QRCode value={`Ticket-${tickets[0]?.id}`} />
                     </div>
                   </div>
                 </div>
