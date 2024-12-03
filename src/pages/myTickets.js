@@ -20,45 +20,46 @@ const MyTickets = ({ tickets, loading }) => {
       <div
         style={{
           display: "flex",
-          justifyContent: "center",
+          justifyContent: "space-around",
           marginTop: "20px",
         }}
       >
-
-      {/* Left Section - Ticket Information */}
-      <div
-        style={{
-          width: "40%",
-          maxWidth: "600px",
-          margin: "20px",
-          padding: "20px",
-          border: "1px solid black",
-          borderRadius: "5px",
-          backgroundColor: "#40826D",
-          color: "white",
-        }}
-      >
-        {/* Ticket Info Display Section */}
+        {/* Left Section - Ticket Information */}
         <div
           style={{
-            display: "flex",
-            flexDirection: "column",
-            textAlign: "left", // Ensures text is aligned to the left
-            width: "95%",
-            padding: "5px",
-            paddingBottom: "15px",
+            width: "40%",
+            maxWidth: "600px",
+            margin: "20px",
+            padding: "20px",
             border: "1px solid black",
             borderRadius: "5px",
-            backgroundColor: "#FEFEFE",
+            backgroundColor: "#40826D",
+            color: "white",
           }}
         >
-          <h2 style={styles.ticketTitle}>Ticket ID: {tickets[0].id}</h2>
-          <h2 style={styles.ticketTitle}>Origin: {tickets[0].origin}</h2>
-          <h2 style={styles.ticketTitle}>Destination: {tickets[0].destination}</h2>
-          <h2 style={styles.ticketTitle}>Departure Date: {tickets[0].departureDate}</h2>
-          <h2 style={styles.ticketTitle}>Departure Time: {tickets[0].departureTime}</h2>
+          {/* Ticket Info Display Section */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "left",
+              cursor: "pointer",
+              width: "95%",
+              padding: "5px",
+              paddingBottom: "15px",
+              border: "1px solid black",
+              borderRadius: "5px",
+              backgroundColor: "#FEFEFE",
+            }}
+          >
+            <h2 style={styles.ticketTitle}>Ticket ID: {tickets[0]?.id}</h2>
+            <h2 style={styles.ticketTitle}>Origin: {tickets[0]?.origin}</h2>
+            <h2 style={styles.ticketTitle}>Destination: {tickets[0]?.destination}</h2>
+            <h2 style={styles.ticketTitle}>Departure Date: {tickets[0]?.departureDate}</h2>
+            <h2 style={styles.ticketTitle}>Departure Time: {tickets[0]?.departureTime}</h2>
+          </div>
         </div>
-      </div>
+
         {/* Ticket Display */}
         <div
           style={{
