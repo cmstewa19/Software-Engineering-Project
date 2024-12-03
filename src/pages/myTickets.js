@@ -49,7 +49,8 @@ const MyTickets = ({ tickets, loading }) => {
               paddingBottom: "15px",
               border: "1px solid black",
               borderRadius: "5px",
-              backgroundColor: "#FEFEFE",
+              backgroundColor: "#FEFEFE", // White background
+              color: "black", // Ensure text is visible
             }}
           >
             {loading ? (
