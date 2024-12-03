@@ -92,8 +92,9 @@ function SignUp({ onNavigate }) {
                 borderRadius: '5px',
                 marginBottom: '10px',
               }}
-              pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+              pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" 
               maxLength="12" // Optional to enforce the format length
+              required
             />
 
             <h4 style={{ fontFamily: 'Arial' }}>Enter Email:</h4>
