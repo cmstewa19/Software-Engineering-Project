@@ -20,11 +20,12 @@ const MyTickets = ({ tickets, loading }) => {
       <div
         style={{
           display: "flex",
-          justifyContent: "space-around",
+          justifyContent: "center",
           marginTop: "20px",
         }}
       >
-        {/* Left Section - Ticket Information */}
+
+      {/* Left Section - Ticket Information */}
         <div
           style={{
             width: "40%",
@@ -60,109 +61,75 @@ const MyTickets = ({ tickets, loading }) => {
           </div>
         </div>
 
-        {/* Right Section - Present Ticket Container */}
+        {/* Ticket Display */}
         <div
           style={{
-            width: "40%",
-            maxWidth: "600px",
-            margin: "20px",
+            width: "80%",
+            maxWidth: "700px",
             padding: "20px",
-            border: "1px solid black",
-            borderRadius: "5px",
-            backgroundColor: "#40826D",
-            color: "white",
+            border: "2px solid black",
+            borderRadius: "10px",
+            backgroundColor: "#FFFFFF",
+            color: "black",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
           }}
         >
-          {/* Tickets Wrapper */}
-          <div style={styles.ticketsWrapper}>
-            {loading ? (
-              <p>Loading tickets...</p>
-            ) : (
-              tickets.map((ticket) => (
-                <div
-                  key={tickets[0]?.id}
-                  style={{
-                    ...styles.ticketContainer,
-                  }}
-                >
-                  <div style={styles.ticketHeader}>
-                    <h2 style={styles.ticketTitle}>Ticket ID: {tickets[0]?.id}</h2>
-                    <div style={styles.ticketRoute}>
-                      <p>
-                        <strong>{tickets[0]?.origin}</strong> →{" "}
-                        <strong>{tickets[0]?.destination}</strong>
-                      </p>
-                    </div>
-                  </div>
-
-                  <div style={styles.ticketDetails}>
-                    <p>
-                      <strong>Departure:</strong> {ticket[0]?.departureDate}
-                    </p>
-                    <p>
-                      <strong>Arrival:</strong> {ticket[0]?.arrivalDate}
-                    </p>
-
-                    {/* Display QR code */}
-                    <div style={styles.qrCodeWrapper}>
-                      <QRCode value={`Ticket-${tickets[0]?.id}`} />
-                    </div>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
+          {loading ? (
+            <p>Loading tickets...</p>
+          ) : tickets[0] ? (
+            <>
+              <h2 style={styles.ticketTitle}>Ticket ID: {tickets[0].id}</h2>
+              <div style={styles.routeInfo}>
+                <p>
+                  <strong>{tickets[0].origin}</strong> →{" "}
+                  <strong>{tickets[0].destination}</strong>
+                </p>
+              </div>
+              <div style={styles.details}>
+                <p>
+                  <strong>Departure:</strong> {tickets[0].departureDate}{" "}
+                  {tickets[0].departureTime}
+                </p>
+                <p>
+                  <strong>Arrival:</strong> {tickets[0].arrivalDate}
+                </p>
+              </div>
+              <div style={styles.qrCodeWrapper}>
+                <QRCode value={`Ticket-${tickets[0].id}`} />
+              </div>
+            </>
+          ) : (
+            <p>No tickets available</p>
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-// Styles for the ticket display
+// Updated styles for the new ticket display
 const styles = {
-  ticketsWrapper: {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: "20px",
-    padding: "20px",
-    justifyContent: "center", // Center tickets within the wrapper
+  ticketTitle: {
+    fontSize: "22px",
+    fontWeight: "bold",
+    marginBottom: "10px",
   },
-  ticketContainer: {
-    width: "500px",
-    height: "300px", // leave horizontal
-    border: "5px solid #000",
-    borderRadius: "8px",
-    backgroundColor: "white",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+  routeInfo: {
+    fontSize: "18px",
+    fontWeight: "bold",
+    marginBottom: "20px",
+  },
+  details: {
+    fontSize: "16px",
+    lineHeight: "1.5",
+    marginBottom: "20px",
+  },
+  qrCodeWrapper: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    margin: "20px",
-  },
-  ticketHeader: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    borderBottom: "1px solid #ddd",
-    paddingBottom: "10px",
-    marginBottom: "10px",
-  },
-  ticketTitle: {
-    fontSize: "20px",
-    fontWeight: "bold",
-    color: "black",
-  },
-  ticketRoute: {
-    fontSize: "16px",
-    fontWeight: "bold",
-    color: "black",
-  },
-  ticketDetails: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "flex-start",
+    marginTop: "20px",
   },
 };
 
 export default MyTickets;
-
