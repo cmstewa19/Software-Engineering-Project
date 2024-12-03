@@ -52,6 +52,10 @@ const MyTickets = ({ tickets, loading }) => {
               backgroundColor: "#FEFEFE",
             }}
           >
+            {loading ? (
+            <p>Loading tickets...</p>
+          ) : tickets[0] ? (
+            <>
             <h2 style={styles.ticketTitle}>Ticket ID: {tickets[0]?.id}</h2>
             <h2 style={styles.ticketTitle}>Origin: {tickets[0]?.origin}</h2>
             <h2 style={styles.ticketTitle}>Destination: {tickets[0]?.destination}</h2>
