@@ -53,15 +53,25 @@ const MyTickets = ({ tickets, loading }) => {
             }}
           >
             {loading ? (
-            <p>Loading tickets...</p>
-          ) : tickets[0] ? (
-            <>
-            <h2 style={styles.ticketTitle}>Ticket ID: {tickets[0]?.id}</h2>
-            <h2 style={styles.ticketTitle}>Origin: {tickets[0]?.origin}</h2>
-            <h2 style={styles.ticketTitle}>Destination: {tickets[0]?.destination}</h2>
-            <h2 style={styles.ticketTitle}>Departure Date: {tickets[0]?.departureDate}</h2>
-            <h2 style={styles.ticketTitle}>Departure Time: {tickets[0]?.departureTime}</h2>
-          </>
+              <p>Loading tickets...</p>
+            ) : tickets[0] ? (
+              <>
+                <h2 style={styles.ticketTitle}>Ticket ID: {tickets[0]?.id}</h2>
+                <h2 style={styles.ticketTitle}>Origin: {tickets[0]?.origin}</h2>
+                <h2 style={styles.ticketTitle}>
+                  Destination: {tickets[0]?.destination}
+                </h2>
+                <h2 style={styles.ticketTitle}>
+                  Departure Date: {tickets[0]?.departureDate}
+                </h2>
+                <h2 style={styles.ticketTitle}>
+                  Departure Time: {tickets[0]?.departureTime}
+                </h2>
+              </>
+            ) : (
+              <p>No tickets available</p>
+            )}
+          </div>
         </div>
 
         {/* Ticket Display */}
