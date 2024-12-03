@@ -1,5 +1,5 @@
 import React from 'react';
-import TempIcon from '../assets/TempIcon2.jpg'; // Adjust the path if necessary
+import TempIcon from '../assets/profile-icon.jpg'; 
 
 const UserProfileInfo = () => {
   return (
@@ -28,8 +28,8 @@ const UserProfileInfo = () => {
           alt="temporary icon to be changed later"
           style={{
             objectFit: 'cover',
-            width: '220px',
-            height: '220px',
+            width: '200px',
+            height: '200px',
           }}
         />
 

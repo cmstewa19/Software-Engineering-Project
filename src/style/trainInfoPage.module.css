@@ -1,0 +1,59 @@
+.leftSection {
+  flex: 1; 
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.trainDetails {
+  flex: 1;
+  padding: 20px;
+  background-color: #f4f4f4; 
+  border-radius: 8px;
+}
+
+.trainRouteMapContainer {
+  width: 500px;
+  margin-top: 170px;
+  margin-left: 30px;
+  height: 350px; 
+  position: fixed; 
+}
+
+.seatMapAndBooking {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background-color: #fff;
+  flex: 2;
+  margin-left: 200px;
+}
+
+.trainSeatMap {
+  margin-bottom: 20px;
+}
+
+.bookingSection {
+  position: fixed;
+  top: 100px; 
+  right: 20px; 
+  width: 250px;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.bookTicketsButton {
+  background-color: #40826D;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 16px;
+}
+
+.bookTicketsButton:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}

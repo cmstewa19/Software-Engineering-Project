@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 import '../style/table.css';
-import { sortTrains } from '../utils/trainUtils'; // Import sorting utility function
+import { sortTrains } from '../utils/trainUtils';
 
 function TrainTable({ trains }) {
     const [sortConfig, setSortConfig] = useState({ key: 'trainID', direction: 'asc' });
-    const navigate = useNavigate(); // Initialize useNavigate
+    const navigate = useNavigate();
 
+    // Sorting function
     const requestSort = (key) => {
         let direction = 'asc';
         if (sortConfig.key === key && sortConfig.direction === 'asc') {
@@ -15,6 +16,7 @@ function TrainTable({ trains }) {
         setSortConfig({ key, direction });
     };
 
+    // Get sorting arrow for the table headers
     const getSortArrow = (key) => {
         if (sortConfig.key === key) {
             return sortConfig.direction === 'asc' ? '▲' : '▼';
@@ -22,10 +24,12 @@ function TrainTable({ trains }) {
         return '';
     };
 
+    // Sort trains based on the current sort configuration
     const sortedTrains = sortTrains(trains, sortConfig.key, sortConfig.direction);
 
-    const handleRowClick = (trainCode) => {
-        navigate(`/train/${trainCode}`); // Navigate to the train details page
+    // Handle row click to navigate to TrainInfoPage with train data
+    const handleRowClick = (train) => {
+        navigate('/train-info', { state: { train } });
     };
 
     return (
@@ -33,8 +37,8 @@ function TrainTable({ trains }) {
             <table className="custom-table">
                 <thead>
                     <tr>
-                        <th onClick={() => requestSort('trainID')}>
-                            Train ID/Code {getSortArrow('trainID')}
+                        <th onClick={() => requestSort('trainCode')}>
+                            Train ID/Code {getSortArrow('trainCode')}
                         </th>
                         <th onClick={() => requestSort('origin')}>
                             Origin {getSortArrow('origin')}
@@ -60,8 +64,8 @@ function TrainTable({ trains }) {
                     {sortedTrains.map((train, index) => (
                         <tr
                             key={index}
-                            onClick={() => handleRowClick(train.trainCode)}
-                            style={{ cursor: 'pointer' }} // Add pointer cursor for better UX
+                            onClick={() => handleRowClick(train)}
+                            style={{ cursor: 'pointer' }}
                         >
                             <td>{train.trainCode}</td>
                             <td>{train.origin}</td>

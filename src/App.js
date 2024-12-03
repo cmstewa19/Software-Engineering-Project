@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
+import { fetchTrainData } from './services/api.js'
 
 // Import page components
 import Home from './pages/homePage.js';
@@ -23,7 +24,25 @@ function LoginPageWithNavigation() {
 
 function App() {
   const [tickets, setTickets] = useState([]);
+  const [trains, setTrains] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [filteredTrains, setFilteredTrains] = useState([]);
+
+  // train data
+  useEffect(() => {
+    const getTrainData = async () => {
+      try {
+        const data = await fetchTrainData(); // call API to get train data
+        setTrains(data);  // store fetched data in state
+      } catch (error) {
+        console.error('Failed to fetch train data:', error);
+      } finally {
+        setLoading(false);  // stop loading once data is fetched
+      }
+    };
+
+    getTrainData();
+  }, []); // Empty dependency array to run once on component mount
 
   // Hardcoded ticket data (this would normally come from an API)
   const ticketData = [
@@ -67,7 +86,10 @@ function App() {
           <Routes>
             <Route path="/" element={<LoginPageWithNavigation />} />
             {/* Pass the ticket data as props to Home and MyTickets */}
-            <Route path="/home" element={<Home tickets={tickets} loading={loading} />} />
+            <Route
+              path="/home"
+              element={<Home tickets={tickets} loading={loading} trains={trains} setFilteredTrains={setFilteredTrains} />}
+            />
             <Route path="/signup" element={<Signup />} />
             <Route path="/browse" element={<BrowseTrains />} />
             <Route path="/profile" element={<Profile />} />
@@ -78,7 +100,7 @@ function App() {
             <Route path="/user-tickets" element={<UserTickets tickets={tickets} loading={loading} />} />
 
             {/* Train details page */}
-            <Route path="/train/:trainCode" element={<TrainInfoPage />} />
+            <Route path="/train-info" element={<TrainInfoPage />} />
           </Routes>
         </main> 
       </div>

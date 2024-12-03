@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import SeatMap from '../components/seatMap.js'
-import TrainRouteMap from '../components/trainRoute.js';
-import '../style/trainInfoPage.css';
+import SeatMap from '../components/seatMap.js';
+import styles from '../style/trainInfoPage.module.css';
+import Header from '../components/header.js';
+import BookingSection from '../components/bookingSeatSelection.js'; 
+import TrainDetails from '../components/trainDetails.js';
+import TrainRouteMap from '../components/trainRouteMap.js';
 
 function TrainInfoPage() {
   const location = useLocation();
@@ -11,49 +14,71 @@ function TrainInfoPage() {
   // Extract train data from the navigation state
   const { train } = location.state || {};
 
-  // placeholder data
-  const placeholderTrain = {
-    trainCode: 'ABC',
-    origin: 'Sioux Falls',
-    destination: 'Rapid City',
-    departureTime: '10:00A',
-    openSeats: 24,
-    bookedSeats: [3, 6, 15],
-  };
-
   const trainData = train || placeholderTrain;
 
-  const handleBooking = (selectedSeats) => {
-    navigate('/checkout', { state: { trainCode: trainData.trainCode, selectedSeats } });
+  const [selectedSeats, setSelectedSeats] = useState([]);
+  const [mapCenter, setMapCenter] = useState(null);  
+
+  // Update the selectedSeats state when seats are selected
+  const handleSeatSelection = (seats) => {
+    setSelectedSeats(seats);
   };
 
+  const handleBooking = () => {
+    // Pass the selected seats and train info to the checkout page
+    navigate('/checkout', {
+      state: { trainCode: trainData.trainCode, selectedSeats },
+    });
+  };
+
+  // Effect to update the map center based on the origin and destination
+  useEffect(() => {
+    if (trainData.origin && trainData.destination) {
+      const origin = trainData.origin; 
+      const destination = trainData.destination;
+      setMapCenter({ lat: 39.8283, lng: -98.5795 });  // Placeholder center (central US)
+    }
+  }, [trainData.origin, trainData.destination]);
+
   return (
-    <div className="train-info-container">
-      {/* Left Section: Train Details */}
-      <div className="train-details">
-        <h1>{trainData.trainCode}</h1>
-        <p><strong>Origin:</strong> {trainData.origin}</p>
-        <p><strong>Destination:</strong> {trainData.destination}</p>
-        <p><strong>Departure Time:</strong> {trainData.departureTime}</p>
-        <p><strong>Open Seats:</strong> {trainData.openSeats}</p>
+    <div className={styles.trainInfoContainer}>
+      {/* Header */}
+      <Header />
+
+      {/* Left Section: Train Details and Train Route Map */}
+      <div className={styles.leftSection}>
+        {/* Train Details */}
+        <TrainDetails trainData={trainData} />
+
+        {/* Train Route Map */}
+        <div className={styles.trainRouteMapContainer}>
+          {mapCenter && (
+            <TrainRouteMap 
+              origin={trainData.origin} 
+              destination={trainData.destination} 
+              center={mapCenter} 
+            />
+          )}
+        </div>
       </div>
 
       {/* Right Section: Seat Map and Booking */}
-      <div className="train-seat-map">
-        <SeatMap
-          trainCode={trainData.trainCode}
-          seatRows={6} // Customize the number of rows
-          seatCols={4} // Customize the number of columns
-          bookedSeats={trainData.bookedSeats}
-          onSeatsSelected={(selectedSeats) => console.log('Selected Seats:', selectedSeats)}
-        />
-        <button
-          className="book-tickets-button"
-          onClick={() => handleBooking()}
-        >
-          Book Tickets
-        </button>
-      </div>
+      <div className={styles.seatMapAndBooking}>
+        <div className={styles.trainSeatMap}>
+          <SeatMap
+            trainCode={trainData.trainCode}
+            seatRows={12}
+            seatCols={5}
+            bookedSeats={trainData.bookedSeats}
+            onSeatsSelected={handleSeatSelection} 
+          />
+        </div>
+
+        {/* Booking Section */}
+        <div className={styles.bookingContainer}>
+          <BookingSection selectedSeats={selectedSeats} handleBooking={handleBooking} />
+        </div>   
+      </div>   
     </div>
   );
 }

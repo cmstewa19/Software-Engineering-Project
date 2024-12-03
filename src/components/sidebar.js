@@ -1,82 +1,48 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import styles from '../style/sidebar.module.css';
 
 const Sidebar = () => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const styles = {
-    container: {
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'stretch',
-    },
-    sidebar: {
-      height: isExpanded ? '100vh' : '7vh', // Expand or collapse length
-      width: isExpanded ? '250px' : '50px', // Expand or collapse width
-      backgroundColor: 'black',
-      color: '#40826D',
-      display: 'flex',
-      flexDirection: 'column',
-      padding: isExpanded ? '20px' : '10px',
-      position: 'fixed',
-      transition: 'width 0.3s ease',
-    },
-    button: {
-      backgroundColor: '#40826D',
-      color: 'white',
-      padding: '10px 20px',
-      margin: '10px 0',
-      textAlign: 'center',
-      border: 'black',
-      borderRadius: '4px',
-      textDecoration: 'none',
-      fontSize: '16px',
-      cursor: 'pointer',
-      display: isExpanded ? 'block' : 'none', // Hide buttons when collapsed
-    },
-    toggleButton: {
-      backgroundColor: 'black',
-      color: '#40826D',
-      border: 'none',
-      borderRadius: '4px',
-      cursor: 'pointer',
-      padding: '10px',
-      width: '100%',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    arrow: {
-      fontSize: '16px',
-    },
-    header: {
-      fontSize: '20px',
-      fontWeight: 'bold',
-      marginBottom: '20px',
-      display: isExpanded ? 'block' : 'none', // Hide header when collapsed
-    },
+  // Set dynamic CSS variables based on the sidebar state
+  const sidebarStyles = {
+    '--sidebar-height': isExpanded ? '100vh' : '7vh',
+    '--sidebar-width': isExpanded ? '250px' : '50px',
+    '--sidebar-padding': isExpanded ? '20px' : '10px',
+    '--button-display': isExpanded ? 'block' : 'none',
+    '--header-display': isExpanded ? 'block' : 'none',
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.sidebar}>
-        {/* Toggle Button */}
+    <div className={styles.container}>
+      <div className={styles.sidebar} style={sidebarStyles}>
         <button
-          style={styles.toggleButton}
+          className={`${styles.toggleButton} ${isExpanded ? styles.active : ''}`}
           onClick={() => setIsExpanded(!isExpanded)}
         >
-          <span style={styles.arrow}>{isExpanded ? '←' : '→'}</span>
+          <span className={styles.arrow}>{isExpanded ? '→' : '←'}</span>
         </button>
+        
 
-        {/* Navigation Links */}
-        <div style={styles.header}>Navigation</div>
-        <Link to="/home" style={styles.button}>Home</Link>
-        <Link to="/browse" style={styles.button}>Browse Trains</Link>
+        <div className={styles.header}>Navigation</div>
+        {/* testing */}
+        <Link to="/home" className={styles.button}>Home</Link>
+        <Link to="/browse" className={styles.button}>Browse Trains</Link>
         <Link to="/user-tickets" style={styles.button}>My Tickets</Link>
-        <Link to="/profile" style={styles.button}>Profile Page</Link>
-        <Link to="/" style={styles.button}>Login</Link>
-        <Link to="/signup" style={styles.button}>Sign Up</Link>
-        <Link to="/checkout" style={styles.button}>Checkout</Link>
+        <Link to="/profile" className={styles.button}>Profile Page</Link>
+        <Link to="/" className={styles.button}>Login</Link>
+        <Link to="/signup" className={styles.button}>Sign Up</Link>
+        <Link to="/checkout" className={styles.button}>Checkout</Link>
+
+        {/* final version */}
+                
+        {/* <Link to="/home" className={styles.button}>Home</Link>
+        <Link to="/browse" className={styles.button}>Browse Trains</Link>
+        <Link to="/profile" className={styles.button}>My Profile</Link>
+        <Link to="/myTickets" className={styles.button}>My Tickets</Link> */}
+        
+
       </div>
     </div>
   );

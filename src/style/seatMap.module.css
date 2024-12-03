@@ -1,0 +1,42 @@
+.seatSelectionContainer {
+  text-align: center;
+  margin: 20px;
+}
+
+.seatMap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; 
+}
+
+.seatRow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px; 
+}
+
+.seat {
+  width: 50px;
+  height: 50px;
+  background-color: #ddd;
+  border: 1px solid #aaa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.seat.booked {
+  background-color: #5A5A5A; 
+  cursor: not-allowed;
+}
+
+.seat.selected {
+  background-color: #40826D; 
+}
+
+.aisle {
+  width: 30px; 
+  height: 50px;
+}
