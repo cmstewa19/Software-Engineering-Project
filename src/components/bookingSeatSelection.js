@@ -1,8 +1,10 @@
-// This component is used in pages/trainInfoPage.js
-// Formatting is in style/trainInfoPage.module.css
+{/* 
+This component is used in pages/trainInfoPage.js
+Formatting is in style/trainInfoPage.module.css
 
-// Function: displays selected seats from the seatMap and 
-//    allows user to navigate to checkout page after selecting seats
+Function: displays selected seats from the seatMap and 
+  allows user to navigate to checkout page after selecting seats
+*/}
 
 import React from 'react';
 import styles from '../style/trainInfoPage.module.css';
