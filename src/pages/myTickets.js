@@ -1,10 +1,14 @@
 import React from "react";
-import NavigationButton from "../components/navigationButton.js"; // nav button
-import Header from "../components/header.js"; // header
-import Sidebar from "../components/sidebar.js"; // sidebar
+import { useLocation } from "react-router-dom"; // Import useLocation
+import NavigationButton from "../components/navigationButton.js";
+import Header from "../components/header.js";
+import Sidebar from "../components/sidebar.js";
 import QRCode from "../components/QRCode.js"; // Assuming you're using this library for QR code generation
 
-const MyTickets = ({ tickets, loading }) => {
+const MyTickets = () => {
+  const location = useLocation(); // Access the location object
+  const ticket = location.state?.ticket; // Extract the ticket data
+
   return (
     <div
       style={{
@@ -37,7 +41,6 @@ const MyTickets = ({ tickets, loading }) => {
             color: "white",
           }}
         >
-          {/* Ticket Info Display Section */}
           <div
             style={{
               display: "flex",
@@ -49,28 +52,24 @@ const MyTickets = ({ tickets, loading }) => {
               paddingBottom: "15px",
               border: "1px solid black",
               borderRadius: "5px",
-              backgroundColor: "#FEFEFE", // White background
-              color: "black", // Ensure text is visible
+              backgroundColor: "#FEFEFE",
+              color: "black",
             }}
           >
-            {loading ? (
-              <p>Loading tickets...</p>
-            ) : tickets[0] ? (
+            {ticket ? (
               <>
-                <h2 style={styles.ticketTitle}>Ticket ID: {tickets[0]?.id}</h2>
-                <h2 style={styles.ticketTitle}>Origin: {tickets[0]?.origin}</h2>
+                <h2 style={styles.ticketTitle}>Ticket ID: {ticket.id}</h2>
+                <h2 style={styles.ticketTitle}>Origin: {ticket.origin}</h2>
+                <h2 style={styles.ticketTitle}>Destination: {ticket.destination}</h2>
                 <h2 style={styles.ticketTitle}>
-                  Destination: {tickets[0]?.destination}
+                  Departure Date: {ticket.departureDate}
                 </h2>
                 <h2 style={styles.ticketTitle}>
-                  Departure Date: {tickets[0]?.departureDate}
-                </h2>
-                <h2 style={styles.ticketTitle}>
-                  Departure Time: {tickets[0]?.departureTime}
+                  Departure Time: {ticket.departureTime}
                 </h2>
               </>
             ) : (
-              <p>No tickets available</p>
+              <p>No ticket selected</p>
             )}
           </div>
         </div>
@@ -88,32 +87,30 @@ const MyTickets = ({ tickets, loading }) => {
             boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
           }}
         >
-          {loading ? (
-            <p>Loading tickets...</p>
-          ) : tickets[0] ? (
+          {ticket ? (
             <>
-              <h2 style={styles.ticketTitle}>Ticket ID: {tickets[0].id}</h2>
+              <h2 style={styles.ticketTitle}>Ticket ID: {ticket.id}</h2>
               <div style={styles.routeInfo}>
                 <p>
-                  <strong>{tickets[0].origin}</strong> →{" "}
-                  <strong>{tickets[0].destination}</strong>
+                  <strong>{ticket.origin}</strong> →{" "}
+                  <strong>{ticket.destination}</strong>
                 </p>
               </div>
               <div style={styles.details}>
                 <p>
-                  <strong>Departure:</strong> {tickets[0].departureDate}{" "}
-                  {tickets[0].departureTime}
+                  <strong>Departure:</strong> {ticket.departureDate}{" "}
+                  {ticket.departureTime}
                 </p>
                 <p>
-                  <strong>Arrival:</strong> {tickets[0].arrivalDate}
+                  <strong>Arrival:</strong> {ticket.arrivalDate}
                 </p>
               </div>
               <div style={styles.qrCodeWrapper}>
-                <QRCode value={`Ticket-${tickets[0].id}`} />
+                <QRCode value={`Ticket-${ticket.id}`} />
               </div>
             </>
           ) : (
-            <p>No tickets available</p>
+            <p>No ticket selected</p>
           )}
         </div>
       </div>
