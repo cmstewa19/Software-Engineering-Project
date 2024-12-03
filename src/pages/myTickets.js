@@ -61,7 +61,7 @@ const MyTickets = ({ tickets, loading }) => {
             <h2 style={styles.ticketTitle}>Destination: {tickets[0]?.destination}</h2>
             <h2 style={styles.ticketTitle}>Departure Date: {tickets[0]?.departureDate}</h2>
             <h2 style={styles.ticketTitle}>Departure Time: {tickets[0]?.departureTime}</h2>
-          </div>
+          </>
         </div>
 
         {/* Ticket Display */}
