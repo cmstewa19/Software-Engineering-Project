@@ -1,77 +1,59 @@
-.trainInfoContainer {
+.leftSection {
+  flex: 1; 
   display: flex;
+  flex-direction: column;
   gap: 20px;
-  padding: 20px;
 }
-
 .trainDetails {
   flex: 1;
-  max-width: 300px;
-  border-right: 1px solid #ccc;
-  padding-right: 20px;
+  padding: 20px;
+  background-color: #f4f4f4; 
+  border-radius: 8px;
 }
 
-.trainDetails h1 {
-  font-size: 2rem;
-  margin-bottom: 20px;
+.trainRouteMapContainer {
+  width: 500px;
+  margin-top: 170px;
+  margin-left: 30px;
+  height: 350px; 
+  position: fixed; 
 }
 
-.trainDetails p {
-  margin: 10px 0;
-  font-size: 1rem;
+.seatMapAndBooking {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background-color: #fff;
+  flex: 2;
+  margin-left: 200px;
 }
 
 .trainSeatMap {
-  flex: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.bookingSection {
+  position: fixed;
+  top: 100px; 
+  right: 20px; 
+  width: 250px;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
 }
 
 .bookTicketsButton {
-  background-color: #333;
+  background-color: #40826D;
   color: white;
   border: none;
-  padding: 10px 20px;
+  padding: 10px;
   cursor: pointer;
-  font-size: 1rem;
-  margin-top: 20px;
-}
-
-.bookTicketsButton:hover {
-  background-color: #555;
-}
-
-.seatSelectionContainer {
   width: 100%;
-  display: flex;
-  justify-content: center;
+  font-size: 16px;
 }
 
-.seatMap {
-  display: grid;
-  grid-template-columns: repeat(4, 40px);
-  gap: 10px;
-}
-
-.seat {
-  width: 40px;
-  height: 40px;
-  border: 1px solid #333;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-}
-
-.seat.selected {
-  background-color: #4caf50;
-  color: white;
-}
-
-.seat.booked {
-  background-color: #f44336;
-  color: white;
+.bookTicketsButton:disabled {
+  background-color: #ccc;
   cursor: not-allowed;
 }
