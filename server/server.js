@@ -94,6 +94,36 @@ app.post('/api/signup', async (req, res) => {
     });
   });
 
+// Login POST request
+app.post('/api/login', (req, res) => {
+    const { email, password } = req.body;
+  
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Email and password are required.' });
+    }
+  
+    // Query the database for the user by email
+    db.get('SELECT * FROM users WHERE email = ?', [email], (err, row) => {
+      if (err) {
+        console.error('Database Error:', err);
+        return res.status(500).json({ error: 'Database error' });
+      }
+  
+      if (!row) {
+        return res.status(401).json({ error: 'Invalid email or password' });
+      }
+  
+      // Compare the provided password with the one stored in the database
+      if (row.password !== password) {
+        return res.status(401).json({ error: 'Invalid email or password' });
+      }
+  
+      res.status(200).json({ message: 'Login successful!' });
+    });
+  });
+  
+  
+
   
 // Start the server
 app.listen(port, () => {
