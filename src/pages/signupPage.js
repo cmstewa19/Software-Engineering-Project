@@ -233,6 +233,7 @@ function SignUp() {
             {/* Create Account Button */}
             <NavigationButton
               text="Create Account"
+              path="/home"
               onClick={handleSubmit} 
               style={{
                 width: '300px',
