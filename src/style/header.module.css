@@ -22,6 +22,14 @@ header .logo {
 
 header img {
     height: 60px;
+    
+}
+
+header .noPointer {
+    cursor: default;
+}
+
+header .pointer {
     cursor: pointer;
 }
 

@@ -3,26 +3,17 @@
 
 import React from 'react';
 import NavigationButton from '../components/navigationButton';
+import { useNavigate } from 'react-router-dom';
 
 function UsernamePasswordForm() {
+  const navigate = useNavigate();
   const loginUser = () => {
     const email = document.getElementById('login-email-field').value;
     const password = document.getElementById('login-password-field').value;
     console.log(email);
     console.log(password);
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
-
-    //regex check for email and password - not acutually sure if we need this but oh well
-      if(!emailRegex.test(email)) {
-      console.log("Bad Email: example@email.com");
-      return;
-    }
-    if(!passwordRegex.test(password)) {
-      console.log("Password must have at least 1 Upper, 1 lower, 1 number, 1 special char, and +8 length");
-      return;
-    }
+    navigate("/home");
   }
 
   return (

@@ -4,7 +4,7 @@ import logo from '../assets/rail.png';
 import styles from '../style/header.module.css';
 import Sidebar from './sidebar.js';
 
-function Header() {
+function Header({isLoggedIn = true}) {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
   const navigate = useNavigate();  
 
@@ -20,9 +20,9 @@ function Header() {
   return (
     <header className={styles.header}>
       <div className={styles.logo}>
-        <img 
+        <img className={isLoggedIn ? styles.pointer : styles.noPointer}
           src={logo} 
-          onClick={() => navigate("/home")}  
+          onClick={isLoggedIn ? () => navigate("/home") : () => {}}  
           alt="Train Logo" 
         />
         <p className={styles.title}>Train Track</p>
