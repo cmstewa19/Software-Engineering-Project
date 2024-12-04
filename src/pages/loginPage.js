@@ -4,11 +4,13 @@ import Header from '../components/header.js'; // header
 import UsernamePasswordForm from '../components/usernamePasswordForm.js'; // username password form
 import NavigationButton from '../components/navigationButton';
 
+
 function Login() {
+
   return (
     <div style={{ overflow: 'hidden', height: '100vh', display: 'flex', flexDirection: 'column' }}>
       {/* Header component */}
-      <Header />
+      <Header isLoggedIn={false} />
       
       {/* Flex container */}
       <div className="row no-gutters" style={{ flex: 1, display: 'flex', height: '100%' }}>

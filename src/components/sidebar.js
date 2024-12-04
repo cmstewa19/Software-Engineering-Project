@@ -35,6 +35,7 @@ const Sidebar = () => {
         >
           <span className={styles.arrow}>{isExpanded ? '→' : '←'}</span>
         </button>
+        
 
         {/* Sidebar header */}
         <div className={styles.header}>Navigation</div>
@@ -42,7 +43,7 @@ const Sidebar = () => {
         {/* use for testing ------ */}
         <Link to="/home" className={styles.button}>Home</Link>
         <Link to="/browse" className={styles.button}>Browse Trains</Link>
-        <Link to="/myTickets" className={styles.button}>My Tickets</Link>
+        <Link to="/user-tickets" className={styles.button}>My Tickets</Link>
         <Link to="/profile" className={styles.button}>Profile Page</Link>
         <Link to="/" className={styles.button}>Login</Link>
         <Link to="/signup" className={styles.button}>Sign Up</Link>
@@ -56,6 +57,7 @@ const Sidebar = () => {
         <Link to="/profile" className={styles.button}>My Profile</Link>
         <Link to="/myTickets" className={styles.button}>My Tickets</Link> */}
         
+
       </div>
     </div>
   );

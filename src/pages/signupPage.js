@@ -4,10 +4,15 @@ import NavigationButton from '../components/navigationButton.js'; // nav button
 import Header from '../components/header.js'; // header
 
 function SignUp({ onNavigate }) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+  const badEmailText = "Bad Email: example@email.com";
+  const badPasswordText = "Password must have at least 1 Upper, 1 lower, 1 number, 1 special char, and +8 length";
+
   return (
     <div>
       {/* Header component */}
-      <Header />
+      <Header isLoggedIn={false} />
 
       {/* Flex container */}
       <div className="row no-gutters" style={{ flex: 1, display: 'flex', height: '100vh' }}>
@@ -92,8 +97,9 @@ function SignUp({ onNavigate }) {
                 borderRadius: '5px',
                 marginBottom: '10px',
               }}
-              pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+              pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" 
               maxLength="12" // Optional to enforce the format length
+              required
             />
 
             <h4 style={{ fontFamily: 'Arial' }}>Enter Email:</h4>

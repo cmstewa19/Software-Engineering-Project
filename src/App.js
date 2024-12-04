@@ -12,6 +12,7 @@ import PurchaseTickets from './pages/purchaseTickets.js';
 import MyTickets from './pages/myTickets';
 import UserTickets from './pages/userTicketsPage.js'
 import TrainInfoPage from './pages/trainInfoPage.js'; 
+import ScanTicket from './pages/scanTicketPage.js';
 
 
 function LoginPageWithNavigation() {
@@ -43,6 +44,15 @@ function App() {
 
     getTrainData();
   }, []); // Empty dependency array to run once on component mount
+
+  //hardcoded user data - eventually will come from our database
+  const user =  [
+    {
+      id: "1111",
+      first: "John",
+      last: "Doe"
+    }
+  ]
 
   // Hardcoded ticket data (this would normally come from an API)
   const ticketData = [
@@ -88,7 +98,7 @@ function App() {
             {/* Pass the ticket data as props to Home and MyTickets */}
             <Route
               path="/home"
-              element={<Home tickets={tickets} loading={loading} trains={trains} setFilteredTrains={setFilteredTrains} />}
+              element={<Home tickets={tickets} loading={loading} trains={trains} setFilteredTrains={setFilteredTrains} user={user[0]} />}
             />
             <Route path="/signup" element={<Signup />} />
             <Route path="/browse" element={<BrowseTrains />} />
@@ -98,6 +108,7 @@ function App() {
             {/* Tickets */}
             <Route path="/myTickets" element={<MyTickets tickets={tickets} loading={loading} />} />
             <Route path="/user-tickets" element={<UserTickets tickets={tickets} loading={loading} />} />
+            <Route path="/scan" element={<ScanTicket />} />
 
             {/* Train details page */}
             <Route path="/train-info" element={<TrainInfoPage />} />

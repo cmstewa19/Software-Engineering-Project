@@ -7,6 +7,9 @@
   padding: 0;
   min-height: 100vh;
 }
+body {
+  background-color: #F5F5F5;
+}
 /* header & sidebar fixed position */
 header, .sidebar {
   position: fixed;
@@ -27,7 +30,11 @@ header, .sidebar {
 }
 /* Profile Card Section */
 .profileCard {
+  display: flex;
+  flex-direction: column;
   flex: 0 0 40%;
+  justify-content: center;
+  align-items: center;
   max-width: 500px;
   padding: 20px;
   background-color: #40826D;
@@ -38,11 +45,15 @@ header, .sidebar {
 /* Ticket Card Section */
 .ticketCard {
   background-color: #FEFEFE;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   border: 1px solid black;
   border-radius: 5px;
   padding: 15px;
   text-align: center;
-  cursor: pointer;
+  width: 90%;
   max-width: 500px; /* Set a max-width to prevent it from stretching too much */
 }
 

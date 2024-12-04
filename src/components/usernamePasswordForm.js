@@ -3,8 +3,19 @@
 
 import React from 'react';
 import NavigationButton from '../components/navigationButton';
+import { useNavigate } from 'react-router-dom';
 
 function UsernamePasswordForm() {
+  const navigate = useNavigate();
+  const loginUser = () => {
+    const email = document.getElementById('login-email-field').value;
+    const password = document.getElementById('login-password-field').value;
+    console.log(email);
+    console.log(password);
+
+    navigate("/home");
+  }
+
   return (
     <div 
       className="bg-light border border-light rounded d-flex flex-column align-items-center"
@@ -26,6 +37,7 @@ function UsernamePasswordForm() {
       {/* Username Input with placeholder */}
       <input
         type="text"
+        id="login-email-field"
         placeholder="Email"
         style={{
           width: '100%',
@@ -42,6 +54,7 @@ function UsernamePasswordForm() {
       {/* Password Input with placeholder */}
       <input
         type="password"
+        id="login-password-field"
         placeholder="Password"
         style={{
           width: '100%',
@@ -58,6 +71,7 @@ function UsernamePasswordForm() {
       <NavigationButton
         text="Login"
         path="/home" 
+        onClick={loginUser}
         style={{
           width: '100%',
           backgroundColor: 'black',
