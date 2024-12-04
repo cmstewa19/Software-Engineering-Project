@@ -29,7 +29,7 @@ const Sidebar = () => {
         {/* testing */}
         <Link to="/home" className={styles.button}>Home</Link>
         <Link to="/browse" className={styles.button}>Browse Trains</Link>
-        <Link to="/user-tickets" style={styles.button}>My Tickets</Link>
+        <Link to="/user-tickets" className={styles.button}>My Tickets</Link>
         <Link to="/profile" className={styles.button}>Profile Page</Link>
         <Link to="/" className={styles.button}>Login</Link>
         <Link to="/signup" className={styles.button}>Sign Up</Link>
