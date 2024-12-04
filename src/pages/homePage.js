@@ -10,7 +10,7 @@ import { formatDate } from '../utils/trainUtils'; // Utility functions
 import styles from '../style/homePage.module.css'; // styling
 
 // Home Page Component
-const Home = ({ tickets, loading: ticketLoading, trains, setFilteredTrains }) => {
+const Home = ({ tickets, loading: ticketLoading, trains, setFilteredTrains, user }) => {
   const [allTrains, setAllTrains] = useState([]); // Full train data
   const [filteredTrains, setFilteredTrainsState] = useState([]); // Trains after filtering
   const [loading, setLoading] = useState(true); // Local loading state for train data
@@ -87,12 +87,12 @@ const Home = ({ tickets, loading: ticketLoading, trains, setFilteredTrains }) =>
       <div className={styles.contentWrapper}>
         {/* Profile Card Section */}
         <div className={styles.profileCard}>
-          <div className={styles.ticketCard} onClick={() => navigate('/myTickets')}>
+          <div className={styles.ticketCard}>
             {tickets.length > 0 ? (
               <>
                 <h2>{tickets[0].origin} → {tickets[0].destination}</h2>
                 <h2>{tickets[0].departureDate}</h2>
-                <QRCode />
+                <QRCode userID={user.id} trainID={tickets[0].id}/>
               </>
             ) : (
               <h2>No tickets to display</h2>
