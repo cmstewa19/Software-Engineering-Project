@@ -1,28 +1,45 @@
-// Form for login page
-// Will need to take input in the future
-
-import React from 'react';
+import React, { useState } from 'react';
 import NavigationButton from '../components/navigationButton';
-import { useNavigate } from 'react-router-dom';
 
-function UsernamePasswordForm() {
-  const navigate = useNavigate();
-  const loginUser = () => {
-    const email = document.getElementById('login-email-field').value;
-    const password = document.getElementById('login-password-field').value;
-    console.log(email);
-    console.log(password);
+function UsernamePasswordForm({ navigate }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-    navigate("/home");
-  }
+  const handleLogin = async () => {
+    // Validation checks
+    if (!email || !password) {
+      return setError('Both email and password are required.');
+    }
+
+    try {
+      const response = await fetch('http://localhost:3000/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert('Login successful!');
+        navigate('/home'); // Redirect to home page
+      } else {
+        setError(data.error || 'Failed to log in.');
+      }
+    } catch (err) {
+      console.error('Login Error:', err);
+      setError('An error occurred. Please try again later.');
+    }
+  };
 
   return (
-    <div 
+    <div
       className="bg-light border border-light rounded d-flex flex-column align-items-center"
-      style={{ 
-        width: '100%', 
-        maxWidth: '400px', 
-        padding: '40px', 
+      style={{
+        width: '100%',
+        maxWidth: '400px',
+        padding: '40px',
         boxSizing: 'border-box',
         textAlign: 'center',
         border: '2px solid #40826D',
@@ -34,10 +51,11 @@ function UsernamePasswordForm() {
         Welcome!
       </h2>
 
-      {/* Username Input with placeholder */}
+      {/* Email Input */}
       <input
         type="text"
-        id="login-email-field"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
         placeholder="Email"
         style={{
           width: '100%',
@@ -51,10 +69,11 @@ function UsernamePasswordForm() {
         }}
       />
 
-      {/* Password Input with placeholder */}
+      {/* Password Input */}
       <input
         type="password"
-        id="login-password-field"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
         placeholder="Password"
         style={{
           width: '100%',
@@ -67,11 +86,14 @@ function UsernamePasswordForm() {
         }}
       />
 
+      {/* Error message */}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+
       {/* Login Button */}
       <NavigationButton
         text="Login"
-        path="/home" 
-        onClick={loginUser}
+        path="/home"
+        onClick={handleLogin}
         style={{
           width: '100%',
           backgroundColor: 'black',
