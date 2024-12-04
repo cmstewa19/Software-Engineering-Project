@@ -1,57 +1,18 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import NavigationButton from "../components/navigationButton.js"; // nav button
-import Header from "../components/header.js"; // header
-import Sidebar from "../components/sidebar.js"; // sidebar
+import React from "react";
+import { useLocation } from "react-router-dom"; // Import useLocation
+import NavigationButton from "../components/navigationButton.js";
+import Header from "../components/header.js";
+import Sidebar from "../components/sidebar.js";
+import QRCode from "../components/QRCode.js"; // Assuming you're using this library for QR code generation
 
-const MyTickets = ({ tickets, loading }) => {
-  const [qrCodes, setQrCodes] = useState({}); // Store QR codes by ticket ID
-  const [loadingQR, setLoadingQR] = useState(true); // Track QR loading state
-  const [enlargedTicketId, setEnlargedTicketId] = useState(null); // Track enlarged ticket state
-
-  // Fetch QR codes on component mount
-  useEffect(() => {
-    const fetchQRCodes = async () => {
-      try {
-        // Map tickets to promises and await their resolution
-        const qrCodePromises = tickets.map(async (ticket) => {
-          const response = await axios.get(
-            `http://localhost:3000/api/qr/${ticket.id}`
-          );
-          return { id: ticket.id, qrCode: response.data.qrCode }; // Map ticket ID to QR code
-        });
-
-        // Await all promises
-        const qrCodeData = await Promise.all(qrCodePromises);
-
-        // Map QR code URLs to ticket IDs
-        const qrCodeMap = {};
-        qrCodeData.forEach(({ id, qrCode }) => {
-          qrCodeMap[id] = qrCode;
-        });
-
-        // Update state
-        setQrCodes(qrCodeMap);
-        setLoadingQR(false);
-      } catch (error) {
-        console.error("Error fetching QR codes:", error);
-      }
-    };
-
-    fetchQRCodes();
-  }, [tickets]);
-
-  // Function to handle ticket click to enlarge/shrink
-  const handleTicketClick = (ticketId) => {
-    setEnlargedTicketId((prevId) =>
-      prevId === ticketId ? null : ticketId
-    ); // Toggle between enlarged and normal
-  };
+const MyTickets = () => {
+  const location = useLocation(); // Access the location object
+  const ticket = location.state?.ticket; // Extract the ticket data
 
   return (
     <div
       style={{
-        overflow: "hidden",
+        overflow: "auto", // scroll
         height: "100vh",
         display: "flex",
         flexDirection: "column",
@@ -60,112 +21,126 @@ const MyTickets = ({ tickets, loading }) => {
       <Header />
       <Sidebar />
 
-      {/* Tickets Wrapper */}
-      <div style={styles.ticketsWrapper}>
-        {loading ? (
-          <p>Loading tickets...</p>
-        ) : (
-          tickets.map((ticket) => (
-            <div
-              key={ticket.id}
-              style={{
-                ...styles.ticketContainer,
-                ...(enlargedTicketId === ticket.id
-                  ? styles.enlargedTicket
-                  : {}),
-              }}
-              onClick={() => handleTicketClick(ticket.id)} // On click, toggle the enlarged state
-            >
-              <div style={styles.ticketHeader}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-around",
+          marginTop: "20px",
+        }}
+      >
+        {/* Left Section - Ticket Information */}
+        <div
+          style={{
+            width: "40%",
+            maxWidth: "600px",
+            margin: "20px",
+            padding: "20px",
+            border: "1px solid black",
+            borderRadius: "5px",
+            backgroundColor: "#40826D",
+            color: "white",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "left",
+              cursor: "pointer",
+              width: "95%",
+              padding: "5px",
+              paddingBottom: "15px",
+              border: "1px solid black",
+              borderRadius: "5px",
+              backgroundColor: "#FEFEFE",
+              color: "black",
+            }}
+          >
+            {ticket ? (
+              <>
                 <h2 style={styles.ticketTitle}>Ticket ID: {ticket.id}</h2>
-                <div style={styles.ticketRoute}>
-                  <p>
-                    <strong>{ticket.origin}</strong> →{" "}
-                    <strong>{ticket.destination}</strong>
-                  </p>
-                </div>
-              </div>
+                <h2 style={styles.ticketTitle}>Origin: {ticket.origin}</h2>
+                <h2 style={styles.ticketTitle}>Destination: {ticket.destination}</h2>
+                <h2 style={styles.ticketTitle}>
+                  Departure Date: {ticket.departureDate}
+                </h2>
+                <h2 style={styles.ticketTitle}>
+                  Departure Time: {ticket.departureTime}
+                </h2>
+              </>
+            ) : (
+              <p>No ticket selected</p>
+            )}
+          </div>
+        </div>
 
-              <div style={styles.ticketDetails}>
+        {/* Ticket Display */}
+        <div
+          style={{
+            width: "80%",
+            maxWidth: "700px",
+            padding: "20px",
+            border: "2px solid black",
+            borderRadius: "10px",
+            backgroundColor: "#FFFFFF",
+            color: "black",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+          }}
+        >
+          {ticket ? (
+            <>
+              <h2 style={styles.ticketTitle}>Ticket ID: {ticket.id}</h2>
+              <div style={styles.routeInfo}>
                 <p>
-                  <strong>Departure:</strong> {ticket.departureDate}
+                  <strong>{ticket.origin}</strong> →{" "}
+                  <strong>{ticket.destination}</strong>
+                </p>
+              </div>
+              <div style={styles.details}>
+                <p>
+                  <strong>Departure:</strong> {ticket.departureDate}{" "}
+                  {ticket.departureTime}
                 </p>
                 <p>
                   <strong>Arrival:</strong> {ticket.arrivalDate}
                 </p>
-
-                {/* Display QR code or loading state */}
-                {loadingQR || !qrCodes[ticket.id] ? (
-                  <p>Loading QR Code...</p>
-                ) : (
-                  <img
-                    src={qrCodes[ticket.id]}
-                    alt={`QR Code for ticket ${ticket.id}`}
-                    style={styles.qrCodeImage}
-                  />
-                )}
               </div>
-            </div>
-          ))
-        )}
+              <div style={styles.qrCodeWrapper}>
+                <QRCode value={`Ticket-${ticket.id}`} />
+              </div>
+            </>
+          ) : (
+            <p>No ticket selected</p>
+          )}
+        </div>
       </div>
     </div>
   );
 };
 
-// Styles for the ticket display
+// Updated styles for the new ticket display
 const styles = {
-  ticketsWrapper: {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: "20px",
-    padding: "20px",
-    justifyContent: "center", // Center tickets within the wrapper
-  },
-  ticketContainer: {
-    width: "400px",
-    border: "5px solid #000",
-    borderRadius: "8px",
-    padding: "20px",
-    backgroundColor: "white",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-    marginLeft: "50px",
-    transition: "transform 0.3s ease", // Smooth transition when enlarging
-  },
-  enlargedTicket: {
-    transform: "scale(2.0)", // Enlarge the ticket
-    zIndex: 1, // Ensure enlarged ticket is on top
-    alignItems: "center",
-  },
-  ticketHeader: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    borderBottom: "1px solid #ddd",
-    paddingBottom: "10px",
+  ticketTitle: {
+    fontSize: "22px",
+    fontWeight: "bold",
     marginBottom: "10px",
   },
-  ticketTitle: {
-    fontSize: "20px",
+  routeInfo: {
+    fontSize: "18px",
     fontWeight: "bold",
-    color: "black",
+    marginBottom: "20px",
   },
-  ticketRoute: {
+  details: {
     fontSize: "16px",
-    fontWeight: "bold",
-    color: "black",
+    lineHeight: "1.5",
+    marginBottom: "20px",
   },
-  ticketDetails: {
+  qrCodeWrapper: {
     display: "flex",
-    flexDirection: "column",
-    alignItems: "flex-start",
-  },
-  qrCodeImage: {
-    marginTop: "15px",
-    width: "120px",
-    height: "120px",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: "20px",
   },
 };
 
 export default MyTickets;
-
