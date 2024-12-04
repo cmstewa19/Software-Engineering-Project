@@ -1,5 +1,10 @@
-// takes text (the display text on the button) and path (where the website will be redirected to)
-// for example, to get to home, text = "Home"; path = "/home", button takes you to 'localhost:xxxx/home'
+{/* 
+This component is used in many pages for navigation between pages. 
+
+Function: 
+  - Takes 'text' (the display text on the button) and 'path' (the destination path the website will be redirected to).
+  - For example, to get to home, 'text' = "Home" and 'path' = "/home", the button will navigate to 'localhost:xxxx/home'.
+*/}
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -8,8 +13,8 @@ import PropTypes from 'prop-types';
 function NavigationButton({ text, path, style, onClick}) {
   // default onClick function is navigation
   if(onClick === undefined) {
-    const navigate = useNavigate();
-    onClick = () => navigate(path);
+    const navigate = useNavigate(); // access the navigate function from React Router
+    onClick = () => navigate(path); 
   }
    
 
@@ -32,11 +37,12 @@ function NavigationButton({ text, path, style, onClick}) {
         ...style,
       }}
     >
-      {text}
+      {text} {/* Button display text */}
     </button>
   );
 }
 
+// define & require prop types to ensure correct usage of the component
 NavigationButton.propTypes = {
   text: PropTypes.string.isRequired,
   path: PropTypes.string.isRequired,

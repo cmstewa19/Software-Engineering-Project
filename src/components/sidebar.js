@@ -1,11 +1,21 @@
+{/* 
+This component is used in header.js. 
+Styling is in sidebar.module.css.
+
+Function:
+- manages a collapsible sidebar that displays links to other pages when expanded. 
+
+*/}
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styles from '../style/sidebar.module.css';
 
 const Sidebar = () => {
+  // state to toggle the sidebar expansion (collapsed or expanded)
   const [isExpanded, setIsExpanded] = useState(false);
 
-  // Set dynamic CSS variables based on the sidebar state
+  // setting CSS variables dynamically based on the sidebar state
   const sidebarStyles = {
     '--sidebar-height': isExpanded ? '100vh' : '7vh',
     '--sidebar-width': isExpanded ? '250px' : '50px',
@@ -16,17 +26,21 @@ const Sidebar = () => {
 
   return (
     <div className={styles.container}>
+      {/* Sidebar container with dynamic styles applied */}
       <div className={styles.sidebar} style={sidebarStyles}>
+        {/* Button to toggle sidebar expansion */}
         <button
           className={`${styles.toggleButton} ${isExpanded ? styles.active : ''}`}
-          onClick={() => setIsExpanded(!isExpanded)}
+          onClick={() => setIsExpanded(!isExpanded)} // switches the expansion state when clicked
         >
           <span className={styles.arrow}>{isExpanded ? '→' : '←'}</span>
         </button>
         
 
+        {/* Sidebar header */}
         <div className={styles.header}>Navigation</div>
-        {/* testing */}
+
+        {/* use for testing ------ */}
         <Link to="/home" className={styles.button}>Home</Link>
         <Link to="/browse" className={styles.button}>Browse Trains</Link>
         <Link to="/user-tickets" className={styles.button}>My Tickets</Link>
@@ -35,8 +49,9 @@ const Sidebar = () => {
         <Link to="/signup" className={styles.button}>Sign Up</Link>
         <Link to="/checkout" className={styles.button}>Checkout</Link>
 
-        {/* final version */}
-                
+        {/* use for final product ------ */}
+
+        {/* Links to all of the pages */}        
         {/* <Link to="/home" className={styles.button}>Home</Link>
         <Link to="/browse" className={styles.button}>Browse Trains</Link>
         <Link to="/profile" className={styles.button}>My Profile</Link>

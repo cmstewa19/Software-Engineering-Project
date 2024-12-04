@@ -1,3 +1,10 @@
+{/* 
+This component is used in most pages. Uses Sidebar component.
+Formatting is in style/header.module.css
+
+Function: header across pages, displays logo, title, and sidebar. 
+*/}
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';  
 import logo from '../assets/rail.png';
@@ -20,6 +27,7 @@ function Header({isLoggedIn = true}) {
   return (
     <header className={styles.header}>
       <div className={styles.logo}>
+        {/* Shows logo, navigates to homePage if clicked */}
         <img className={isLoggedIn ? styles.pointer : styles.noPointer}
           src={logo} 
           onClick={isLoggedIn ? () => navigate("/home") : () => {}}  
@@ -28,7 +36,7 @@ function Header({isLoggedIn = true}) {
         <p className={styles.title}>Train Track</p>
       </div>
 
-      {/* Sidebar */}
+      {/* Sidebar component */}
       <Sidebar isExpanded={isSidebarExpanded} setIsExpanded={setIsSidebarExpanded} styles={sidebarStyles} />
     </header>
   );
