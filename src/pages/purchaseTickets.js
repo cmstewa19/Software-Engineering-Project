@@ -251,7 +251,14 @@ function PurchaseTicketsPage() {
         }}
       >
         {/* Cart Section */}
-        <div style={{ width: "40%", padding: "20px", backgroundColor: "#40826D", color: "white" }}>
+        <div
+          style={{
+            width: "40%",
+            padding: "20px",
+            backgroundColor: "#40826D",
+            color: "white",
+          }}
+        >
           <h2>Your Cart</h2>
           {cart.length > 0 ? (
             cart.map((seat, index) => (
@@ -288,76 +295,65 @@ function PurchaseTicketsPage() {
           ) : (
             <p>No seats selected.</p>
           )}
-
-          {/* Summary */}
           <h3>Order Summary</h3>
           <p>Subtotal: ${cart.length * 9.99}</p>
           <p>Handling Fee: $3.99</p>
           <p>Tax: $2.99</p>
-          <h4>
-            Total: ${(cart.length * 9.99 + 3.99 + 2.99).toFixed(2)}
-          </h4>
+          <h4>Total: ${(cart.length * 9.99 + 3.99 + 2.99).toFixed(2)}</h4>
+        </div>
 
-        {/*<h2>Your Cart</h2>
+
+        {/* Uncomment this block if needed
+        <h2>Your Cart</h2>
         {selectedSeats?.length ? (
-        <>
-          {selectedSeats.map((seat, index) => (
-            <div
-              key={index}
-              style={{
-                backgroundColor: "#FEFEFE",
-                color: "black",
-                padding: "10px",
-                margin: "10px 0",
-                borderRadius: "5px",
-              }}
-            >
-              {ticket ? (
-                <>
-                  <h4>Ticket ID: {ticket.id}</h4>
-                  <div style={styles.routeInfo}>
-                    <p>
-                      <strong>{ticket.origin}</strong> →{" "}
-                      <strong>{ticket.destination}</strong>
-                    </p>
-                  </div>
+          <>
+            {selectedSeats.map((seat, index) => (
+              <div
+                key={index}
+                style={{
+                  backgroundColor: "#FEFEFE",
+                  color: "black",
+                  padding: "10px",
+                  margin: "10px 0",
+                  borderRadius: "5px",
+                }}
+              >
+                {ticket ? (
+                  <>
+                    <h4>Ticket ID: {ticket.id}</h4>
+                    <div style={styles.routeInfo}>
+                      <p>
+                        <strong>{ticket.origin}</strong> →{" "}
+                        <strong>{ticket.destination}</strong>
+                      </p>
+                    </div>
+                    <p>Seat: {seat}</p>
+                    <button
+                      onClick={() => handleRemoveFromCart(index)}
+                      style={{
+                        backgroundColor: "#D9534F",
+                        color: "white",
+                        border: "none",
+                        padding: "5px 10px",
+                        borderRadius: "5px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Remove
+                    </button>
+                  </>
+                ) : (
                   <p>Seat: {seat}</p>
-                  <button
-                    onClick={() => handleRemoveFromCart(index)}
-                    style={{
-                      backgroundColor: "#D9534F",
-                      color: "white",
-                      border: "none",
-                      padding: "5px 10px",
-                      borderRadius: "5px",
-                      cursor: "pointer",
-                    }}
-                  >
-                    Remove
-                  </button>
-                </>
-              ) : (
-                <p>Seat: {seat}</p>
-              )}
-            </div>
-          ))}
-        </>
-      ) : (
-        <p>No seats selected.</p>
-      )}
-                       
-        <h3>Order Summary</h3>
-        <p>Subtotal: ${cart.reduce((acc, item) => acc + 9.99, 0).toFixed(2)}</p>
-        <p>Handling Fee: $3.99</p>
-        <p>Tax: $2.99</p>
-        <h4>
-          Total: $
-          {(
-            cart.reduce((acc, item) => acc + 9.99, 0) + 
-            3.99 + 
-            2.99
-          ).toFixed(2)}
-        </h4>*/}
+                )}
+              </div>
+            ))}
+          </>
+        ) : (
+          <p>No seats selected.</p>
+        )}
+        */}
+
+
 
         <NavigationButton
           text="Back to Browse"
