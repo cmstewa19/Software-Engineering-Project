@@ -34,7 +34,7 @@ function Profile() {
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <Header />
+      <Header isLoggedIn = {true}/>
 
       {/* My Profile header for the top of the page */}
       <div
