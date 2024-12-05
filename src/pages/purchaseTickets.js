@@ -253,7 +253,8 @@ function PurchaseTicketsPage() {
         
         <h2>Your Cart</h2>
         {selectedSeats?.length ? (
-          selectedSeats.map((seat, index) => (
+        <>
+          {selectedSeats.map((seat, index) => (
             <div
               key={index}
               style={{
@@ -264,33 +265,39 @@ function PurchaseTicketsPage() {
                 borderRadius: "5px",
               }}
             >
-            {ticket ? (
-              <>
-                <h4>Ticket ID: {ticket.id}</h4>
-                <div style={styles.routeInfo}>
-                  <p>
-                    <strong>{ticket.origin}</strong> →{" "}
-                    <strong>{ticket.destination}</strong>
-                  </p>
-                </div>
+              {ticket ? (
+                <>
+                  <h4>Ticket ID: {ticket.id}</h4>
+                  <div style={styles.routeInfo}>
+                    <p>
+                      <strong>{ticket.origin}</strong> →{" "}
+                      <strong>{ticket.destination}</strong>
+                    </p>
+                  </div>
+                  <p>Seat: {seat}</p>
+                  <button
+                    onClick={() => handleRemoveFromCart(index)}
+                    style={{
+                      backgroundColor: "#D9534F",
+                      color: "white",
+                      border: "none",
+                      padding: "5px 10px",
+                      borderRadius: "5px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Remove
+                  </button>
+                </>
+              ) : (
                 <p>Seat: {seat}</p>
-                <button
-                  onClick={() => handleRemoveFromCart(index)} 
-                  style={{
-                    backgroundColor: "#D9534F",
-                    color: "white",
-                    border: "none",
-                    padding: "5px 10px",
-                    borderRadius: "5px",
-                    cursor: "pointer",
-                  }}
-                >
-                  Remove
-                </button>
-              </>
-            ) : (
-              <p>Seat: {seat}</p>
-            )}
+              )}
+            </div>
+          ))}
+        </>
+      ) : (
+        <p>No seats selected.</p>
+      )}
               
 
           
