@@ -40,7 +40,7 @@ function Profile() {
       <div
         style={{
           position: 'absolute',
-          top: '110px',
+          top: '90px',
           left: '65px',
           marginTop: '20px',
           fontSize: '50px',
@@ -353,15 +353,20 @@ function Profile() {
 
                         {/* Right column */}
                         <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                          <button
-                            style={{
-                              backgroundColor: '#40826D',
-                              color: 'white',
-                              border: '1px solid #40826D',
-                              padding: '10px 20px',
-                              borderRadius: '5px',
-                              cursor: 'pointer',
-                            }}>Change Password</button>
+                        
+                        {/* Change Password Button, links off to the page */}
+                        <NavigationButton
+                          text="Change Password"
+                          path="/changepassword"
+                          style={{
+                            padding: '10px 20px',
+                            fontSize: '18px',
+                            margin: '10px',
+                            color: 'white',
+                            backgroundColor: '#40826D',
+                            border: '1px solid #40826D',
+                          
+                          }}/>
                         </div>
                       </div>
                     </div>
