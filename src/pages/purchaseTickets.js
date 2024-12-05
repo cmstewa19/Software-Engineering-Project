@@ -17,7 +17,17 @@ function PurchaseTicketsPage() {
   //const ticket = location.state?.ticket; // Extract the ticket data
 
   // State variables
-  const { trainCode, selectedSeats } = location.state || {};
+  //const { trainCode, selectedSeats } = location.state || {};
+  // Destructure variables from location.state
+  const { 
+    trainCode = '', 
+    origin = '', 
+    destination = '', 
+    departureTime = '', 
+    availableSeats = [], 
+    selectedSeats = [] 
+  } = location.state || {};
+  
   const [cart, setCart] = useState(location.state?.cart || []);
   const [selectedPayment, setSelectedPayment] = useState("");
   const [paymentImage, setPaymentImage] = useState(null);
@@ -272,9 +282,9 @@ function PurchaseTicketsPage() {
                   borderRadius: "5px",
                 }}
               >
-                <h4>Train: {trainCode.trainCode}</h4>
+                <h4>Train: {trainCode}</h4>
                 <p>
-                  <strong>{trainCode.origin}</strong> → <strong>{trainCode.destination}</strong>
+                  <strong>{origin}</strong> → <strong>{destination}</strong>
                 </p>
                 <p>Seat: {seat}</p>
                 <button
