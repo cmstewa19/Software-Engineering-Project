@@ -14,7 +14,7 @@ import NavigationButton from "../components/navigationButton.js";
 function PurchaseTicketsPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const ticket = location.state?.ticket; // Extract the ticket data
+  //const ticket = location.state?.ticket; // Extract the ticket data
 
   // State variables
   const { trainCode, selectedSeats } = location.state || {};
@@ -265,9 +265,9 @@ function PurchaseTicketsPage() {
                   borderRadius: "5px",
                 }}
               >
-                <h4>Train: {train.trainName} ({train.trainCode})</h4>
+                <h4>Train: {trainCode.trainCode}</h4>
                 <p>
-                  <strong>{train.origin}</strong> → <strong>{train.destination}</strong>
+                  <strong>{trainCode.origin}</strong> → <strong>{trainCode.destination}</strong>
                 </p>
                 <p>Seat: {seat}</p>
                 <button
