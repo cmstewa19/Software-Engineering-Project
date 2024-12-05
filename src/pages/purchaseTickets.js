@@ -264,7 +264,7 @@ function PurchaseTicketsPage() {
                 borderRadius: "5px",
               }}
             >
-              {ticket ? (
+            {ticket ? (
               <>
                 <h4>Ticket ID: {ticket.id}</h4>
                 <div style={styles.routeInfo}>
@@ -273,27 +273,25 @@ function PurchaseTicketsPage() {
                     <strong>{ticket.destination}</strong>
                   </p>
                 </div>
-                </>
-              )
+                <p>Seat: {seat}</p>
+                <button
+                  onClick={() => handleRemoveFromCart(index)} 
+                  style={{
+                    backgroundColor: "#D9534F",
+                    color: "white",
+                    border: "none",
+                    padding: "5px 10px",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Remove
+                </button>
+              </>
+            ) : (
               <p>Seat: {seat}</p>
-              <button
-                onClick={() => handleRemoveFromCart(index)} 
-                style={{
-                  backgroundColor: "#D9534F",
-                  color: "white",
-                  border: "none",
-                  padding: "5px 10px",
-                  borderRadius: "5px",
-                  cursor: "pointer",
-                }}
-              >
-                Remove
-              </button>
-            </div>
-          ))
-        ) : (
-          <p>No seats selected.</p>
-        )}
+            )}
+              
 
           
         <h3>Order Summary</h3>
