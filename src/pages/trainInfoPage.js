@@ -27,8 +27,13 @@ function TrainInfoPage() {
   const handleBooking = () => {
     // Pass the selected seats and train info to the checkout page
     navigate('/checkout', {
-      state: { trainCode: trainData.trainCode, trainData.origin, trainData.destination, trainData.deaprtureTime, 
-             trainData.availableSeats, selectedSeats },
+      state: { 
+        trainCode: trainData.trainCode, 
+        origin: trainData.origin, 
+        destination: trainData.destination, 
+        departureTime: trainData.departureTime,  
+        selectedSeats 
+      },
     });
   };
 
