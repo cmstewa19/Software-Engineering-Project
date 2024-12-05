@@ -364,8 +364,7 @@ function Profile() {
                             margin: '10px',
                             color: 'white',
                             backgroundColor: '#40826D',
-                            border: '1px solid #40826D',
-                          
+                            border: '1px solid #40826D'
                           }}/>
                         </div>
                       </div>
