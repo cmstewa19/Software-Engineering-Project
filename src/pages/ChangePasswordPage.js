@@ -1,5 +1,6 @@
 import React from 'react';
 import Header from '../components/header.js';
+import Divider from '../components/divider.js';
 import NavigationButton from '../components/navigationButton.js';
 
 {/* Page to change a user's password */}
@@ -11,7 +12,9 @@ function ChangePasswordPage() {
 
             {/* Text Header */}
             <h1 style = {{
-                textAlign: 'center'
+                fontSize: '50px',
+                textAlign: 'center',
+                marginTop: '50px'
             }}>Change Your Password</h1>
 
             {/* Box */}
@@ -26,7 +29,7 @@ function ChangePasswordPage() {
               borderRadius: '10px',
               position: 'relative',
               top: '20px',
-              height: '55vh'
+              height: '60vh'
             }}
           >
             {/* Display current password */}
@@ -39,19 +42,28 @@ function ChangePasswordPage() {
             
             <div style = {{marginBottom: '20px'}}>(Insert Password Here)</div>
 
+            {/* Divider Component */}
+            <div style = {{
+                display: 'flex',
+                justifyContent: 'right',
+                width: '100%',
+                marginBottom: '20px'
+            }}><Divider /></div>
+
             {/* Create a new password */}
             <div style = {{
                 fontFamily: 'Arial',
                 fontSize: '20px',
                 fontWeight: 'bold',
+                marginTop: '20px',
                 marginBottom: '20px'
             }}>Your New Password:</div>
 
             <input
               type="New Password"
-              placeholder="First Name"
+              placeholder="New Password"
               style={{
-                width: '100%',
+                width: '98%',
                 padding: '10px',
                 fontSize: '16px',
                 border: '1px solid black',
@@ -72,7 +84,7 @@ function ChangePasswordPage() {
               type="password"
               placeholder="Confirm Password"
               style={{
-                width: '100%',
+                width: '98%',
                 padding: '10px',
                 fontSize: '16px',
                 border: '1px solid black',
@@ -124,7 +136,6 @@ function ChangePasswordPage() {
                     border: '1px solid #40826D',
                     width: '250px'
                 }}/>
-
             </div>
           </div>
         </div>
