@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom"; // Import useLocation
 import NavigationButton from "../components/navigationButton.js";
 import Header from "../components/header.js";
 import Sidebar from "../components/sidebar.js";
-import QRCode from "../components/QRCode.js"; // Assuming you're using this library for QR code generation
+import QRCode from "../components/QRCode.js"; 
 
 const MyTickets = () => {
   const location = useLocation(); // Access the location object
