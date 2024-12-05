@@ -249,37 +249,7 @@ function PurchaseTicketsPage() {
           color: "white",
         }}
       >
-        {/* original 
-        <h2>Your Cart</h2>
-        {cart.map((item, index) => (
-          <div
-            key={index}
-            style={{
-              backgroundColor: "#FEFEFE",
-              color: "black",
-              padding: "10px",
-              margin: "10px 0",
-              borderRadius: "5px",
-            }}
-          >
-            <p>Ticket #{item.ticketId}</p>
-            <p>{item.details}</p>
-            <p>${item.price}</p>
-            <button
-              onClick={() => handleRemoveFromCart(index)}
-              style={{
-                backgroundColor: "#D9534F",
-                color: "white",
-                border: "none",
-                padding: "5px 10px",
-                borderRadius: "5px",
-                cursor: "pointer",
-              }}
-            >
-              Remove
-            </button>
-          </div>
-        ))} */}
+        
         <h2>Your Cart</h2>
         {selectedSeats?.length ? (
           selectedSeats.map((seat, index) => (
@@ -293,6 +263,13 @@ function PurchaseTicketsPage() {
                 borderRadius: "5px",
               }}
             >
+              <h4>Ticket ID: {ticket.id}</h4>
+              <div style={styles.routeInfo}>
+                <p>
+                  <strong>{ticket.origin}</strong> →{" "}
+                  <strong>{ticket.destination}</strong>
+                </p>
+              </div>
               <p>Seat: {seat}</p>
               <button
                 onClick={() => handleRemoveFromCart(index)} 
@@ -315,17 +292,18 @@ function PurchaseTicketsPage() {
 
           
         <h3>Order Summary</h3>
-        <p>Subtotal: ${cart.reduce((acc, item) => acc + item.price, 0)}</p>
+        <p>Subtotal: ${cart.reduce((acc, item) => acc + 9.99, 0).toFixed(2)}</p>
         <p>Handling Fee: $3.99</p>
         <p>Tax: $2.99</p>
         <h4>
           Total: $
           {(
-            cart.reduce((acc, item) => acc + item.price, 0) +
-            3.99 +
+            cart.reduce((acc, item) => acc + 9.99, 0) + 
+            3.99 + 
             2.99
           ).toFixed(2)}
         </h4>
+
         <NavigationButton
           text="Back to Browse"
           path="/browse"
@@ -342,4 +320,13 @@ function PurchaseTicketsPage() {
   </div>
 );
 };
+
+const styles = {
+  routeInfo: {
+    fontSize: "18px",
+    fontWeight: "bold",
+    marginBottom: "20px",
+  },
+};
+
 export default PurchaseTicketsPage;
