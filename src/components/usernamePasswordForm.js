@@ -1,17 +1,31 @@
 // Form for login page
 // Will need to take input in the future
-
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import NavigationButton from '../components/navigationButton';
 import { useNavigate } from 'react-router-dom';
 
 function UsernamePasswordForm() {
   const navigate = useNavigate();
+  const [badPass, setBadPass] = useState(true);
   const loginUser = () => {
     const email = document.getElementById('login-email-field').value;
     const password = document.getElementById('login-password-field').value;
     console.log(email);
     console.log(password);
+
+    if(badPass) {
+      setBadPass(false);
+      const container = document.getElementById('login-form-container');
+      const changePasswordAnchor = document.createElement("a");
+
+      // Set the href attribute
+      changePasswordAnchor.href = "/forgot-password";
+
+      // Set the text content
+      changePasswordAnchor.textContent = "forgot password?";
+      container.appendChild(changePasswordAnchor);
+      return;
+    }
 
     navigate("/home");
   }
@@ -19,6 +33,7 @@ function UsernamePasswordForm() {
   return (
     <div 
       className="bg-light border border-light rounded d-flex flex-column align-items-center"
+      id="login-form-container"
       style={{ 
         width: '100%', 
         maxWidth: '400px', 
