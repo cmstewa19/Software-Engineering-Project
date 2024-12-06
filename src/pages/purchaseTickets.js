@@ -114,17 +114,17 @@ function PurchaseTicketsPage() {
 
   // Checks to make sure the user has entered valid credit card and has an item in their cart
   const handleCheckout = () => {
-  if (!isCardValid) {
+  if (!iscardNumberValid) {
     alert("Please enter a valid card number.");
     return;
   }
 
-  if (!isCodeValid) {
+  if (!iscodeNumberValid) {
     alert("Please enter a valid security code.");
     return;
   }
 
-  if (!isDateValid) {
+  if (!isdateNumberValid) {
     alert("Please enter a valid expiration date.");
     return;
   }
