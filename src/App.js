@@ -14,6 +14,7 @@ import UserTickets from './pages/userTicketsPage.js'
 import TrainInfoPage from './pages/trainInfoPage.js'; 
 import ScanTicket from './pages/scanTicketPage.js';
 import ChangePassword from './pages/ChangePasswordPage.js';
+import PurchaseSuccess from './pages/successPurchase.js';
 
 
 function LoginPageWithNavigation() {
@@ -111,6 +112,7 @@ function App() {
             <Route path="/myTickets" element={<MyTickets tickets={tickets} loading={loading} />} />
             <Route path="/user-tickets" element={<UserTickets tickets={tickets} loading={loading} />} />
             <Route path="/scan" element={<ScanTicket />} />
+            <Route path="/success" element={<PurchaseSuccess/>} />
 
             {/* Train details page */}
             <Route path="/train-info" element={<TrainInfoPage />} />
