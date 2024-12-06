@@ -10,6 +10,7 @@ import paymentImage3 from "../assets/American-Express-Logo.png"; // Example imag
 import paymentImage4 from "../assets/Discover-Bank-logo-review-featured-image.png"; // Example image
 import paymentImage5 from "../assets/Mastercard-Logo.png"; // Example image
 import NavigationButton from "../components/navigationButton.js";
+import TrainDetails from '../components/trainDetails.js';
 
 function PurchaseTicketsPage() {
   const location = useLocation();
