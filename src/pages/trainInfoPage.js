@@ -47,7 +47,7 @@ function TrainInfoPage() {
   }, [trainData.origin, trainData.destination]);
 
   return (
-    <div className={styles.trainInfoContainer}>
+    <div className={styles.body}>
       {/* Header */}
       <Header />
 
@@ -81,7 +81,7 @@ function TrainInfoPage() {
         </div>
 
         {/* Booking Section */}
-        <div className={styles.bookingContainer}>
+        <div className={styles.bookingSection}>
           <BookingSection selectedSeats={selectedSeats} handleBooking={handleBooking} />
         </div>   
       </div>   
