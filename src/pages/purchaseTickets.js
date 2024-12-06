@@ -114,23 +114,35 @@ function PurchaseTicketsPage() {
 
   // Checks to make sure the user has entered valid credit card and has an item in their cart
   const handleCheckout = () => {
-  if (!isCardValid) {
-    alert("Please enter a valid card number.");
+  console.log("Card Valid:", isCardValid);
+  console.log("Code Valid:", isCodeValid);
+  console.log("Date Valid:", isDateValid);
+  console.log("Cart:", cart);
+  console.log("Selected Payment:", selectedPayment);
+
+  if (!selectedPayment) {
+    alert("Please select a payment method.");
     return;
   }
-  if (!isCodeValid) {
-    alert("Please enter a valid security code.");
+  if (selectedPayment === "New Credit Card") {
+    if (!isCardValid) {
+      alert("Please enter a valid card number.");
+      return;
+    }
+    if (!isCodeValid) {
+      alert("Please enter a valid security code.");
+      return;
+    }
+    if (!isDateValid) {
+      alert("Please enter a valid expiration date.");
+      return;
+    }
+  }
+  if (cart.length === 0) {
+    alert("Must have items in cart to checkout.");
     return;
   }
-  if (!isDateValid) {
-    alert("Please enter a valid expiration date.");
-    return;
-  }
-  if (cart.length == 0) {
-    alert("Must have items in cart to checkout.")
-    return;
-  }
-  // If all validations pass, navigate to the success page
+
   navigate("/success");
 };
 
