@@ -1,3 +1,11 @@
+{/* 
+This component is used in 
+
+
+Function: 
+
+*/}
+
 import React from "react";
 import { useNavigate } from 'react-router-dom';
 import QR from "react-qr-code";

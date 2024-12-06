@@ -16,6 +16,7 @@ function PurchaseTicketsPage() {
   const navigate = useNavigate();
 
   // State variables
+  const { trainCode, selectedSeats } = location.state || {};
   const [cart, setCart] = useState(location.state?.cart || []);
   const [selectedPayment, setSelectedPayment] = useState("");
   const [paymentImage, setPaymentImage] = useState(null);
@@ -248,6 +249,7 @@ function PurchaseTicketsPage() {
           color: "white",
         }}
       >
+        {/* original 
         <h2>Your Cart</h2>
         {cart.map((item, index) => (
           <div
@@ -277,7 +279,40 @@ function PurchaseTicketsPage() {
               Remove
             </button>
           </div>
-        ))}
+        ))} */}
+        <h2>Your Cart</h2>
+        {selectedSeats?.length ? (
+          selectedSeats.map((seat, index) => (
+            <div
+              key={index}
+              style={{
+                backgroundColor: "#FEFEFE",
+                color: "black",
+                padding: "10px",
+                margin: "10px 0",
+                borderRadius: "5px",
+              }}
+            >
+              <p>Seat: {seat}</p>
+              <button
+                onClick={() => handleRemoveFromCart(index)} 
+                style={{
+                  backgroundColor: "#D9534F",
+                  color: "white",
+                  border: "none",
+                  padding: "5px 10px",
+                  borderRadius: "5px",
+                  cursor: "pointer",
+                }}
+              >
+                Remove
+              </button>
+            </div>
+          ))
+        ) : (
+          <p>No seats selected.</p>
+        )}
+
           
         <h3>Order Summary</h3>
         <p>Subtotal: ${cart.reduce((acc, item) => acc + item.price, 0)}</p>

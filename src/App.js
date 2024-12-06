@@ -107,6 +107,7 @@ function App() {
             <Route path="/browse" element={<BrowseTrains />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/checkout" element={<PurchaseTickets />} />
+            <Route path="/changepassword" element={<ChangePassword />} />
 
             {/* Tickets */}
             <Route path="/myTickets" element={<MyTickets tickets={tickets} loading={loading} />} />

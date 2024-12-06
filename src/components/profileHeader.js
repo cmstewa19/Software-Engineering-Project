@@ -1,3 +1,11 @@
+{/* 
+This component is used in 
+
+
+Function: 
+
+*/}
+
 import React from 'react';
 import TempIcon from '../assets/profile-icon.jpg'; 
 
