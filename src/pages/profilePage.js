@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import NavigationButton from '../components/navigationButton.js';
 import Header from '../components/header.js';
 import Divider from '../components/divider.js';
@@ -10,6 +10,34 @@ function Profile() {
   const [showSavedPayments, setShowSavedPayments] = useState(false);
   const [showSecurity, setShowSecurity] = useState(false);
   const [showTicketHistory, setShowTicketHistory] = useState(false);
+  const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  // Fetch user data when the component loads
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/api/profile', {
+          credentials: 'include', // Include session cookies
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch user data.');
+        }
+
+        const data = await response.json();
+        setUserData(data.user); // Assuming the API returns a `user` object
+      } catch (err) {
+        console.error('Error fetching user data:', err);
+        setError('Unable to load user information.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const toggleUserInfo = () => {
     setShowUser((prevState) => !prevState);
@@ -32,9 +60,17 @@ function Profile() {
     setShowTicketHistory(false);
   };
 
+  if (loading) {
+    return <div>Loading user information...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <Header isLoggedIn = {true}/>
+      <Header isLoggedIn={true} />
 
       {/* My Profile header for the top of the page */}
       <div
@@ -46,7 +82,9 @@ function Profile() {
           fontSize: '50px',
           fontWeight: 'bold',
         }}
-      >My Profile</div>
+      >
+        My Profile
+      </div>
 
       {/* Flex container for the main content */}
       <div
@@ -56,15 +94,15 @@ function Profile() {
           display: 'flex',
           alignItems: 'stretch',
           marginTop: '100px',
-        }}>
-
+        }}
+      >
         <div
           className="row"
           style={{
             display: 'flex',
             flexGrow: 1,
-          }}>
-
+          }}
+        >
           {/* Left Column & All Info Held Within It */}
           <div
             className="col-md-6 d-flex flex-column align-items-center me-3"
@@ -90,7 +128,10 @@ function Profile() {
                   width: '100%',
                   cursor: 'pointer',
                   fontSize: '20px',
-                }}>User Info</button>
+                }}
+              >
+                User Info
+              </button>
 
               {/* Button that toggles the saved payments */}
               <button
@@ -105,8 +146,10 @@ function Profile() {
                   width: '100%',
                   cursor: 'pointer',
                   fontSize: '20px',
-                }}>Payment Info</button>
-
+                }}
+              >
+                Payment Info
+              </button>
 
               {/* Button that toggles the security page */}
               <button
@@ -121,8 +164,10 @@ function Profile() {
                   width: '100%',
                   cursor: 'pointer',
                   fontSize: '20px',
-                }}>Security</button>
-
+                }}
+              >
+                Security
+              </button>
             </div>
           </div>
 
@@ -137,12 +182,11 @@ function Profile() {
             }}
           >
             <div style={{ textAlign: 'left', width: '100%' }}>
-
               {/* Overarching header w/ basic user information */}
-              {showUser && (<ProfileHeader />)}
+              {showUser && <ProfileHeader />}
 
-              {/* Shows all the user information in the bottom box */}
-              {showUser && (
+              {/* Shows all the user information */}
+              {showUser && userData && (
                 <div
                   style={{
                     height: '430px',
@@ -178,211 +222,32 @@ function Profile() {
                     <Divider />
                   </div>
 
-                  {/* Smaller Box & Two-column layout for personal information */}
-                  <div style={{
-                    height: '250px',
-                    width: '100%',
-                    marginTop: '20px',
-                    border: '2px solid #40826D',
-                    borderRadius: '10px',
-                    padding: '20px',
-                    backgroundColor: '#FFF',
-                    boxSizing: 'border-box',
-                  }}><div
+                  {/* Display user information */}
+                  <div
                     style={{
                       display: 'flex',
                       justifyContent: 'space-between',
-                      gap: '20px'}}>
-
-                        {/* Left column */}
-                        <div style={{ flex: 1 }}>
-                          <h3 style={{ fontFamily: 'Arial' }}>First Name:</h3>
-                          <h4 style={{ fontFamily: 'Arial' }}>(Insert User's First Name)</h4>
-                          <h3 style={{ fontFamily: 'Arial' }}>Last Name:</h3>
-                          <h4 style={{ fontFamily: 'Arial' }}>(Insert User's Last Name)</h4>
-                        </div>
-
-                        {/* Right column */}
-                        <div style={{ flex: 1 }}>
-                          <h3 style={{ fontFamily: 'Arial' }}>Email:</h3>
-                          <h4 style={{ fontFamily: 'Arial' }}>(xxx@outlook.com)</h4>
-                          <h3 style={{ fontFamily: 'Arial' }}>Phone Number:</h3>
-                          <h4 style={{ fontFamily: 'Arial' }}>(000-000-0000)</h4>
-                        </div>
-                      </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Overarching header w/ basic user information */}
-              {showSavedPayments && (<ProfileHeader />)}
-
-              {/* Shows all the information in the second box in the Payment Info section */}
-              {showSavedPayments && (
-                <div
-                  style={{
-                    height: '430px',
-                    width: '100%',
-                    marginTop: '20px',
-                    border: '2px solid #40826D',
-                    borderRadius: '10px',
-                    padding: '20px',
-                    backgroundColor: '#FFF',
-                    boxSizing: 'border-box',
-                  }}
-                >
-                  <div
-                    style={{
-                      marginTop: '20px',
-                      fontSize: '30px',
-                      fontWeight: 'bold',
-                      fontFamily: 'Arial',
-                    }}>Saved Cards</div>
-
-                  {/* Flex container for divider and buttons */}
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      marginTop: '20px',
-                      marginBottom: '20px',
+                      gap: '20px',
                     }}
                   >
-                    {/* Divider */}
-                    <Divider />
+                    {/* Left column */}
+                    <div style={{ flex: 1 }}>
+                      <h3 style={{ fontFamily: 'Arial' }}>First Name:</h3>
+                      <h4 style={{ fontFamily: 'Arial' }}>{userData.firstName}</h4>
+                      <h3 style={{ fontFamily: 'Arial' }}>Last Name:</h3>
+                      <h4 style={{ fontFamily: 'Arial' }}>{userData.lastName}</h4>
+                    </div>
 
-                    {/* Buttons that go alongside the divider (add and delete payment) */}
-                    <div>
-                      <button
-                        style={{
-                          backgroundColor: '#40826D',
-                          color: 'white',
-                          border: '1px solid #40826D',
-                          padding: '10px 20px',
-                          marginRight: '10px',
-                          borderRadius: '5px',
-                          cursor: 'pointer',
-                        }}>Add Card</button>
-
-                      <button
-                        style={{
-                          backgroundColor: '#40826D',
-                          color: 'white',
-                          border: '1px solid #40826D',
-                          padding: '10px 20px',
-                          borderRadius: '5px',
-                          cursor: 'pointer',
-                        }}>Delete Card</button>
+                    {/* Right column */}
+                    <div style={{ flex: 1 }}>
+                      <h3 style={{ fontFamily: 'Arial' }}>Email:</h3>
+                      <h4 style={{ fontFamily: 'Arial' }}>{userData.email}</h4>
+                      <h3 style={{ fontFamily: 'Arial' }}>Phone Number:</h3>
+                      <h4 style={{ fontFamily: 'Arial' }}>{userData.phoneNumber || 'N/A'}</h4>
                     </div>
                   </div>
-
-                  {/* Holds all of the saved card information */}
-                  <div
-                  style={{
-                    height: '250px',
-                    width: '100%',
-                    marginTop: '20px',
-                    border: '2px solid #40826D',
-                    borderRadius: '10px',
-                    padding: '20px',
-                    backgroundColor: '#FFF',
-                    boxSizing: 'border-box',
-                  }}>Insert Saved Card Information Here</div>
                 </div>
               )}
-
-              {/* Overarching header w/ basic user information */}
-              {showSecurity && (<ProfileHeader />)}
-
-              {/* Shows all the information in the bottom box in the security section */}
-              {showSecurity && (
-                <div
-                  style={{
-                    height: '430px',
-                    width: '100%',
-                    marginTop: '20px',
-                    border: '2px solid #40826D',
-                    borderRadius: '10px',
-                    padding: '20px',
-                    backgroundColor: '#FFF',
-                    boxSizing: 'border-box',
-                  }}
-                >
-                  <div
-                    style={{
-                      marginTop: '20px',
-                      fontSize: '30px',
-                      fontWeight: 'bold',
-                      fontFamily: 'Arial',
-                    }}>Security</div>
-
-                  {/* Flex container for divider */}
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      marginTop: '20px',
-                      marginBottom: '20px',
-                    }}
-                  >
-                    {/* Divider */}
-                    <Divider />
-                  </div>
-
-                  {/* Smaller Box & Two-column layout for personal information */}
-                  <div style={{
-                    height: '250px',
-                    width: '100%',
-                    marginTop: '20px',
-                    border: '2px solid #40826D',
-                    borderRadius: '10px',
-                    padding: '20px',
-                    backgroundColor: '#FFF',
-                    boxSizing: 'border-box',
-                  }}><div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      gap: '20px'}}>
-
-                        {/* Left column */}
-                        <div style={{ flex: 1 }}>
-                          <h3 style={{ fontFamily: 'Arial' }}>Email:</h3>
-                          <h4 style={{ fontFamily: 'Arial' }}>(xxx@outlook.com)</h4>
-                        </div>
-
-                        {/* Right column */}
-                        <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                        
-                        {/* Change Password Button, links off to the page */}
-                        <NavigationButton
-                          text="Change Password"
-                          path="/changepassword"
-                          style={{
-                            padding: '10px 20px',
-                            fontSize: '18px',
-                            margin: '10px',
-                            color: 'white',
-                            backgroundColor: '#40826D',
-                            border: '1px solid #40826D'
-                          }}/>
-                        </div>
-                      </div>
-                    </div>
-                </div>
-              )}
-
-            {/* 
-              If no pages are selected, then the default page shown is the "user info" page. 
-              I dont know if it's better to do this or to have a default message shown instead like
-              "Press a button in the left hand column to view its contents". This way shown seems more 
-              straightforward but I'm open to other options.
-            */}
-            {!showUser && !showSavedPayments && !showSecurity && !showTicketHistory && (
-              <>
-                {setShowUser(true)}
-              </>
-            )}
             </div>
           </div>
         </div>
