@@ -120,29 +120,20 @@ function PurchaseTicketsPage() {
   console.log("Cart:", cart);
   console.log("Selected Payment:", selectedPayment);
 
-  if (!selectedPayment) {
-    alert("Please select a payment method.");
-    return;
-  }
   if (selectedPayment === "New Credit Card") {
     if (!isCardValid) {
       alert("Please enter a valid card number.");
+      if (!isCodeValid) {
+        alert("Please enter a valid security code.");
+        if (!isDateValid) {
+          alert("Please enter a valid expiration date.");
+          if (cart.length === 0) {
+            alert("Must have items in cart to checkout.");
       return;
+          }
+        }
+      }
     }
-    if (!isCodeValid) {
-      alert("Please enter a valid security code.");
-      return;
-    }
-    if (!isDateValid) {
-      alert("Please enter a valid expiration date.");
-      return;
-    }
-  }
-  if (cart.length === 0) {
-    alert("Must have items in cart to checkout.");
-    return;
-  }
-
   navigate("/success");
 };
 
