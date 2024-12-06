@@ -1,9 +1,30 @@
 import Header from '../components/header.js'; // header
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/sidebar.js'; // sidebar
+import SearchBar from "../components/SearchBar.js"; // SearchBar component
+
 
 function UserTickets({ tickets, loading }) {
   const navigate = useNavigate();
+  const [filteredTickets, setFilteredTickets] = useState(tickets);
+
+  // Handle search queries
+  const handleSearch = (query) => {
+    const lowerQuery = query.toLowerCase();
+    const filtered = tickets.filter(
+      (ticket) =>
+        ticket.id.toString().includes(lowerQuery) ||
+        ticket.origin.toLowerCase().includes(lowerQuery) ||
+        ticket.destination.toLowerCase().includes(lowerQuery)
+    );
+    setFilteredTickets(filtered);
+  };
+
+  // Update filtered tickets when the tickets prop changes
+  useEffect(() => {
+    setFilteredTickets(tickets);
+  }, [tickets]);
+
 
   return (
     <div id="purchased-tickets-page">
@@ -11,6 +32,10 @@ function UserTickets({ tickets, loading }) {
       <Sidebar />
 
       <h1>User's Tickets</h1>
+
+      {/* Add SearchBar component */}
+      <SearchBar onSearch={handleSearch} />
+      
       {/* table to store all of user's tickets */}
       <table
         id="ticket-table"
