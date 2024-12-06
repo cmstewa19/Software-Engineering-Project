@@ -112,6 +112,33 @@ function PurchaseTicketsPage() {
     setCart(updatedCart);
   };
 
+  // Checks to make sure the user has entered valid credit card and has an item in their cart
+  const handleCheckout = () => {
+  if (!isCardValid) {
+    alert("Please enter a valid card number.");
+    return;
+  }
+
+  if (!isCodeValid) {
+    alert("Please enter a valid security code.");
+    return;
+  }
+
+  if (!isDateValid) {
+    alert("Please enter a valid expiration date.");
+    return;
+  }
+
+  if (cart.length == 0) {
+    alert("Must have items in cart to checkout.")
+    return;
+  }
+
+  // If all validations pass, navigate to the success page
+  navigate("/success");
+};
+
+  
   // Save cart state in localStorage
   {/*useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
@@ -368,13 +395,23 @@ function PurchaseTicketsPage() {
         )}
         */}
 
-
-
         <NavigationButton
           text="Back to Browse"
           path="/browse"
           style={{
-            padding: "10px 20px",
+            padding: "5px 10px",
+            fontSize: "18px",
+            marginTop: "10px",
+            display: "block",
+            textAlign: "center",
+          }}
+        />
+
+          <NavigationButton
+          text="Checkout"
+          path="/success"
+          style={{
+            padding: "5px 10px",
             fontSize: "18px",
             marginTop: "10px",
             display: "block",
