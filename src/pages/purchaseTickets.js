@@ -134,6 +134,7 @@ function PurchaseTicketsPage() {
         }
       }
     }
+  }
   navigate("/success");
 };
 
