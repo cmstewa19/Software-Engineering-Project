@@ -118,22 +118,18 @@ function PurchaseTicketsPage() {
     alert("Please enter a valid card number.");
     return;
   }
-
   if (!iscodeNumberValid) {
     alert("Please enter a valid security code.");
     return;
   }
-
   if (!isdateNumberValid) {
     alert("Please enter a valid expiration date.");
     return;
   }
-
   if (cart.length == 0) {
     alert("Must have items in cart to checkout.")
     return;
   }
-
   // If all validations pass, navigate to the success page
   navigate("/success");
 };
@@ -407,17 +403,26 @@ function PurchaseTicketsPage() {
           }}
         />
 
-          <NavigationButton
-          text="Checkout"
-          path="/success"
-          style={{
-            padding: "5px 10px",
-            fontSize: "18px",
-            marginTop: "10px",
-            display: "block",
-            textAlign: "center",
-          }}
-        />
+          <div>
+            <button
+              onClick={handleCheckout}
+              style={{
+                padding: "5px 10px",
+                fontSize: "18px",
+                marginTop: "10px",
+                display: "block",
+                textAlign: "center",
+                backgroundColor: "#4CAF50", // Green button
+                color: "white",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+              }}
+            >
+              Checkout
+            </button>
+          </div>
+
       </div>
     </div>
   </div>
