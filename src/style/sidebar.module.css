@@ -15,7 +15,8 @@
     padding: var(--sidebar-padding);
     position: fixed;
     top: 0;
-    right: 0; 
+    right: 0;
+    z-index: 1000; 
     transition: width 0.3s ease;
   }
   

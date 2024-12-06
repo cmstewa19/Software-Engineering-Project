@@ -3,9 +3,10 @@ import trainPhoto from '../assets/train.jpg'; // photo for login page
 import Header from '../components/header.js'; // header
 import UsernamePasswordForm from '../components/usernamePasswordForm.js'; // username password form
 import NavigationButton from '../components/navigationButton';
-
+import { useNavigate } from 'react-router-dom'; // for navigation
 
 function Login() {
+  const navigate = useNavigate();
 
   return (
     <div style={{ overflow: 'hidden', height: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -34,7 +35,7 @@ function Login() {
             }}
           >
             {/* Username and password form */}
-            <UsernamePasswordForm />
+            <UsernamePasswordForm navigate={navigate} />
 
             {/* Sign-Up Option */}
             <div 
