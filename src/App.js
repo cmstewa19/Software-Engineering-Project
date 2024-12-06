@@ -13,7 +13,7 @@ import MyTickets from './pages/myTickets';
 import UserTickets from './pages/userTicketsPage.js'
 import TrainInfoPage from './pages/trainInfoPage.js'; 
 import ScanTicket from './pages/scanTicketPage.js';
-import ChangePassword from './pages/ChangePasswordPage.js';
+import ChangePassword from './pages/changePasswordPage.js';
 import PurchaseSuccess from './pages/successPurchase.js';
 
 
