@@ -9,12 +9,6 @@ const PurchaseSuccess = () => {
         document.getElementsByTagName("body")[0].style.backgroundColor="#F5F5F5";
     }
 
-    if(!isValid) {
-        setIsValid(true);
-    }
-
-    document.getElementsByTagName("body")[0].style.backgroundColor= isValid ? "#5CB85C" : "#ED4337";
-
     return(
         <div className={styles.container} onClick={onClick}>
             <h2 className={styles.successIcon}>{"✓"}</h2>
