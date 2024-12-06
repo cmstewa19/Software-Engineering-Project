@@ -20,7 +20,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements, useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 import axios from 'axios';
 
-const stripePromise = loadStripe('pk_test_51QT65rFfyC9ICmXuEA3u4v1xiJyV2O7AYbRM8rY3b901QO5G898iTOdjyhHLUUzksSQJigDYzGNRFWooVhqkJHtI00k6y5yhhN'); // Replace with your Stripe publishable key
+const stripePromise = loadStripe('pk_test_51QKjDaKo2xrmK8G63Ai8S8y6TR8IxkbGYXkHWUz5uLUvwXnYHSPlZljtjhcRlUyqZUiU1pJ8eKuIIkV7E2ZveVMe00NWWrpysP'); // Replace with your Stripe publishable key
 
 function CheckoutForm() {
   const stripe = useStripe();
