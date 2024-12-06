@@ -9,6 +9,8 @@ function UserTickets({ tickets, loading }) {
     <div id="purchased-tickets-page">
       <Header />
       <Sidebar />
+
+      <h1>User's Tickets</h1>
       {/* table to store all of user's tickets */}
       <table
         id="ticket-table"
