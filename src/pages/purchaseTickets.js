@@ -10,13 +10,25 @@ import paymentImage3 from "../assets/American-Express-Logo.png"; // Example imag
 import paymentImage4 from "../assets/Discover-Bank-logo-review-featured-image.png"; // Example image
 import paymentImage5 from "../assets/Mastercard-Logo.png"; // Example image
 import NavigationButton from "../components/navigationButton.js";
+import TrainDetails from '../components/trainDetails.js';
 
 function PurchaseTicketsPage() {
   const location = useLocation();
   const navigate = useNavigate();
+  const ticket = location.state?.ticket; // Extract the ticket data
 
   // State variables
-  const { trainCode, selectedSeats } = location.state || {};
+  //const { trainCode, selectedSeats } = location.state || {};
+  // Destructure variables from location.state
+  const { 
+    trainCode = '', 
+    origin = '', 
+    destination = '', 
+    departureTime = '', 
+    availableSeats = [], 
+    selectedSeats = [] 
+  } = location.state || {};
+  
   const [cart, setCart] = useState(location.state?.cart || []);
   const [selectedPayment, setSelectedPayment] = useState("");
   const [paymentImage, setPaymentImage] = useState(null);
@@ -100,10 +112,48 @@ function PurchaseTicketsPage() {
     setCart(updatedCart);
   };
 
+  // Checks to make sure the user has entered valid credit card and has an item in their cart
+  const handleCheckout = () => {
+  console.log("Card Valid:", isCardValid);
+  console.log("Code Valid:", isCodeValid);
+  console.log("Date Valid:", isDateValid);
+  console.log("Cart:", cart);
+  console.log("Selected Payment:", selectedPayment);
+
+  if (!selectedPayment) {
+    alert("Please select a payment method.");
+    return;
+  }
+  if (selectedPayment === "New Credit Card") {
+    if (!isCardValid) {
+      alert("Please enter a valid card number.");
+      return;
+    }
+    if (!isCodeValid) {
+      alert("Please enter a valid security code.");
+      return;
+    }
+    if (!isDateValid) {
+      alert("Please enter a valid expiration date.");
+      return;
+    }
+  }
+  if (cart.length === 0) {
+    alert("Must have items in cart to checkout.");
+    return;
+  }
+
+  navigate("/success");
+};
+  
   // Save cart state in localStorage
-  useEffect(() => {
+  {/*useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
+  */}
+  useEffect(() => {
+    setCart(selectedSeats);
+  }, [selectedSeats]);
 
   return (
   <div
@@ -249,97 +299,153 @@ function PurchaseTicketsPage() {
           color: "white",
         }}
       >
-        {/* original 
-        <h2>Your Cart</h2>
-        {cart.map((item, index) => (
-          <div
-            key={index}
-            style={{
-              backgroundColor: "#FEFEFE",
-              color: "black",
-              padding: "10px",
-              margin: "10px 0",
-              borderRadius: "5px",
-            }}
-          >
-            <p>Ticket #{item.ticketId}</p>
-            <p>{item.details}</p>
-            <p>${item.price}</p>
-            <button
-              onClick={() => handleRemoveFromCart(index)}
-              style={{
-                backgroundColor: "#D9534F",
-                color: "white",
-                border: "none",
-                padding: "5px 10px",
-                borderRadius: "5px",
-                cursor: "pointer",
-              }}
-            >
-              Remove
-            </button>
-          </div>
-        ))} */}
-        <h2>Your Cart</h2>
-        {selectedSeats?.length ? (
-          selectedSeats.map((seat, index) => (
-            <div
-              key={index}
-              style={{
-                backgroundColor: "#FEFEFE",
-                color: "black",
-                padding: "10px",
-                margin: "10px 0",
-                borderRadius: "5px",
-              }}
-            >
-              <p>Seat: {seat}</p>
-              <button
-                onClick={() => handleRemoveFromCart(index)} 
+        {/* Cart Section */}
+        <div
+          style={{
+            width: "80%",
+            padding: "10px",
+            backgroundColor: "#40826D",
+            color: "white",
+          }}
+        >
+          <h2>Your Cart</h2>
+          {cart.length > 0 ? (
+            cart.map((seat, index) => (
+              <div
+                key={index}
                 style={{
-                  backgroundColor: "#D9534F",
-                  color: "white",
-                  border: "none",
-                  padding: "5px 10px",
+                  backgroundColor: "#FEFEFE",
+                  color: "black",
+                  padding: "10px",
+                  margin: "10px 0",
                   borderRadius: "5px",
-                  cursor: "pointer",
                 }}
               >
-                Remove
-              </button>
-            </div>
-          ))
+                <h4>Train: {trainCode}</h4>
+                <p>
+                  <strong>{origin}</strong> → <strong>{destination}</strong>
+                </p>
+                <p>Seat: {seat}</p>
+                <button
+                  onClick={() => handleRemoveFromCart(index)}
+                  style={{
+                    backgroundColor: "#D9534F",
+                    color: "white",
+                    border: "none",
+                    padding: "5px 10px",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Remove
+                </button>
+              </div>
+            ))
+          ) : (
+            <p>No seats selected.</p>
+          )}
+          <h3>Order Summary</h3>
+          <p>Subtotal: ${cart.length * 9.99}</p>
+          <p>Handling Fee: $3.99</p>
+          <p>Tax: $2.99</p>
+          <h4>Total: ${(cart.length * 9.99 + 3.99 + 2.99).toFixed(2)}</h4>
+        </div>
+
+
+        {/* Uncomment this block if needed
+        <h2>Your Cart</h2>
+        {selectedSeats?.length ? (
+          <>
+            {selectedSeats.map((seat, index) => (
+              <div
+                key={index}
+                style={{
+                  backgroundColor: "#FEFEFE",
+                  color: "black",
+                  padding: "10px",
+                  margin: "10px 0",
+                  borderRadius: "5px",
+                }}
+              >
+                {ticket ? (
+                  <>
+                    <h4>Ticket ID: {ticket.id}</h4>
+                    <div style={styles.routeInfo}>
+                      <p>
+                        <strong>{ticket.origin}</strong> →{" "}
+                        <strong>{ticket.destination}</strong>
+                      </p>
+                    </div>
+                    <p>Seat: {seat}</p>
+                    <button
+                      onClick={() => handleRemoveFromCart(index)}
+                      style={{
+                        backgroundColor: "#D9534F",
+                        color: "white",
+                        border: "none",
+                        padding: "5px 10px",
+                        borderRadius: "5px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Remove
+                    </button>
+                  </>
+                ) : (
+                  <p>Seat: {seat}</p>
+                )}
+              </div>
+            ))}
+          </>
         ) : (
           <p>No seats selected.</p>
         )}
+        */}
 
-          
-        <h3>Order Summary</h3>
-        <p>Subtotal: ${cart.reduce((acc, item) => acc + item.price, 0)}</p>
-        <p>Handling Fee: $3.99</p>
-        <p>Tax: $2.99</p>
-        <h4>
-          Total: $
-          {(
-            cart.reduce((acc, item) => acc + item.price, 0) +
-            3.99 +
-            2.99
-          ).toFixed(2)}
-        </h4>
         <NavigationButton
           text="Back to Browse"
           path="/browse"
           style={{
-            padding: "10px 20px",
+            padding: "5px 10px",
             fontSize: "18px",
             marginTop: "10px",
             display: "block",
             textAlign: "center",
           }}
         />
+
+          <div>
+            <button
+              onClick={handleCheckout}
+              style={{
+                padding: "5px 10px",
+                fontSize: "18px",
+                marginTop: "10px",
+                display: "block",
+                textAlign: "center",
+                backgroundColor: "#4CAF50", // Green button
+                color: "white",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+              }}
+            >
+              Checkout
+            </button>
+          </div>
+
       </div>
     </div>
   </div>
 );
 };
+
+const styles = {
+  routeInfo: {
+    fontSize: "18px",
+    fontWeight: "bold",
+    marginBottom: "20px",
+  },
+};
+
 export default PurchaseTicketsPage;

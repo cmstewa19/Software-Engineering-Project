@@ -1,5 +1,9 @@
-import React, { useState } from 'react';
+
+// Form for login page
+// Will need to take input in the future
+import React, { useState, useEffect } from 'react';
 import NavigationButton from '../components/navigationButton';
+
 
 function UsernamePasswordForm({ navigate }) {
   const [email, setEmail] = useState('');
@@ -32,6 +36,7 @@ function UsernamePasswordForm({ navigate }) {
       setError('An error occurred. Please try again later.');
     }
   };
+
 
   return (
     <div

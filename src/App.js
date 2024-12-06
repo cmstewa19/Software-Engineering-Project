@@ -13,6 +13,10 @@ import MyTickets from './pages/myTickets';
 import UserTickets from './pages/userTicketsPage.js'
 import TrainInfoPage from './pages/trainInfoPage.js'; 
 import ScanTicket from './pages/scanTicketPage.js';
+import ChangePassword from './pages/ChangePasswordPage.js';
+import PurchaseSuccess from './pages/successPurchase.js';
+
+
 
 
 function LoginPageWithNavigation() {
@@ -100,15 +104,19 @@ function App() {
               path="/home"
               element={<Home tickets={tickets} loading={loading} trains={trains} setFilteredTrains={setFilteredTrains} user={user[0]} />}
             />
+            
             <Route path="/signup" element={<Signup />} />
+            <Route path="forgot-password" element={<ChangePassword />} />
             <Route path="/browse" element={<BrowseTrains />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/checkout" element={<PurchaseTickets />} />
+            <Route path="/changepassword" element={<ChangePassword />} />
 
             {/* Tickets */}
             <Route path="/myTickets" element={<MyTickets tickets={tickets} loading={loading} />} />
             <Route path="/user-tickets" element={<UserTickets tickets={tickets} loading={loading} />} />
             <Route path="/scan" element={<ScanTicket />} />
+            <Route path="/success" element={<PurchaseSuccess/>} />
 
             {/* Train details page */}
             <Route path="/train-info" element={<TrainInfoPage />} />
