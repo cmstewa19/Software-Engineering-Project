@@ -15,7 +15,7 @@ import TrainDetails from '../components/trainDetails.js';
 function PurchaseTicketsPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  //const ticket = location.state?.ticket; // Extract the ticket data
+  const ticket = location.state?.ticket; // Extract the ticket data
 
   // State variables
   //const { trainCode, selectedSeats } = location.state || {};
@@ -113,9 +113,13 @@ function PurchaseTicketsPage() {
   };
 
   // Save cart state in localStorage
-  useEffect(() => {
+  {/*useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
+  */}
+  useEffect(() => {
+    setCart(selectedSeats);
+  }, [selectedSeats]);
 
   return (
   <div
