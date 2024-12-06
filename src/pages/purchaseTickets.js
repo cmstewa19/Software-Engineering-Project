@@ -268,8 +268,8 @@ function PurchaseTicketsPage() {
         {/* Cart Section */}
         <div
           style={{
-            width: "40%",
-            padding: "20px",
+            width: "80%",
+            padding: "10px",
             backgroundColor: "#40826D",
             color: "white",
           }}
