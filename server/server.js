@@ -137,7 +137,7 @@ app.post('/api/login', (req, res) => {
     req.session.user = { userid: row.userid, email: row.email };
 
     // Log session data to confirm it's set
-    console.log('Session Data:', req.session);
+    // console.log('Session Data:', req.session);
 
     res.status(200).json({ message: 'Login successful!' });
   });
