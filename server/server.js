@@ -6,6 +6,7 @@ const QRCode = require('qrcode'); //require package for the qr code generator
 const Stripe = require('stripe'); // require stripe for payment simulation
 const db = require('./database'); // require database
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY); // uses your secret env key
+const session = require('express-session');
 
 const app = express(); // instance of our app
 const port = 3000; // backend goes on 3000. (frontend goes on 3001)
