@@ -133,9 +133,13 @@ app.post('/api/login', (req, res) => {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
 
-    // Create session for the user
-    req.session.user = { id: row.id, email: row.email }; // Store user info in session
-    res.status(200).json({ message: 'Login successful!', user: req.session.user });
+    // Set session data (creates a session for the user)
+    req.session.user = { userid: row.userid, email: row.email };
+
+    // Log session data to confirm it's set
+    console.log('Session Data:', req.session);
+
+    res.status(200).json({ message: 'Login successful!' });
   });
 });
   
