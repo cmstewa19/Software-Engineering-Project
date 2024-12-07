@@ -14,6 +14,20 @@ const port = 3000; // backend goes on 3000. (frontend goes on 3001)
 app.use(cors());
 app.use(express.json());
 
+// Session middleware setup
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET, // Use environment variable for production
+    resave: false,  // Don't save session if it hasn't been modified
+    saveUninitialized: false, // Don't create session until something is stored
+    cookie: {
+      secure: false, // Set to true if you're using HTTPS in production
+      httpOnly: true, // Helps protect against XSS attacks
+      maxAge: 3600000, // 1 hour expiration
+    },
+  })
+);
+
 // Create payment intent using Stripe
 app.post('/create-payment-intent', async (req, res) => {
   try {
@@ -96,32 +110,33 @@ app.post('/api/signup', async (req, res) => {
 
 // Login POST request
 app.post('/api/login', (req, res) => {
-    const { email, password } = req.body;
-  
-    if (!email || !password) {
-      return res.status(400).json({ error: 'Email and password are required.' });
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ error: 'Email and password are required.' });
+  }
+
+  // Query the database for the user by email
+  db.get('SELECT * FROM users WHERE email = ?', [email], (err, row) => {
+    if (err) {
+      console.error('Database Error:', err);
+      return res.status(500).json({ error: 'Database error' });
     }
-  
-    // Query the database for the user by email
-    db.get('SELECT * FROM users WHERE email = ?', [email], (err, row) => {
-      if (err) {
-        console.error('Database Error:', err);
-        return res.status(500).json({ error: 'Database error' });
-      }
-  
-      if (!row) {
-        return res.status(401).json({ error: 'Invalid email or password' });
-      }
-  
-      // Compare the provided password with the one stored in the database
-      if (row.password !== password) {
-        return res.status(401).json({ error: 'Invalid email or password' });
-      }
-  
-      res.status(200).json({ message: 'Login successful!' });
-    });
+
+    if (!row) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
+    // Compare the provided password with the one stored in the database
+    if (row.password !== password) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
+    // Create session for the user
+    req.session.user = { id: row.id, email: row.email }; // Store user info in session
+    res.status(200).json({ message: 'Login successful!', user: req.session.user });
   });
-  
+});
   
 
   
