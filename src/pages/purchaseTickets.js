@@ -314,7 +314,14 @@ function PurchaseTicketsPage() {
           <h4>Total: ${(cart.length * 9.99 + 3.99 + 2.99).toFixed(2)}</h4>
         </div>
 
-        <CheckoutButton/> {/* Use CheckoutButton */}
+           
+        <CheckoutButton 
+            cart={cart} 
+            isCardValid={isCardValid} 
+            isCodeValid={isCodeValid} 
+            isDateValid={isDateValid} 
+            selectedPayment={selectedPayment}
+          /> {/* Use CheckoutButton */}
 
         <NavigationButton
           text="Back to Browse"
