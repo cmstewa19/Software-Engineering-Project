@@ -6,6 +6,7 @@ const QRCode = require('qrcode'); //require package for the qr code generator
 const Stripe = require('stripe'); // require stripe for payment simulation
 const db = require('./database'); // require database
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY); // uses your secret env key
+const session = require('express-session');
 
 const app = express(); // instance of our app
 const port = 3000; // backend goes on 3000. (frontend goes on 3001)
@@ -13,6 +14,20 @@ const port = 3000; // backend goes on 3000. (frontend goes on 3001)
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Session middleware setup
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET, // Use environment variable for production
+    resave: false,  // Don't save session if it hasn't been modified
+    saveUninitialized: false, // Don't create session until something is stored
+    cookie: {
+      secure: false, // Set to true if you're using HTTPS in production
+      httpOnly: true, // Helps protect against XSS attacks
+      maxAge: 3600000, // 1 hour expiration
+    },
+  })
+);
 
 // Create payment intent using Stripe
 app.post('/create-payment-intent', async (req, res) => {
@@ -96,32 +111,37 @@ app.post('/api/signup', async (req, res) => {
 
 // Login POST request
 app.post('/api/login', (req, res) => {
-    const { email, password } = req.body;
-  
-    if (!email || !password) {
-      return res.status(400).json({ error: 'Email and password are required.' });
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ error: 'Email and password are required.' });
+  }
+
+  // Query the database for the user by email
+  db.get('SELECT * FROM users WHERE email = ?', [email], (err, row) => {
+    if (err) {
+      console.error('Database Error:', err);
+      return res.status(500).json({ error: 'Database error' });
     }
-  
-    // Query the database for the user by email
-    db.get('SELECT * FROM users WHERE email = ?', [email], (err, row) => {
-      if (err) {
-        console.error('Database Error:', err);
-        return res.status(500).json({ error: 'Database error' });
-      }
-  
-      if (!row) {
-        return res.status(401).json({ error: 'Invalid email or password' });
-      }
-  
-      // Compare the provided password with the one stored in the database
-      if (row.password !== password) {
-        return res.status(401).json({ error: 'Invalid email or password' });
-      }
-  
-      res.status(200).json({ message: 'Login successful!' });
-    });
+
+    if (!row) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
+    // Compare the provided password with the one stored in the database
+    if (row.password !== password) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
+    // Set session data (creates a session for the user)
+    req.session.user = { userid: row.userid, email: row.email };
+
+    // Log session data to confirm it's set
+    console.log('Session Data:', req.session);
+
+    res.status(200).json({ message: 'Login successful!' });
   });
-  
+});
   
 
   
