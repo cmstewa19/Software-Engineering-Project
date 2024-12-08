@@ -8,6 +8,30 @@ function UserTickets({ tickets, loading }) {
   const navigate = useNavigate();
   const [filteredTickets, setFilteredTickets] = useState(tickets);
 
+  const [tickets, setTickets] = useState([]); // Tickets from the database
+  const [loading, setLoading] = useState(true); // Loading state
+
+  // Fetch tickets from the database
+  useEffect(() => {
+    const fetchTickets = async () => {
+      try {
+        const response = await fetch(`/api/get-tickets?userId=${userId}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch tickets");
+        }
+        const data = await response.json();
+        setTickets(data); // Update tickets state
+        setFilteredTickets(data); // Initialize filtered tickets
+        setLoading(false); // Stop loading
+      } catch (error) {
+        console.error("Error fetching tickets:", error.message);
+        setLoading(false);
+      }
+    };
+
+    fetchTickets();
+  }, [userId]);
+
   const handleSearch = (query) => {
     const lowerQuery = query.toLowerCase(); // Normalize query for case-insensitive matching
     const filtered = tickets.filter(
