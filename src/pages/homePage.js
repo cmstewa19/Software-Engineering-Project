@@ -83,6 +83,9 @@ const Home = ({ tickets, loading: ticketLoading, trains, setFilteredTrains, user
       {/* Sidebar */}
       <Sidebar />
 
+      {/* Welcome Message */}
+      <h2 className={styles.welcomeText}>Welcome {user.first}!</h2>
+
       {/* Main content wrapper */}
       <div className={styles.contentWrapper}>
         {/* Profile Card Section */}
