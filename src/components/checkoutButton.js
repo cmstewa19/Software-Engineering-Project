@@ -22,7 +22,7 @@ const CheckoutButton = ({ cart, isCardValid, isCodeValid, isDateValid, selectedP
     }
   };
 
-  const handleClick = () => {
+  const handleClick = async () => {
     console.log("Card Valid:", isCardValid);
     console.log("Code Valid:", isCodeValid);
     console.log("Date Valid:", isDateValid);
