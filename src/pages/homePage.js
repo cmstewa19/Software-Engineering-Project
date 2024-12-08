@@ -15,6 +15,7 @@ const Home = ({ tickets, loading: ticketLoading, trains, setFilteredTrains, user
   const [filteredTrains, setFilteredTrainsState] = useState([]); // Trains after filtering
   const [loading, setLoading] = useState(true); // Local loading state for train data
   const [error, setError] = useState(null); // Error state for fetching data
+  document.getElementsByTagName("body")[0].style.backgroundColor="#F5F5F5";
 
   const navigate = useNavigate();
 
