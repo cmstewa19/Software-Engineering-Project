@@ -14,6 +14,7 @@ import UserTickets from './pages/userTicketsPage.js'
 import TrainInfoPage from './pages/trainInfoPage.js'; 
 import ScanTicket from './pages/scanTicketPage.js';
 import ChangePassword from './pages/changePasswordPage.js';
+import ForgotPassword from './pages/forgotPasswordPage.js';
 import PurchaseSuccess from './pages/successPurchase.js';
 
 
@@ -106,7 +107,7 @@ function App() {
             />
             
             <Route path="/signup" element={<Signup />} />
-            <Route path="/forgot-password" element={<ChangePassword />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/browse" element={<BrowseTrains />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/checkout" element={<PurchaseTickets />} />

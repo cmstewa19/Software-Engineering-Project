@@ -7,18 +7,27 @@ import NavigationButton from '../components/navigationButton';
 function UsernamePasswordForm({ navigate }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confpassword, setConfPassword] = useState('');
   const [error, setError] = useState('');
-  const container = document.getElementById("container");
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
   
 
-  const handleLogin = async () => {
+  const handlePassChange = async () => {
     // Validation checks
-    if (!email || !password) {
-      return setError('Both email and password are required.');
+    if (!email || !password || !confpassword) {
+      return setError('All fields are required');
+    }
+
+    if(!password === confpassword) {
+        return setError('Passwords do not match');
+    }
+
+    if(!passwordRegex.test(password)) {
+        return setError('Password must be 8+ characters long and contain 1 upper, 1 lowercase, 1 number, 1 special character');
     }
 
     try {
-      const response = await fetch('http://localhost:3000/api/login', {
+      const response = await fetch('http://localhost:3000/api/change-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -27,16 +36,10 @@ function UsernamePasswordForm({ navigate }) {
       const data = await response.json();
 
       if (response.ok) {
-        alert('Login successful!');
+        alert('Password Changed Successfully!');
         navigate('/home'); // Redirect to home page
       } else {
-        const anchor = document.createElement("a");
-        anchor.href = data.anchor;
-        anchor.textContent = data.anchortext;
-        console.log({data});
-        console.log(data.anchortext);
-        container.appendChild(anchor);
-        setError(data.error || 'Failed to log in.');
+        setError(data.error || 'Something went wrong');
       }
     } catch (err) {
       console.error('Login Error:', err);
@@ -99,14 +102,31 @@ function UsernamePasswordForm({ navigate }) {
         }}
       />
 
+      {/* Password Input */}
+      <input
+        type="password"
+        value={confpassword}
+        onChange={(e) => setConfPassword(e.target.value)}
+        placeholder="Confirm Password"
+        style={{
+          width: '100%',
+          maxWidth: '300px',
+          padding: '10px',
+          fontSize: '16px',
+          border: '1px solid black',
+          borderRadius: '5px',
+          marginBottom: '20px',
+        }}
+      />
+
       {/* Error message */}
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
       {/* Login Button */}
       <NavigationButton
-        text="Login"
+        text="Change Password"
         path="/home"
-        onClick={handleLogin}
+        onClick={handlePassChange}
         style={{
           width: '100%',
           backgroundColor: 'black',

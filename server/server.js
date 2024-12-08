@@ -138,12 +138,12 @@ app.post('/api/login', (req, res) => {
     }
 
     if (!row) {
-      return res.status(401).json({ error: 'Invalid email or password' });
+      return res.status(401).json({ error: 'Invalid email or password', anchortext:'forgot password?', anchor:'forgot-password'});
     }
 
     // Compare the provided password with the one stored in the database
     if (row.password !== password) {
-      return res.status(401).json({ error: 'Invalid email or password' });
+      return res.status(401).json({ error: 'Invalid email or password', anchortext:'forgot password?', anchor:'forgot-password'});
     }
 
     // Set session data
@@ -152,6 +152,29 @@ app.post('/api/login', (req, res) => {
     res.status(200).json({ message: 'Login successful!' });
   });
 }); // <-- Properly close this route
+
+// Change Password POST request
+app.post('/api/change-password', (req, res) => {
+  // get email and password from request
+  const {email, password} = req.body;
+  if (!email || !password) {
+    return res.status(400).json({ error: 'Email and password are required.' });
+  }
+  // tries to get row associated w email to ensure account exists
+  db.get("SELECT * FROM users WHERE email = ?", [email], (err, row) => {
+    if(err) {
+      console.error('Database Error:', err);
+      return res.status(500).json({ error: 'Failed to change password.' });
+    }
+    if(!row) {
+      return res.status(400).json({error : 'invalid email'});
+    }
+    //updates password field
+    db.run("UPDATE users SET password = ? WHERE email = ?", [password, email], () => {
+      res.status(201).json({message: "Password changed successfully"});
+    });
+  });
+});
 
 // API Endpoint to save tickets
 app.post('/api/save-tickets', (req, res) => {
