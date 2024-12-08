@@ -1,4 +1,3 @@
-
 // Form for login page
 // Will need to take input in the future
 import React, { useState, useEffect } from 'react';
@@ -9,6 +8,9 @@ function UsernamePasswordForm({ navigate }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const forgotPassAnchor = document.createElement("a");
+  forgotPassAnchor.href = "/forgot-password";
+  forgotPassAnchor.textContent = "Forgot password?";
 
   const handleLogin = async () => {
     // Validation checks
@@ -26,6 +28,8 @@ function UsernamePasswordForm({ navigate }) {
       const data = await response.json();
 
       if (response.ok) {
+        console.log(email);
+        console.log(password);
         alert('Login successful!');
         navigate('/home'); // Redirect to home page
       } else {
