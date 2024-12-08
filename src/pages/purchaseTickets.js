@@ -11,6 +11,7 @@ import paymentImage4 from "../assets/Discover-Bank-logo-review-featured-image.pn
 import paymentImage5 from "../assets/Mastercard-Logo.png"; // Example image
 import NavigationButton from "../components/navigationButton.js";
 import TrainDetails from '../components/trainDetails.js';
+import CheckoutButton from '../components/checkoutButton'; // Import the CheckoutButton
 
 function PurchaseTicketsPage() {
   const location = useLocation();
@@ -112,49 +113,11 @@ function PurchaseTicketsPage() {
     setCart(updatedCart);
   };
 
-  // Checks to make sure the user has entered valid credit card and has an item in their cart
-  const handleCheckout = () => {
-  console.log("Card Valid:", isCardValid);
-  console.log("Code Valid:", isCodeValid);
-  console.log("Date Valid:", isDateValid);
-  console.log("Cart:", cart);
-  console.log("Selected Payment:", selectedPayment);
-
-  if (!selectedPayment) {
-    alert("Please select a payment method.");
-    return;
-  }
-  if (selectedPayment === "New Credit Card") {
-    if (!isCardValid) {
-      alert("Please enter a valid card number.");
-      return;
-    }
-    if (!isCodeValid) {
-      alert("Please enter a valid security code.");
-      return;
-    }
-    if (!isDateValid) {
-      alert("Please enter a valid expiration date.");
-      return;
-    }
-  }
-  if (cart.length === 0) {
-    alert("Must have items in cart to checkout.");
-    return;
-  }
-
-  navigate("/success");
-};
-  
-  // Save cart state in localStorage
-  {/*useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
-  }, [cart]);
-  */}
   useEffect(() => {
     setCart(selectedSeats);
   }, [selectedSeats]);
 
+  
   return (
   <div
     style={{
@@ -201,9 +164,8 @@ function PurchaseTicketsPage() {
           }}
         >
           <option value="">Select Payment Option</option>
-          <option value="Credit Card">New Credit Card</option>
-          <option value="Credit Card">Saved Credit Card - Visa ****</option>
-          <option value="PayPal">PayPal</option>
+          <option value="Credit Card">Credit Card</option>
+      
         </select>
         {paymentImage && (
           <img
@@ -351,56 +313,14 @@ function PurchaseTicketsPage() {
           <h4>Total: ${(cart.length * 9.99 + 3.99 + 2.99).toFixed(2)}</h4>
         </div>
 
-
-        {/* Uncomment this block if needed
-        <h2>Your Cart</h2>
-        {selectedSeats?.length ? (
-          <>
-            {selectedSeats.map((seat, index) => (
-              <div
-                key={index}
-                style={{
-                  backgroundColor: "#FEFEFE",
-                  color: "black",
-                  padding: "10px",
-                  margin: "10px 0",
-                  borderRadius: "5px",
-                }}
-              >
-                {ticket ? (
-                  <>
-                    <h4>Ticket ID: {ticket.id}</h4>
-                    <div style={styles.routeInfo}>
-                      <p>
-                        <strong>{ticket.origin}</strong> →{" "}
-                        <strong>{ticket.destination}</strong>
-                      </p>
-                    </div>
-                    <p>Seat: {seat}</p>
-                    <button
-                      onClick={() => handleRemoveFromCart(index)}
-                      style={{
-                        backgroundColor: "#D9534F",
-                        color: "white",
-                        border: "none",
-                        padding: "5px 10px",
-                        borderRadius: "5px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      Remove
-                    </button>
-                  </>
-                ) : (
-                  <p>Seat: {seat}</p>
-                )}
-              </div>
-            ))}
-          </>
-        ) : (
-          <p>No seats selected.</p>
-        )}
-        */}
+           
+        <CheckoutButton 
+            cart={cart} 
+            isCardValid={isCardValid} 
+            isCodeValid={isCodeValid} 
+            isDateValid={isDateValid} 
+            selectedPayment={selectedPayment}
+          /> {/* Use CheckoutButton */}
 
         <NavigationButton
           text="Back to Browse"
@@ -413,27 +333,6 @@ function PurchaseTicketsPage() {
             textAlign: "center",
           }}
         />
-
-          <div>
-            <button
-              onClick={handleCheckout}
-              style={{
-                padding: "5px 10px",
-                fontSize: "18px",
-                marginTop: "10px",
-                display: "block",
-                textAlign: "center",
-                backgroundColor: "#4CAF50", // Green button
-                color: "white",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-              }}
-            >
-              Checkout
-            </button>
-          </div>
-
       </div>
     </div>
   </div>

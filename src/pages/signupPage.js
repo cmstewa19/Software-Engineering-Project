@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import trainPhoto from '../assets/train.jpg'; // photo for login page
 import NavigationButton from '../components/navigationButton.js'; // nav button
-import Header from '../components/header.js'; // header
+import Header from '../components/headerNoSidebar.js'; // header without sidebar
 import { useNavigate } from 'react-router-dom';
 
 function SignUp() {
