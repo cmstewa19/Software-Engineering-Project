@@ -1,15 +1,58 @@
-import Header from '../components/header.js'; // header
-import { useNavigate } from 'react-router-dom';
-import Sidebar from '../components/sidebar.js'; // sidebar
+import React, { useState, useEffect } from "react";
+import Header from "../components/header.js";
+import Sidebar from "../components/sidebar.js";
+import { useNavigate } from "react-router-dom";
+import SearchBar from "../components/SearchBar.js";
 
-function UserTickets({ tickets, loading }) {
+function UserTickets({ userId }) { // Remove `tickets` and `loading` from props
   const navigate = useNavigate();
+  const [tickets, setTickets] = useState([]); // Tickets fetched from the database
+  const [filteredTickets, setFilteredTickets] = useState([]); // Filtered tickets for search
+  const [loading, setLoading] = useState(true); // Loading state
+
+  // Fetch tickets from the database on component mount
+  useEffect(() => {
+    const fetchTickets = async () => {
+      try {
+        const response = await fetch(`/api/get-tickets?userId=${userId}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch tickets");
+        }
+        const data = await response.json();
+        setTickets(data); // Update tickets state
+        setFilteredTickets(data); // Initialize filtered tickets
+        setLoading(false); // Stop loading
+      } catch (error) {
+        console.error("Error fetching tickets:", error.message);
+        setLoading(false);
+      }
+    };
+
+    fetchTickets();
+  }, [userId]);
+
+  const handleSearch = (query) => {
+    const lowerQuery = query.toLowerCase(); // Normalize query for case-insensitive matching
+    const filtered = tickets.filter(
+      (ticket) =>
+        ticket.ticketid.toString().includes(lowerQuery) ||
+        ticket.origin.toLowerCase().includes(lowerQuery) ||
+        ticket.destination.toLowerCase().includes(lowerQuery)
+    );
+    setFilteredTickets(filtered); // Update filtered tickets state
+  };
 
   return (
     <div id="purchased-tickets-page">
       <Header />
       <Sidebar />
-      {/* table to store all of user's tickets */}
+
+      <h1>User's Tickets</h1>
+
+      {/* Add SearchBar */}
+      <SearchBar onSearch={handleSearch} />
+
+      {/* Table of Tickets */}
       <table
         id="ticket-table"
         border="1"
@@ -17,7 +60,6 @@ function UserTickets({ tickets, loading }) {
         style={{ width: "90%", margin: "50px", borderCollapse: "collapse" }}
       >
         <thead>
-          {/* header row */}
           <tr>
             <th>Ticket ID</th>
             <th>Origin</th>
@@ -28,26 +70,27 @@ function UserTickets({ tickets, loading }) {
           </tr>
         </thead>
         <tbody>
-          {!loading && tickets.length > 0 ? (
-            tickets.map((ticket) => (
+          {/* Render filtered tickets */}
+          {!loading && filteredTickets.length > 0 ? (
+            filteredTickets.map((ticket) => (
               <tr
-                key={ticket.id}
+                key={ticket.ticketid}
                 onClick={() =>
-                  navigate("/myTickets", { state: { ticket } }) // Pass ticket data
+                  navigate("/myTickets", { state: { ticket } }) // Navigate with ticket data
                 }
                 style={{ cursor: "pointer" }}
               >
-                <td>{ticket.id}</td>
+                <td>{ticket.ticketid}</td>
                 <td>{ticket.origin}</td>
                 <td>{ticket.destination}</td>
-                <td>{ticket.departureDate}</td>
-                <td>{ticket.arrivalDate}</td>
-                <td>1</td> {/* Assuming Quantity is always 1 */}
+                <td>{ticket.departure_time}</td>
+                <td>{ticket.arrival_time}</td>
+                <td>1</td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="4">Loading tickets...</td>
+              <td colSpan="6">{loading ? "Loading tickets..." : "No tickets found..."}</td>
             </tr>
           )}
         </tbody>

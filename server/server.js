@@ -38,6 +38,7 @@ app.use(
 );
 
 
+
 // Create payment intent using Stripe
 app.post('/create-payment-intent', async (req, res) => {
   try {
@@ -48,6 +49,7 @@ app.post('/create-payment-intent', async (req, res) => {
       return res.status(400).json({ error: 'Missing amount or currency' });
     }
 
+    
 // Create payment intent
     const paymentIntent = await stripe.paymentIntents.create({
       amount, // amount in smallest currency unit (e.g., cents)
@@ -64,6 +66,7 @@ app.post('/create-payment-intent', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 
 // Endpoint to generate QR code for a ticket
 app.get('/api/qr/:ticketId', (req, res) => {
@@ -88,6 +91,7 @@ app.get('/api/qr/:ticketId', (req, res) => {
     });
   });
 });
+
 
 // Signup POST request
 app.post('/api/signup', async (req, res) => {
@@ -154,6 +158,39 @@ app.post('/api/login', (req, res) => {
 
     res.status(200).json({ message: 'Login successful!' });
   });
+
+  
+  // API Endpoint to save tickets
+app.post('/api/save-tickets', (req, res) => {
+  const { tickets, userId } = req.body;
+
+  if (!tickets || tickets.length === 0) {
+    return res.status(400).json({ error: 'No tickets provided.' });
+  }
+
+  const stmt = db.prepare(`
+    INSERT INTO Tickets (user_id, train_id, departure_time, arrival_time, seat_number, qr_code, price)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `);
+
+  try {
+    tickets.forEach(ticket => {
+      stmt.run(
+        userId,
+        ticket.trainId,
+        ticket.departureTime,
+        ticket.arrivalTime,
+        ticket.seatNumber,
+        ticket.qrCode,
+        ticket.price
+      );
+    });
+    stmt.finalize();
+    res.status(200).json({ message: 'Tickets saved successfully.' });
+  } catch (err) {
+    console.error('Error saving tickets:', err.message);
+    res.status(500).json({ error: 'Failed to save tickets.' });
+  }
 });
 
 
