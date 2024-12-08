@@ -27,7 +27,13 @@ function TrainInfoPage() {
   const handleBooking = () => {
     // Pass the selected seats and train info to the checkout page
     navigate('/checkout', {
-      state: { trainCode: trainData.trainCode, selectedSeats },
+      state: { 
+        trainCode: trainData.trainCode, 
+        origin: trainData.origin, 
+        destination: trainData.destination, 
+        departureTime: trainData.departureTime,  
+        selectedSeats 
+      },
     });
   };
 
@@ -41,7 +47,7 @@ function TrainInfoPage() {
   }, [trainData.origin, trainData.destination]);
 
   return (
-    <div className={styles.trainInfoContainer}>
+    <div className={styles.body}>
       {/* Header */}
       <Header />
 
@@ -75,7 +81,7 @@ function TrainInfoPage() {
         </div>
 
         {/* Booking Section */}
-        <div className={styles.bookingContainer}>
+        <div className={styles.bookingSection}>
           <BookingSection selectedSeats={selectedSeats} handleBooking={handleBooking} />
         </div>   
       </div>   
