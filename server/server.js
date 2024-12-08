@@ -93,7 +93,7 @@ app.get('/api/qr/:ticketId', (req, res) => {
 });
 
 
-// Signup POST request
+// Signup POST request endpoint
 app.post('/api/signup', async (req, res) => {
     const { firstName, lastName, phoneNumber, email, password } = req.body;
   
@@ -122,7 +122,7 @@ app.post('/api/signup', async (req, res) => {
     });
   });
 
-// Login POST request
+// Login POST request endpoint
 app.post('/api/login', (req, res) => {
   const { email, password } = req.body;
 
