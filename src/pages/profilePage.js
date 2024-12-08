@@ -89,21 +89,18 @@ function Profile() {
     setShowUser((prevState) => !prevState);
     setShowSavedPayments(false);
     setShowSecurity(false);
-    setShowTicketHistory(false);
   };
 
   const toggleSavedPayments = () => {
     setShowSavedPayments((prevState) => !prevState);
     setShowUser(false);
     setShowSecurity(false);
-    setShowTicketHistory(false);
   };
 
   const toggleSecurity = () => {
     setShowSecurity((prevState) => !prevState);
     setShowUser(false);
     setShowSavedPayments(false);
-    setShowTicketHistory(false);
   };
 
 
@@ -308,12 +305,10 @@ function Profile() {
                         {/* Left column */}
                         <div style={{ flex: 1 }}>
                         
-                          {/* <h1>User Profile</h1> */}
-                          <p><strong>First Name:</strong> {user.first_name}</p>
-                          <p><strong>Last Name:</strong> {user.last_name}</p>
-                          <p><strong>Email:</strong> {user.email}</p>
-                          <p><strong>Phone:</strong> {user.phone_number}</p>
-                      
+                          <h3 style={{ fontFamily: 'Arial' }}>First Name:</h3>
+                          <h4 style={{ fontFamily: 'Arial' }}>{user.first_name}</h4>
+                          <h3 style={{ fontFamily: 'Arial' }}>Last Name:</h3>
+                          <h4 style={{ fontFamily: 'Arial' }}>{user.last_name}</h4>                      
                           {/* <h3 style={{ fontFamily: 'Arial' }}>First Name:</h3>
                           <h4 style={{ fontFamily: 'Arial' }}>(Insert User's First Name)</h4>
                           <h3 style={{ fontFamily: 'Arial' }}>Last Name:</h3>
@@ -323,9 +318,9 @@ function Profile() {
                         {/* Right column */}
                         <div style={{ flex: 1 }}>
                           <h3 style={{ fontFamily: 'Arial' }}>Email:</h3>
-                          <h4 style={{ fontFamily: 'Arial' }}>(xxx@outlook.com)</h4>
+                          <h4 style={{ fontFamily: 'Arial' }}>{user.email}</h4>                          
                           <h3 style={{ fontFamily: 'Arial' }}>Phone Number:</h3>
-                          <h4 style={{ fontFamily: 'Arial' }}>(000-000-0000)</h4>
+                          <h4 style={{ fontFamily: 'Arial' }}>{user.phone_number}</h4>
                         </div>
                       </div>
                   </div>
@@ -466,7 +461,7 @@ function Profile() {
                         {/* Left column */}
                         <div style={{ flex: 1 }}>
                           <h3 style={{ fontFamily: 'Arial' }}>Email:</h3>
-                          <h4 style={{ fontFamily: 'Arial' }}>(xxx@outlook.com)</h4>
+                          <h4 style={{ fontFamily: 'Arial' }}>{user.email}</h4>
                         </div>
 
                         {/* Right column */}
@@ -496,7 +491,7 @@ function Profile() {
               "Press a button in the left hand column to view its contents". This way shown seems more 
               straightforward but I'm open to other options.
             */}
-            {!showUser && !showSavedPayments && !showSecurity && !showTicketHistory && (
+            {!showUser && !showSavedPayments && !showSecurity && (
               <>
                 {setShowUser(true)}
               </>
