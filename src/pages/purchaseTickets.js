@@ -298,7 +298,8 @@ function PurchaseTicketsPage() {
                     borderRadius: "5px",
                     cursor: "pointer",
                   }}
-                >
+                />
+              </div>
             ))
           ) : (
             <p>No seats selected.</p>
