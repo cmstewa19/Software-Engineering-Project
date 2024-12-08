@@ -4,6 +4,24 @@ import { useNavigate } from 'react-router-dom';
 const CheckoutButton = ({ cart, isCardValid, isCodeValid, isDateValid, selectedPayment }) => {
   const navigate = useNavigate();
 
+  const saveTicketsToDatabase = async () => {
+    try {
+      const response = await fetch('/api/save-tickets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tickets: cart, userId }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save tickets.');
+      }
+
+      console.log('Tickets saved successfully.');
+    } catch (error) {
+      console.error('Error saving tickets:', error.message);
+    }
+  };
+
   const handleClick = () => {
     console.log("Card Valid:", isCardValid);
     console.log("Code Valid:", isCodeValid);
@@ -33,6 +51,8 @@ const CheckoutButton = ({ cart, isCardValid, isCodeValid, isDateValid, selectedP
       alert("Must have items in cart to checkout.");
       return;
     }
+    // Save tickets to the database
+    await saveTicketsToDatabase();
   
     navigate("/success");
   };
