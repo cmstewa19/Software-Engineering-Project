@@ -4,14 +4,13 @@ import Sidebar from "../components/sidebar.js";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "../components/SearchBar.js";
 
-function UserTickets({ tickets, loading }) {
+function UserTickets({ userId }) { // Remove `tickets` and `loading` from props
   const navigate = useNavigate();
-  const [filteredTickets, setFilteredTickets] = useState(tickets);
-
-  const [tickets, setTickets] = useState([]); // Tickets from the database
+  const [tickets, setTickets] = useState([]); // Tickets fetched from the database
+  const [filteredTickets, setFilteredTickets] = useState([]); // Filtered tickets for search
   const [loading, setLoading] = useState(true); // Loading state
 
-  // Fetch tickets from the database
+  // Fetch tickets from the database on component mount
   useEffect(() => {
     const fetchTickets = async () => {
       try {
@@ -36,17 +35,12 @@ function UserTickets({ tickets, loading }) {
     const lowerQuery = query.toLowerCase(); // Normalize query for case-insensitive matching
     const filtered = tickets.filter(
       (ticket) =>
-        ticket.id.toString().includes(lowerQuery) ||
+        ticket.ticketid.toString().includes(lowerQuery) ||
         ticket.origin.toLowerCase().includes(lowerQuery) ||
         ticket.destination.toLowerCase().includes(lowerQuery)
     );
     setFilteredTickets(filtered); // Update filtered tickets state
   };
-
-  // Ensure the filtered tickets update if the tickets prop changes
-  useEffect(() => {
-    setFilteredTickets(tickets);
-  }, [tickets]);
 
   return (
     <div id="purchased-tickets-page">
@@ -80,23 +74,23 @@ function UserTickets({ tickets, loading }) {
           {!loading && filteredTickets.length > 0 ? (
             filteredTickets.map((ticket) => (
               <tr
-                key={ticket.id}
+                key={ticket.ticketid}
                 onClick={() =>
                   navigate("/myTickets", { state: { ticket } }) // Navigate with ticket data
                 }
                 style={{ cursor: "pointer" }}
               >
-                <td>{ticket.id}</td>
+                <td>{ticket.ticketid}</td>
                 <td>{ticket.origin}</td>
                 <td>{ticket.destination}</td>
-                <td>{ticket.departureDate}</td>
-                <td>{ticket.arrivalDate}</td>
+                <td>{ticket.departure_time}</td>
+                <td>{ticket.arrival_time}</td>
                 <td>1</td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="6">No tickets found...</td>
+              <td colSpan="6">{loading ? "Loading tickets..." : "No tickets found..."}</td>
             </tr>
           )}
         </tbody>
