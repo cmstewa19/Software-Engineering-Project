@@ -164,9 +164,8 @@ function PurchaseTicketsPage() {
           }}
         >
           <option value="">Select Payment Option</option>
-          <option value="Credit Card">New Credit Card</option>
-          <option value="Credit Card">Saved Credit Card - Visa ****</option>
-          <option value="PayPal">PayPal</option>
+          <option value="Credit Card">Credit Card</option>
+      
         </select>
         {paymentImage && (
           <img
