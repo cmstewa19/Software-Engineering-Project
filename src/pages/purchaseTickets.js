@@ -299,9 +299,6 @@ function PurchaseTicketsPage() {
                     cursor: "pointer",
                   }}
                 >
-                  Remove
-                </button>
-              </div>
             ))
           ) : (
             <p>No seats selected.</p>

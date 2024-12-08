@@ -93,7 +93,7 @@ app.get('/api/qr/:ticketId', (req, res) => {
 });
 
 
-// Signup POST request
+// Signup POST request endpoint
 app.post('/api/signup', async (req, res) => {
     const { firstName, lastName, phoneNumber, email, password } = req.body;
   
@@ -122,7 +122,7 @@ app.post('/api/signup', async (req, res) => {
     });
   });
 
-// Login POST request
+// Login POST request endpoint
 app.post('/api/login', (req, res) => {
   const { email, password } = req.body;
 
@@ -177,36 +177,26 @@ app.post('/api/change-password', (req, res) => {
 });
 
 // API Endpoint to save tickets
-app.post('/api/save-tickets', (req, res) => {
+app.post('/api/save-tickets', async (req, res) => {
   const { tickets, userId } = req.body;
 
   if (!tickets || tickets.length === 0) {
     return res.status(400).json({ error: 'No tickets provided.' });
   }
 
-  const stmt = db.prepare(`
-    INSERT INTO Tickets (user_id, train_id, departure_time, arrival_time, seat_number, qr_code, price)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
-  `);
-
-  try {
-    tickets.forEach(ticket => {
-      stmt.run(
-        userId,
-        ticket.trainId,
-        ticket.departureTime,
-        ticket.arrivalTime,
-        ticket.seatNumber,
-        ticket.qrCode,
-        ticket.price
-      );
-    });
-    stmt.finalize();
-    res.status(200).json({ message: 'Tickets saved successfully.' });
-  } catch (err) {
-    console.error('Error saving tickets:', err.message);
-    res.status(500).json({ error: 'Failed to save tickets.' });
-  }
+  // Checking and inserting into the database
+  db.run(
+    `INSERT INTO Tickets (user_id, train_id, departure_time, arrival_time, seat_number, qr_code, price)
+    VALUES (?, ?, ?, ?, ?, ?, ?)`,
+    [user_id, train_id, departure_time, arrival_time, seat_number, qr_code, price],
+    (err) => {
+      if (err) {
+        console.error('Database Error:', err);
+        return res.status(500).json({ error: 'Failed to save tickets to the database.' });
+      }
+      res.status(201).json({ message: 'Tickets saved successfully.' });
+    }
+  );
 });
 
 // Start the server
