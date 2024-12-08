@@ -12,22 +12,31 @@ const app = express(); // instance of our app
 const port = 3000; // backend goes on 3000. (frontend goes on 3001)
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3001',  // Frontend URL
+  credentials: true,                // Allow cookies to be included in requests
+}));
+
 app.use(express.json());
+app.use((req, res, next) => {
+  console.log('Session ID on request:', req.sessionID);
+  next();
+});
 
 // Session middleware setup
 app.use(
   session({
-    secret: process.env.SESSION_SECRET, // Use environment variable for production
-    resave: false,  // Don't save session if it hasn't been modified
-    saveUninitialized: false, // Don't create session until something is stored
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
     cookie: {
-      secure: false, // Set to true if you're using HTTPS in production
-      httpOnly: true, // Helps protect against XSS attacks
-      maxAge: 3600000, // 1 hour expiration
+      httpOnly: true,
+      sameSite: 'Lax',  
+      maxAge: 3600000,    // 1 hour expiration
     },
   })
 );
+
 
 // Create payment intent using Stripe
 app.post('/create-payment-intent', async (req, res) => {
@@ -128,21 +137,25 @@ app.post('/api/login', (req, res) => {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
 
-    // Compare the provided password with the one stored in the database
+// Compare the provided password with the one stored in the database
     if (row.password !== password) {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
 
-    // Set session data (creates a session for the user)
+    // Log the session before setting user data
+    //console.log('Session before setting user:', req.session);
+
+    // Set session data
     req.session.user = { userid: row.userid, email: row.email };
 
-    // Log session data to confirm it's set
-    // console.log('Session Data:', req.session);
+    // Log session data after setting user
+    //console.log('Session after setting user:', req.session);
+    //console.log('Session cookie after login:', req.session.cookie);
 
     res.status(200).json({ message: 'Login successful!' });
   });
 });
-  
+
 
   
 // Start the server
