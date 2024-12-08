@@ -141,26 +141,19 @@ app.post('/api/login', (req, res) => {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
 
-// Compare the provided password with the one stored in the database
+    // Compare the provided password with the one stored in the database
     if (row.password !== password) {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
 
-    // Log the session before setting user data
-    //console.log('Session before setting user:', req.session);
-
     // Set session data
     req.session.user = { userid: row.userid, email: row.email };
 
-    // Log session data after setting user
-    //console.log('Session after setting user:', req.session);
-    //console.log('Session cookie after login:', req.session.cookie);
-
     res.status(200).json({ message: 'Login successful!' });
   });
+}); // <-- Properly close this route
 
-  
-  // API Endpoint to save tickets
+// API Endpoint to save tickets
 app.post('/api/save-tickets', (req, res) => {
   const { tickets, userId } = req.body;
 
@@ -193,8 +186,6 @@ app.post('/api/save-tickets', (req, res) => {
   }
 });
 
-
-  
 // Start the server
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
