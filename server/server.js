@@ -119,7 +119,14 @@ app.post('/api/signup', async (req, res) => {
           res.status(201).json({ message: 'Account created successfully!' });
         }
       );
+      //set session information based off of user login data
+      req.session.first = row.first_name;
+      req.session.last = row.last_name;
+      req.session.userid = row.userid;
+      req.session.email = row.email;
+      req.session.phone = row.phone;
     });
+    
   });
 
 // Login POST request endpoint

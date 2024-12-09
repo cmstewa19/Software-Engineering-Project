@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import NavigationButton from '../components/navigationButton';
 
 
-function UsernamePasswordForm({ navigate }) {
+function UsernamePasswordForm({ navigate, user }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -27,15 +27,12 @@ function UsernamePasswordForm({ navigate }) {
       const data = await response.json();
 
       if (response.ok) {
+        
         alert('Login successful!');
         navigate('/home'); // Redirect to home page
       } else {
-        const anchor = document.createElement("a");
-        anchor.href = data.anchor;
-        anchor.textContent = data.anchortext;
-        console.log({data});
-        console.log(data.anchortext);
-        container.appendChild(anchor);
+        //create anchor element
+        document.getElementById("forgot-password-anchor").style.visibility = "visible";
         setError(data.error || 'Failed to log in.');
       }
     } catch (err) {
@@ -115,6 +112,9 @@ function UsernamePasswordForm({ navigate }) {
           padding: '10px',
         }}
       />
+      <a id="forgot-password-anchor" href='/forgot-password' style={{visibility:"hidden"}}>
+        forgot password?
+      </a>
     </div>
   );
 }
