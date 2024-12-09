@@ -19,7 +19,7 @@ app.use(cors({
 
 app.use(express.json());
 app.use((req, res, next) => {
-  console.log('Session ID on request:', req.sessionID);
+  // console.log('Session ID on request:', req.sessionID);
   next();
 });
 
@@ -144,14 +144,13 @@ app.post('/api/login', (req, res) => {
     }
 
     // Log the session before setting user data
-    console.log('Session before setting user:', req.session);
+    // console.log('Session before setting user:', req.session);
 
     // Set session data
     req.session.user = { userid: row.userid, email: row.email };
 
     // Log session data after setting user
     console.log('Session after setting user:', req.session);
-    console.log('Session cookie after login:', req.session.cookie);
 
     res.status(200).json({ message: 'Login successful!' });
   });
@@ -159,7 +158,7 @@ app.post('/api/login', (req, res) => {
 
 // endpoint to get userinfo for profile
 app.get('/api/userinfo', (req, res) => {
-  console.log('Session:', req.session.user);  // Log session to check if it's set
+  console.log('Session:', req.session.user.userid);  // Log session to check if it's set
 
   if (!req.session.user) {
     return res.status(401).json({ message: 'Not logged in' });
@@ -187,45 +186,51 @@ app.get('/api/userinfo', (req, res) => {
 app.post('/api/save-tickets', async (req, res) => {
   const { tickets } = req.body;
 
-  // Check if user is logged in
-  if (!req.session || !req.session.user) {
-    return res.status(401).json({ error: 'Unauthorized: User not logged in.' });
-  }
-
-  const userId = req.session.user.userid; // Retrieve user ID from session
-
   if (!tickets || tickets.length === 0) {
     return res.status(400).json({ error: 'No tickets provided.' });
   }
 
   try {
-    // Insert tickets into the database
     const insertTicket = db.prepare(`
       INSERT INTO tickets (user_id, train_id, departure_time, arrival_time, seat_number, qr_code, price)
       VALUES (?, ?, ?, ?, ?, ?, ?)
     `);
 
-    tickets.forEach(async (ticket) => {
-      // Generate QR code for each ticket
-      const qrCodeData = await QRCode.toDataURL(JSON.stringify({
-        userId,
-        trainId: ticket.trainId,
-        seatNumber: ticket.seatNumber,
-        departureTime: ticket.departureTime,
-        arrivalTime: ticket.arrivalTime,
-      }));
+    for (const ticket of tickets) {
+      // Check if ticket.trainId exists and clean it if it's valid
+      if (ticket.trainId) {
+        const cleanedTrainId = ticket.trainId.replace(/\D/g, ''); // Clean trainId
 
-      // Insert ticket into database
-      insertTicket.run(
-        userId, 
-        ticket.trainId, 
-        ticket.departureTime, 
-        ticket.arrivalTime, 
-        ticket.seatNumber, 
-        qrCodeData, 
-        ticket.price
-      );
-    });
+        // Check if cleaned trainId is a valid integer
+        if (isNaN(cleanedTrainId)) {
+          console.error('Invalid trainId:', ticket.trainId);
+          continue; // Skip if trainId is not valid
+        }
+
+        // Generate QR code for each ticket
+        const qrCodeData = await QRCode.toDataURL(JSON.stringify({
+          userId,
+          trainId: cleanedTrainId,
+          seatNumber: ticket.seatNumber,
+          departureTime: ticket.departureTime,
+          arrivalTime: ticket.arrivalTime,
+        }));
+
+        // Insert ticket into database
+        insertTicket.run(
+          userId,
+          cleanedTrainId, // Insert the cleaned train_id
+          ticket.departureTime,
+          ticket.arrivalTime,
+          ticket.seatNumber,
+          qrCodeData,
+          ticket.price
+        );
+      } else {
+        console.error('Missing trainId for ticket:', ticket);
+        continue; // Skip if trainId is missing
+      }
+    }
 
     insertTicket.finalize(); // Close the prepared statement
     res.status(201).json({ message: 'Tickets saved successfully!' });
@@ -234,6 +239,9 @@ app.post('/api/save-tickets', async (req, res) => {
     res.status(500).json({ error: 'Failed to save tickets.' });
   }
 });
+
+
+
 
 // Start the server
 app.listen(port, () => {

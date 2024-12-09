@@ -25,17 +25,29 @@ function TrainInfoPage() {
   };
 
   const handleBooking = () => {
-    // Pass the selected seats and train info to the checkout page
+    // Log the selected data before navigating
+    console.log('trainId:', trainData.trainCode);  // Log the trainId to check if it's correct
+    console.log('Selected seats:', selectedSeats);  // Log the selected seats
+    console.log('Train data:', {
+      trainId: trainData.trainCode, 
+      origin: trainData.origin, 
+      destination: trainData.destination, 
+      departureTime: trainData.departureTime,  
+      selectedSeats
+    });  // Log all the data being passed to the checkout page
+    
+    // Navigate to checkout with the state
     navigate('/checkout', {
       state: { 
-        trainCode: trainData.trainCode, 
+        trainId: trainData.trainCode, 
         origin: trainData.origin, 
         destination: trainData.destination, 
         departureTime: trainData.departureTime,  
-        selectedSeats 
+        selectedSeats
       },
     });
   };
+  
 
   // Effect to update the map center based on the origin and destination
   useEffect(() => {

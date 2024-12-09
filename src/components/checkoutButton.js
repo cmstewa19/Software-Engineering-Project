@@ -4,51 +4,30 @@ import { useNavigate } from 'react-router-dom';
 const CheckoutButton = ({ cart, isCardValid, isCodeValid, isDateValid, selectedPayment }) => {
   const navigate = useNavigate();
 
-  // Function to get user ID from the session
-  const getUserIdFromSession = async () => {
-    try {
-      const response = await fetch('http://localhost:3000/api/userinfo', {
-        method: 'GET',
-        credentials: 'include', // Include cookies for session
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to retrieve user session.');
-      }
-
-      const data = await response.json();
-      return data.userid;
-    } catch (error) {
-      console.error('Error retrieving session:', error.message);
-      return null; // Handle appropriately in your flow
-    }
-  };
-
-  // Function to save tickets to the database
   const saveTicketsToDatabase = async () => {
     try {
-      const userId = await getUserIdFromSession(); // Retrieve user ID from session
-  
-      if (!userId) {
-        alert('Unable to save tickets: User not logged in.');
-        return;
-      }
-
-      // Prepare the ticket data
+      // Step 1: Prepare the ticket data
       const tickets = cart.map(item => ({
-        trainId: item.trainId,
+        train_id: item.trainId,
         departureTime: item.departureTime,
         arrivalTime: item.arrivalTime,
         seatNumber: item.seatNumber,
         price: item.price,
       }));
-
+  
+      // Log the prepared tickets to check if the data is correct
+      console.log('Prepared tickets:', tickets);
+  
+      // Step 2: Send the ticket data to the server, relying on the session to get userId
       const response = await fetch('http://localhost:3000/api/save-tickets', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tickets, userId }),
-        credentials: 'include', // Include session cookies
+        body: JSON.stringify({ tickets }),
+        credentials: 'include', // Include session cookies to send session info
       });
+  
+      // Log the response status to see if the request was successful
+      console.log('Server response status:', response.status);
   
       if (!response.ok) {
         throw new Error('Failed to save tickets.');
@@ -56,9 +35,12 @@ const CheckoutButton = ({ cart, isCardValid, isCodeValid, isDateValid, selectedP
   
       console.log('Tickets saved successfully.');
     } catch (error) {
+      // Log the error message to understand why the request failed
       console.error('Error saving tickets:', error.message);
     }
   };
+  
+  
 
   // Handle the checkout button click
   const handleClick = async () => {
