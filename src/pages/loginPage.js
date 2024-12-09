@@ -4,6 +4,7 @@ import Header from '../components/headerNoSidebar.js'; // header without sidebar
 import UsernamePasswordForm from '../components/usernamePasswordForm.js'; // username password form
 import NavigationButton from '../components/navigationButton';
 import { useNavigate } from 'react-router-dom'; // for navigation
+import Sidebar from '../components/sidebar.js';
 
 function Login() {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ function Login() {
     <div style={{ overflow: 'hidden', height: '100vh', display: 'flex', flexDirection: 'column' }}>
       {/* Header component */}
       <Header isLoggedIn={false} />
+      <Sidebar />
       
       {/* Flex container */}
       <div className="row no-gutters" style={{ flex: 1, display: 'flex', height: '100%' }}>
