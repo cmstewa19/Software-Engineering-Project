@@ -186,6 +186,15 @@ app.post('/api/save-tickets', (req, res) => {
   }
 });
 
+// endpoint that returns the userID of the current session
+app.post('/api/session', (req, res) => {
+  if (req.session && req.session.user) {
+    res.json({ userId: req.session.user.userid });
+  } else {
+    res.status(401).json({ error: 'User not logged in.' });
+  }
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);

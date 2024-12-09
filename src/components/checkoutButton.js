@@ -4,23 +4,53 @@ import { useNavigate } from 'react-router-dom';
 const CheckoutButton = ({ cart, isCardValid, isCodeValid, isDateValid, selectedPayment }) => {
   const navigate = useNavigate();
 
+  const getUserIdFromSession = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/api/session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include', // Include cookies for session
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to retrieve user session.');
+      }
+  
+      const data = await response.json();
+      return data.userId;
+    } catch (error) {
+      console.error('Error retrieving session:', error.message);
+      return null; // Handle appropriately in your flow
+    }
+  };
+  
+
   const saveTicketsToDatabase = async () => {
     try {
+      const userId = await getUserIdFromSession(); // Retrieve user ID from session
+  
+      if (!userId) {
+        alert('Unable to save tickets: User not logged in.');
+        return;
+      }
+  
       const response = await fetch('/api/save-tickets', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ tickets: cart, userId }),
       });
-
+  
       if (!response.ok) {
         throw new Error('Failed to save tickets.');
       }
-
+  
       console.log('Tickets saved successfully.');
     } catch (error) {
       console.error('Error saving tickets:', error.message);
     }
   };
+  
+  
 
   const handleClick = async () => {
     console.log("Card Valid:", isCardValid);
