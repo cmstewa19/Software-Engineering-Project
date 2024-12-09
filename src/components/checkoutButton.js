@@ -4,27 +4,27 @@ import { useNavigate } from 'react-router-dom';
 const CheckoutButton = ({ cart, isCardValid, isCodeValid, isDateValid, selectedPayment }) => {
   const navigate = useNavigate();
 
+  // Function to get user ID from the session
   const getUserIdFromSession = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/session', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch('http://localhost:3000/api/userinfo', {
+        method: 'GET',
         credentials: 'include', // Include cookies for session
       });
-  
+
       if (!response.ok) {
         throw new Error('Failed to retrieve user session.');
       }
-  
+
       const data = await response.json();
-      return data.userId;
+      return data.userid;
     } catch (error) {
       console.error('Error retrieving session:', error.message);
       return null; // Handle appropriately in your flow
     }
   };
-  
 
+  // Function to save tickets to the database
   const saveTicketsToDatabase = async () => {
     try {
       const userId = await getUserIdFromSession(); // Retrieve user ID from session
@@ -33,11 +33,21 @@ const CheckoutButton = ({ cart, isCardValid, isCodeValid, isDateValid, selectedP
         alert('Unable to save tickets: User not logged in.');
         return;
       }
-  
-      const response = await fetch('/api/save-tickets', {
+
+      // Prepare the ticket data
+      const tickets = cart.map(item => ({
+        trainId: item.trainId,
+        departureTime: item.departureTime,
+        arrivalTime: item.arrivalTime,
+        seatNumber: item.seatNumber,
+        price: item.price,
+      }));
+
+      const response = await fetch('http://localhost:3000/api/save-tickets', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tickets: cart, userId }),
+        body: JSON.stringify({ tickets, userId }),
+        credentials: 'include', // Include session cookies
       });
   
       if (!response.ok) {
@@ -49,9 +59,8 @@ const CheckoutButton = ({ cart, isCardValid, isCodeValid, isDateValid, selectedP
       console.error('Error saving tickets:', error.message);
     }
   };
-  
-  
 
+  // Handle the checkout button click
   const handleClick = async () => {
     console.log("Card Valid:", isCardValid);
     console.log("Code Valid:", isCodeValid);
@@ -81,6 +90,7 @@ const CheckoutButton = ({ cart, isCardValid, isCodeValid, isDateValid, selectedP
       alert("Must have items in cart to checkout.");
       return;
     }
+  
     // Save tickets to the database
     await saveTicketsToDatabase();
   
