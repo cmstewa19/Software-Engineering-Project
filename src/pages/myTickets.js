@@ -1,14 +1,15 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import { useLocation } from "react-router-dom"; // Import useLocation
 import NavigationButton from "../components/navigationButton.js";
 import Header from "../components/header.js";
 import Sidebar from "../components/sidebar.js";
 import QRCode from "../components/QRCode.js"; 
+import TrainRouteMap from '../components/trainRouteMap.js';
 
 const MyTickets = () => {
   const location = useLocation(); // Access the location object
   const ticket = location.state?.ticket; // Extract the ticket data
-
+  const [mapCenter, setMapCenter] = useState(null);  
   return (
     <div
       style={{
@@ -72,6 +73,17 @@ const MyTickets = () => {
               <p>No ticket selected</p>
             )}
           </div>
+        </div>
+
+        {/* Train Route Map */}
+        <div className={styles.trainRouteMapContainer}>
+          {mapCenter && (
+            <TrainRouteMap 
+              origin={ticket.origin} 
+              destination={ticket.destination} 
+              center={mapCenter} 
+            />
+          )}
         </div>
 
         {/* Ticket Display */}
@@ -141,6 +153,13 @@ const styles = {
     alignItems: "center",
     marginTop: "20px",
   },
+  trainRouteMapContainer: {
+    width: "500px",
+    marginTop: "170px",
+    marginLeft: "30px",
+    height: "350px", 
+    position: "fixed", 
+  }
 };
 
 export default MyTickets;
