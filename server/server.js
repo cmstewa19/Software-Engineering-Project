@@ -156,8 +156,7 @@ app.post('/api/login', (req, res) => {
   });
 });
 
-
-  
+// endpoint to get userinfo for profile
 app.get('/api/userinfo', (req, res) => {
   console.log('Session:', req.session.user);  // Log session to check if it's set
 
@@ -183,7 +182,59 @@ app.get('/api/userinfo', (req, res) => {
   );
 });
 
-  
+// endpoint to insert tickets into database
+// Endpoint to save tickets to the database
+app.post('/api/save-tickets', async (req, res) => {
+  const { tickets } = req.body;
+
+  // Check if user is logged in
+  if (!req.session || !req.session.user) {
+    return res.status(401).json({ error: 'Unauthorized: User not logged in.' });
+  }
+
+  const userId = req.session.user.userid; // Retrieve user ID from session
+
+  if (!tickets || tickets.length === 0) {
+    return res.status(400).json({ error: 'No tickets provided.' });
+  }
+
+  try {
+    // Insert tickets into the database
+    const insertTicket = db.prepare(`
+      INSERT INTO tickets (user_id, train_id, departure_time, arrival_time, seat_number, qr_code, price)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+    `);
+
+    tickets.forEach(async (ticket) => {
+      // Generate QR code for each ticket
+      const qrCodeData = await QRCode.toDataURL(JSON.stringify({
+        userId,
+        trainId: ticket.trainId,
+        seatNumber: ticket.seatNumber,
+        departureTime: ticket.departureTime,
+        arrivalTime: ticket.arrivalTime,
+      }));
+
+      // Insert ticket into database
+      insertTicket.run(
+        userId, 
+        ticket.trainId, 
+        ticket.departureTime, 
+        ticket.arrivalTime, 
+        ticket.seatNumber, 
+        qrCodeData, 
+        ticket.price
+      );
+    });
+
+    insertTicket.finalize(); // Close the prepared statement
+    res.status(201).json({ message: 'Tickets saved successfully!' });
+  } catch (error) {
+    console.error('Error saving tickets:', error.message);
+    res.status(500).json({ error: 'Failed to save tickets.' });
+  }
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
