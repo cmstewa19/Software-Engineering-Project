@@ -10,7 +10,7 @@ import { formatDate } from '../utils/trainUtils'; // Utility functions
 import styles from '../style/homePage.module.css'; // styling
 
 // Home Page Component
-const Home = ({ tickets, loading: ticketLoading, trains, setFilteredTrains, user }) => {
+const Home = ({ tickets, loading: ticketLoading, trains, setFilteredTrains }) => {
   const [allTrains, setAllTrains] = useState([]); // Full train data
   const [filteredTrains, setFilteredTrainsState] = useState([]); // Trains after filtering
   const [loading, setLoading] = useState(true); // Local loading state for train data
@@ -18,6 +18,12 @@ const Home = ({ tickets, loading: ticketLoading, trains, setFilteredTrains, user
   document.getElementsByTagName("body")[0].style.backgroundColor="#F5F5F5";
 
   const navigate = useNavigate();
+  let nextTicket = {
+    id: null,
+    origin: null,
+    destination: null,
+    departDate: null,
+  };
 
   // Fetching train data using useEffect
   useEffect(() => {
@@ -76,6 +82,29 @@ const Home = ({ tickets, loading: ticketLoading, trains, setFilteredTrains, user
     return <div>Error fetching train data: {error.message}</div>;
   }
 
+  async function fetchUserInfo() {
+    try {
+      const response = await fetch("http://localhost:3000/api/home", {
+        method: "GET",
+        headers:{ 'Content-Type': 'application/json' },
+        credentials:"include",
+      });
+      const data = await response.json();
+      if(response.ok){
+        return data;
+      } else {
+        setError(data.error || 'Something went wrong.');
+        //navigate("/");
+      }
+    } catch (err) {
+      console.error('Login Error:', err);
+      setError('An error occurred. Please try again later.');
+    }
+  }
+
+  const something = fetchUserInfo();
+  //console.log(something);
+
   return (
     <div className={styles.homePage}>
       {/* Header */}
@@ -85,18 +114,18 @@ const Home = ({ tickets, loading: ticketLoading, trains, setFilteredTrains, user
       <Sidebar />
 
       {/* Welcome Message */}
-      <h2 className={styles.welcomeText}>Welcome {user.first}!</h2>
+      <h2 className={styles.welcomeText}>Welcome Andrew!</h2>
 
       {/* Main content wrapper */}
       <div className={styles.contentWrapper}>
         {/* Profile Card Section */}
         <div className={styles.profileCard}>
           <div className={styles.ticketCard}>
-            {tickets.length > 0 ? (
+            {nextTicket != null ? (
               <>
-                <h2>{tickets[0].origin} → {tickets[0].destination}</h2>
-                <h2>{tickets[0].departureDate}</h2>
-                <QRCode userID={user.id} trainID={tickets[0].id}/>
+                <h2>Origin → Destination</h2>
+                <h2>{nextTicket.departDate}</h2>
+                <QRCode userID={201} trainID={501}/>
               </>
             ) : (
               <h2>No tickets to display</h2>

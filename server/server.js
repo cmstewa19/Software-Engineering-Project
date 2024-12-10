@@ -7,15 +7,15 @@ const Stripe = require('stripe'); // require stripe for payment simulation
 const db = require('./database'); // require database
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY); // uses your secret env key
 const session = require('express-session');
+const cookieParser = require("cookie-parser");
 
 const app = express(); // instance of our app
 const port = 3000; // backend goes on 3000. (frontend goes on 3001)
 
-// Middleware
-app.use(cors({
-  origin: 'http://localhost:3001',  // Frontend URL
-  credentials: true,                // Allow cookies to be included in requests
-}));
+
+
+//middleware for creating cookies
+app.use(cookieParser());
 
 app.use(express.json());
 app.use((req, res, next) => {
@@ -37,7 +37,11 @@ app.use(
   })
 );
 
-
+// Middleware
+app.use(cors({
+  origin: 'http://localhost:3001',  // Frontend URL
+  credentials: true,                // Allow cookies to be included in requests
+}));
 
 // Create payment intent using Stripe
 app.post('/create-payment-intent', async (req, res) => {
@@ -119,13 +123,9 @@ app.post('/api/signup', async (req, res) => {
           res.status(201).json({ message: 'Account created successfully!' });
         }
       );
-      //set session information based off of user login data
-      req.session.first = row.first_name;
-      req.session.last = row.last_name;
-      req.session.userid = row.userid;
-      req.session.email = row.email;
-      req.session.phone = row.phone;
+      
     });
+    app.route('/api/login')
     
   });
 
@@ -154,9 +154,12 @@ app.post('/api/login', (req, res) => {
     }
 
     // Set session data
-    req.session.user = { userid: row.userid, email: row.email };
-
+    req.session.user = { userid: row.userid, first: row.first_name, email: row.email };
+    
+    res.cookie('first', row.first_name);
+    res.cookie('uid', row.userid);
     res.status(200).json({ message: 'Login successful!' });
+    
   });
 }); // <-- Properly close this route
 
@@ -167,6 +170,7 @@ app.post('/api/change-password', (req, res) => {
   if (!email || !password) {
     return res.status(400).json({ error: 'Email and password are required.' });
   }
+  
   // tries to get row associated w email to ensure account exists
   db.get("SELECT * FROM users WHERE email = ?", [email], (err, row) => {
     if(err) {
@@ -180,6 +184,22 @@ app.post('/api/change-password', (req, res) => {
     db.run("UPDATE users SET password = ? WHERE email = ?", [password, email], () => {
       res.status(201).json({message: "Password changed successfully"});
     });
+  });
+});
+
+app.get('/api/home', (req, res) => {
+  console.log(req.cookies);
+
+  db.get('SELECT * FROM tickets WHERE user_id = ? ORDER BY departure_time ASC LIMIT 1', 1, (err, row) => {
+    if(err) {
+      console.error("Database error: ",err.message);
+      return res.status(500).json({error: "Couldn't fetch ticket"});
+    }
+
+    if(!row) {
+      return res.status(201).json({userFirst: "FIRSTNAME"});
+    }
+    return res.status(201).json({ticketId: row.ticketId, ticketDepart: row.departure_time, userFirst: req.session.user.first, userid: req.session.user.userid})
   });
 });
 
