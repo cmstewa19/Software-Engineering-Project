@@ -9,6 +9,7 @@ import paymentImage4 from "../assets/Discover-Bank-logo-review-featured-image.pn
 import paymentImage5 from "../assets/Mastercard-Logo.png";
 import NavigationButton from "../components/navigationButton.js";
 import TrainDetails from '../components/trainDetails.js';
+import Payment from '../components/checkoutForm.js'
 
 const PurchaseTicketsPage = () => {
   const location = useLocation();
@@ -178,33 +179,7 @@ const PurchaseTicketsPage = () => {
       <div style={{ display: "flex", justifyContent: "space-around", marginTop: "20px" }}>
         <div style={{ width: "40%", maxWidth: "600px", margin: "20px", padding: "20px", border: "1px solid black", borderRadius: "5px", backgroundColor: "#40826D", color: "white" }}>
           <h2>Payment Details</h2>
-          <select value={selectedPayment} onChange={handlePaymentChange} style={{ width: "100%", padding: "10px", margin: "10px 0", fontSize: "16px", borderRadius: "5px" }}>
-            <option value="">Select Payment Option</option>
-            <option value="New Credit Card">Credit Card</option>
-            <option value="PayPal">PayPal</option>
-          </select>
-          {paymentImage && (
-            <img src={paymentImage} alt="Payment Method" style={{ width: "80px", height: "40px", margin: "10px 0" }} />
-          )}
-          {selectedPayment === "New Credit Card" && (
-            <>
-              <div>
-                <label htmlFor="card-number">Card Number</label>
-                <input id="card-number" type="text" value={cardNumber} onChange={handleCardNumberChange} style={{ width: "100%", padding: "10px", margin: "10px 0", borderRadius: "5px" }} />
-                {!isCardValid && <p style={{ color: "red", fontSize: "12px" }}>Invalid card number</p>}
-              </div>
-              <div>
-                <label htmlFor="security-code">Security Code</label>
-                <input id="security-code" type="text" value={codeNumber} onChange={handleSecurityCodeChange} style={{ width: "100%", padding: "10px", margin: "10px 0", borderRadius: "5px" }} />
-                {!isCodeValid && <p style={{ color: "red", fontSize: "12px" }}>Invalid security code</p>}
-              </div>
-              <div>
-                <label htmlFor="exp-date">Expiration Date (mm/yy)</label>
-                <input id="exp-date" type="text" value={dateNumber} onChange={handleExpDateChange} style={{ width: "100%", padding: "10px", margin: "10px 0", borderRadius: "5px" }} />
-                {!isDateValid && <p style={{ color: "red", fontSize: "12px" }}>Invalid expiration date</p>}
-              </div>
-            </>
-          )}
+          <Payment />
         </div>
         <div style={{ width: "40%", maxWidth: "600px", margin: "20px", padding: "20px", border: "1px solid black", borderRadius: "5px", backgroundColor: "#40826D", color: "white" }}>
           <div style={{ width: "80%", padding: "10px", backgroundColor: "#40826D", color: "white" }}>
