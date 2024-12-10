@@ -83,6 +83,10 @@ app.get('/api/qr/:ticketId', (req, res) => {
   });
 });
 
+
+
+// Users Table Endpoints
+
 // Login endpoint
 app.post('/api/login', (req, res) => {
   const { email, password } = req.body;
@@ -99,12 +103,12 @@ app.post('/api/login', (req, res) => {
     }
 
     if (!row) {
-      return res.status(401).json({ error: 'Invalid email or password' });
+      return res.status(401).json({ error: 'Email not found. Sign up below.' });
     }
 
     // Compare the provided password with the one stored in the database
     if (row.password !== password) {
-      return res.status(401).json({ error: 'Invalid email or password' });
+      return res.status(401).json({ error: 'Invalid password.' });
     }
 
     // Set session data after successful login
@@ -114,7 +118,7 @@ app.post('/api/login', (req, res) => {
   });
 });
 
-// Users Table Endpoints
+// Signup endpoint
 app.post('/api/signup', (req, res) => {
   const { firstName, lastName, phoneNumber, email, password } = req.body;
 
@@ -146,6 +150,7 @@ app.post('/api/signup', (req, res) => {
   });
 });
 
+// Change password endpoint
 app.post('/api/change-password', (req, res) => {
   const { email, password } = req.body;
 
@@ -172,6 +177,7 @@ app.post('/api/change-password', (req, res) => {
   });
 });
 
+// Display user info endpoint (for profile page)
 app.get('/api/profile/:userId', (req, res) => {
   const { userId } = req.params;
 
