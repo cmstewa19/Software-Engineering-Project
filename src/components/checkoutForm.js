@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const stripePromise = loadStripe('pk_test_51QKjDaKo2xrmK8G63Ai8S8y6TR8IxkbGYXkHWUz5uLUvwXnYHSPlZljtjhcRlUyqZUiU1pJ8eKuIIkV7E2ZveVMe00NWWrpysP'); // Replace with your Stripe publishable key
 
-function CheckoutForm() {
+function CheckoutForm({ handleCheckout }) {
   const stripe = useStripe();
   const elements = useElements();
   const [error, setError] = useState(null);
@@ -33,6 +33,7 @@ function CheckoutForm() {
     } else if (paymentIntent.status === 'succeeded') {
       setError(null);
       setSuccess(true);
+      handleCheckout(); // Call handleCheckout after payment success
     }
   };
 
@@ -49,11 +50,11 @@ function CheckoutForm() {
   );
 }
 
-function Payment() {
+function Payment({ handleCheckout }) {
   return (
     <div style={paymentContainerStyles}>
       <Elements stripe={stripePromise}>
-        <CheckoutForm />
+        <CheckoutForm handleCheckout={handleCheckout} />
       </Elements>
     </div>
   );

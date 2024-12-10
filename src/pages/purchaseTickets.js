@@ -36,66 +36,6 @@ const PurchaseTicketsPage = () => {
   const [dateNumber, setDateNumber] = useState("");
   const [isDateValid, setIsDateValid] = useState(true);
 
-  const getIssuer = (cardNumber) => {
-    if (!cardNumber) return null;
-    if (/^4/.test(cardNumber)) return "Visa";
-    if (/^5[1-5]/.test(cardNumber)) return "MasterCard";
-    if (/^3[47]/.test(cardNumber)) return "American Express";
-    if (/^6(?:011|5)/.test(cardNumber)) return "Discover";
-    return null;
-  };
-
-  useEffect(() => {
-    if (selectedPayment === "New Credit Card") {
-      const issuer = getIssuer(cardNumber);
-      switch (issuer) {
-        case "Visa":
-          setPaymentImage(paymentImage1);
-          break;
-        case "American Express":
-          setPaymentImage(paymentImage3);
-          break;
-        case "Discover":
-          setPaymentImage(paymentImage4);
-          break;
-        case "MasterCard":
-          setPaymentImage(paymentImage5);
-          break;
-        default:
-          setPaymentImage(null);
-      }
-    } else if (selectedPayment === "PayPal") {
-      setPaymentImage(paymentImage2);
-    } else {
-      setPaymentImage(null);
-    }
-  }, [cardNumber, selectedPayment]);
-
-  const handlePaymentChange = (e) => {
-    setSelectedPayment(e.target.value);
-  };
-
-  const handleCardNumberChange = (e) => {
-    const cardInput = e.target.value;
-    const regex = /^[0-9]{16}$/;
-    setCardNumber(cardInput);
-    setIsCardValid(regex.test(cardInput));
-  };
-
-  const handleSecurityCodeChange = (e) => {
-    const codeInput = e.target.value;
-    const regex = /^[0-9]{3}$/;
-    setCodeNumber(codeInput);
-    setIsCodeValid(regex.test(codeInput));
-  };
-
-  const handleExpDateChange = (e) => {
-    const dateInput = e.target.value;
-    const regex = /^[01][0-9]\/[0-9]{2}$/;
-    setDateNumber(dateInput);
-    setIsDateValid(regex.test(dateInput));
-  };
-
   const handleRemoveFromCart = (index) => {
     const updatedCart = [...cart];
     updatedCart.splice(index, 1);
@@ -140,30 +80,6 @@ const PurchaseTicketsPage = () => {
   };
 
   const handleCheckout = async () => {
-    if (!selectedPayment) {
-      alert("Please select a payment method.");
-      return;
-    }
-
-    if (selectedPayment === "New Credit Card") {
-      if (!isCardValid) {
-        alert("Please enter a valid card number.");
-        return;
-      }
-      if (!isCodeValid) {
-        alert("Please enter a valid security code.");
-        return;
-      }
-      if (!isDateValid) {
-        alert("Please enter a valid expiration date.");
-        return;
-      }
-    }
-
-    if (cart.length === 0) {
-      alert("Must have items in cart to checkout.");
-      return;
-    }
 
     // Save tickets to the database
     await saveTicketsToDatabase();
