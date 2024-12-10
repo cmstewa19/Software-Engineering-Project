@@ -256,25 +256,29 @@ app.post('/api/purchase-ticket', (req, res) => {
   res.status(201).json({ message: 'Tickets purchased successfully!' });
 });
 
+app.get('/api/my-tickets', (req, res) => {
+  // Check if the user is logged in and the session exists
+  if (!req.session || !req.session.user) {
+    return res.status(401).json({ error: 'User not authenticated' });
+  }
 
-
-
-
-
-
-app.get('/api/my-tickets/:user_id', (req, res) => {
-  const { user_id } = req.params;
+  // Extract the user_id from the session
+  const user_id = req.session.user.user_id;
 
   db.all('SELECT * FROM Tickets WHERE user_id = ?', [user_id], (err, rows) => {
     if (err) {
       console.error('Database Error:', err);
       return res.status(500).json({ error: 'Database error.' });
     }
+
+    console.log("Rows: ", rows)
+    // Return the user's tickets
     res.status(200).json(rows);
   });
 });
 
-// testing session
+
+// endpoint to test session. just for testing purposes, not used in application.
 app.get('/api/test-session', (req, res) => {
   //console.log(req.session); // Check if user info is in session
   res.status(200).json({ user: req.session.user });
