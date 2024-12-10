@@ -29,7 +29,7 @@ function TicketTable({ tickets }) {
 
     // Handle row click to navigate to TicketInfoPage with ticket data
     const handleRowClick = (ticket) => {
-        navigate('/ticket-info', { state: { ticket } });
+        navigate('/myTickets', { state: { ticket } });
     };
 
     return (

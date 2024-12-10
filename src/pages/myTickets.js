@@ -1,68 +1,117 @@
-import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom"; // Import useLocation and useNavigate
+import React from "react";
+import { useLocation } from "react-router-dom"; // Import useLocation
 import NavigationButton from "../components/navigationButton.js";
 import Header from "../components/header.js";
 import Sidebar from "../components/sidebar.js";
 import QRCode from "../components/QRCode.js"; 
 
 const MyTickets = () => {
-  const [tickets, setTickets] = useState([]); // State to store ticket data
-  const [loading, setLoading] = useState(true); // Loading state for the API call
-  const [error, setError] = useState(null); // To handle any errors during the fetch
-  
   const location = useLocation(); // Access the location object
-  const navigate = useNavigate(); // For navigation
-  
-  useEffect(() => {
-    const fetchTickets = async () => {
-      try {
-        const response = await fetch('http://localhost:3000/api/my-tickets', { 
-          credentials: 'include', 
-        });
-  
-        if (!response.ok) {
-          throw new Error('Failed to fetch tickets');
-        }
-  
-        const data = await response.json();
-        setTickets(data); // Store the tickets in the state
-      } catch (error) {
-        setError(error.message); // Set the error state
-      } finally {
-        setLoading(false); // Stop loading
-      }
-    };
-  
-    fetchTickets(); // Call the fetch function when the component is mounted
-  }, []); 
-  
-  
-  document.getElementsByTagName("body")[0].style.backgroundColor = "#F5F5F5"; //ensure background color is white
-
-  if (loading) return <div>Loading...</div>; // Display loading state
-
-  if (error) return <div>Error: {error}</div>; // Display error if any
+  const ticket = location.state?.ticket; // Extract the ticket data
+  document.getElementsByTagName("body")[0].style.backgroundColor="#F5F5F5"; //ensure background color is white
 
   return (
-    <div style={{ overflow: "auto", height: "100vh", display: "flex", flexDirection: "column" }}>
+    <div
+      style={{
+        overflow: "auto", // scroll
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       <Header />
       <Sidebar />
 
-      {/* Left Section - Ticket Information */}
-      <div style={{ display: "flex", justifyContent: "space-around", marginTop: "20px" }}>
-        <div style={{ width: "40%", maxWidth: "600px", margin: "20px", padding: "20px", border: "1px solid black", borderRadius: "5px", backgroundColor: "#40826D", color: "white" }}>
-          {tickets.length > 0 ? (
-            tickets.map(ticket => (
-              <div key={ticket.id} style={{ display: "flex", flexDirection: "column", alignItems: "left", cursor: "pointer", width: "95%", padding: "5px", paddingBottom: "15px", border: "1px solid black", borderRadius: "5px", backgroundColor: "#FEFEFE", color: "black" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-around",
+          marginTop: "20px",
+        }}
+      >
+        {/* Left Section - Ticket Information */}
+        <div
+          style={{
+            width: "40%",
+            maxWidth: "600px",
+            margin: "20px",
+            padding: "20px",
+            border: "1px solid black",
+            borderRadius: "5px",
+            backgroundColor: "#40826D",
+            color: "white",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "left",
+              cursor: "pointer",
+              width: "95%",
+              padding: "5px",
+              paddingBottom: "15px",
+              border: "1px solid black",
+              borderRadius: "5px",
+              backgroundColor: "#FEFEFE",
+              color: "black",
+            }}
+          >
+            {ticket ? (
+              <>
                 <h2 style={styles.ticketTitle}>Ticket ID: {ticket.id}</h2>
                 <h2 style={styles.ticketTitle}>Origin: {ticket.origin}</h2>
                 <h2 style={styles.ticketTitle}>Destination: {ticket.destination}</h2>
-                <h2 style={styles.ticketTitle}>Departure Date: {ticket.departure_time}</h2>
-                <h2 style={styles.ticketTitle}>Departure Time: {ticket.departure_time}</h2>
+                <h2 style={styles.ticketTitle}>
+                  Departure Date: {ticket.departureDate}
+                </h2>
+                <h2 style={styles.ticketTitle}>
+                  Departure Time: {ticket.departureTime}
+                </h2>
+              </>
+            ) : (
+              <p>No ticket selected</p>
+            )}
+          </div>
+        </div>
+
+        {/* Ticket Display */}
+        <div
+          style={{
+            width: "80%",
+            maxWidth: "700px",
+            padding: "20px",
+            border: "2px solid black",
+            borderRadius: "10px",
+            backgroundColor: "#FFFFFF",
+            color: "black",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+          }}
+        >
+          {ticket ? (
+            <>
+              <h2 style={styles.ticketTitle}>Ticket ID: {ticket.id}</h2>
+              <div style={styles.routeInfo}>
+                <p>
+                  <strong>{ticket.origin}</strong> →{" "}
+                  <strong>{ticket.destination}</strong>
+                </p>
               </div>
-            ))
+              <div style={styles.details}>
+                <p>
+                  <strong>Departure:</strong> {ticket.departureDate}{" "}
+                  {ticket.departureTime}
+                </p>
+                <p>
+                  <strong>Arrival:</strong> {ticket.arrivalDate}
+                </p>
+              </div>
+              <div style={styles.qrCodeWrapper}>
+                <QRCode value={`Ticket-${ticket.id}`} />
+              </div>
+            </>
           ) : (
-            <p>No tickets available</p>
+            <p>No ticket selected</p>
           )}
         </div>
       </div>
