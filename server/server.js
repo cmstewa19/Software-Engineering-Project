@@ -226,7 +226,7 @@ app.post('/api/purchase-ticket', (req, res) => {
   }
 
   // Log the received data
-  console.log('Received ticket purchase data:', req.body.tickets);
+  //console.log('Received ticket purchase data:', req.body.tickets);
 
   // Iterate over each ticket in the array
   req.body.tickets.forEach(ticket => {
@@ -248,7 +248,7 @@ app.post('/api/purchase-ticket', (req, res) => {
           console.error('Database Error:', err);
           return res.status(500).json({ error: 'Failed to purchase ticket.' });
         }
-        console.log('Ticket saved:', ticket);
+        //console.log('Ticket saved:', ticket);
       }
     );
   });
