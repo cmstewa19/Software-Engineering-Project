@@ -2,45 +2,25 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../components/header.js";
 import Sidebar from "../components/sidebar.js";
-import paymentImage2 from "../assets/paypal_PNG9.png";
-import paymentImage1 from "../assets/Visa-Logo-2014-present.jpg";
-import paymentImage3 from "../assets/American-Express-Logo.png";
-import paymentImage4 from "../assets/Discover-Bank-logo-review-featured-image.png";
-import paymentImage5 from "../assets/Mastercard-Logo.png";
 import NavigationButton from "../components/navigationButton.js";
-import TrainDetails from '../components/trainDetails.js';
-import Payment from '../components/checkoutForm.js'
+import Payment from "../components/checkoutForm.js";
 
 const PurchaseTicketsPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const ticket = location.state?.ticket;
 
-  const { 
-    trainCode = '', 
-    origin = '', 
-    destination = '', 
-    departureTime = '', 
+  const {
+    trainCode = '',
+    origin = '',
+    destination = '',
+    departureTime = '',
     arrivalTime = '',
-    availableSeats = [], 
-    selectedSeats = [] 
+    availableSeats = [],
+    selectedSeats = []
   } = location.state || {};
 
   const [cart, setCart] = useState(location.state?.cart || []);
-  const [selectedPayment, setSelectedPayment] = useState("");
-  const [paymentImage, setPaymentImage] = useState(null);
-  const [cardNumber, setCardNumber] = useState("");
-  const [isCardValid, setIsCardValid] = useState(true);
-  const [codeNumber, setCodeNumber] = useState("");
-  const [isCodeValid, setIsCodeValid] = useState(true);
-  const [dateNumber, setDateNumber] = useState("");
-  const [isDateValid, setIsDateValid] = useState(true);
-
-  const handleRemoveFromCart = (index) => {
-    const updatedCart = [...cart];
-    updatedCart.splice(index, 1);
-    setCart(updatedCart);
-  };
 
   useEffect(() => {
     setCart(selectedSeats);
@@ -58,33 +38,30 @@ const PurchaseTicketsPage = () => {
         qrCode: ticket.qrCode,
         price: ticket.price,
       }));
-  
+
       // Log the ticket data before sending it
       console.log('Ticket data:', ticketData);
-  
+
       const response = await fetch('http://localhost:3000/api/purchase-ticket', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ tickets: ticketData }),
         credentials: 'include'
       });
-  
+
       if (!response.ok) {
         throw new Error('Failed to save tickets.');
       }
-  
+
       console.log('Tickets saved successfully.');
     } catch (error) {
       console.error('Error saving tickets:', error.message);
     }
   };
 
-  const handleCheckout = async () => {
-
-    // Save tickets to the database
+  const handlePaymentSuccess = async (cart) => {
+    // After successful payment, save tickets to the database
     await saveTicketsToDatabase();
-
-    // Navigate to success page
     navigate("/success");
   };
 
@@ -95,7 +72,7 @@ const PurchaseTicketsPage = () => {
       <div style={{ display: "flex", justifyContent: "space-around", marginTop: "20px" }}>
         <div style={{ width: "40%", maxWidth: "600px", margin: "20px", padding: "20px", border: "1px solid black", borderRadius: "5px", backgroundColor: "#40826D", color: "white" }}>
           <h2>Payment Details</h2>
-          <Payment />
+          <Payment cart={cart} handlePaymentSuccess={handlePaymentSuccess} />
         </div>
         <div style={{ width: "40%", maxWidth: "600px", margin: "20px", padding: "20px", border: "1px solid black", borderRadius: "5px", backgroundColor: "#40826D", color: "white" }}>
           <div style={{ width: "80%", padding: "10px", backgroundColor: "#40826D", color: "white" }}>
@@ -119,21 +96,6 @@ const PurchaseTicketsPage = () => {
             <p>Tax: $2.99</p>
             <h4>Total: ${(cart.length * 9.99 + 3.99 + 2.99).toFixed(2)}</h4>
           </div>
-
-          <button
-            onClick={handleCheckout}
-            style={{
-              padding: '10px 20px',
-              fontSize: '18px',
-              backgroundColor: '#4CAF50',
-              color: 'white',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: 'pointer',
-            }}
-          >
-            Checkout
-          </button>
 
           <NavigationButton text="Back to Browse" path="/browse" style={{ padding: "5px 10px", fontSize: "18px", marginTop: "10px", display: "block", textAlign: "center" }} />
         </div>

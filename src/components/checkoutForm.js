@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const stripePromise = loadStripe('pk_test_51QKjDaKo2xrmK8G63Ai8S8y6TR8IxkbGYXkHWUz5uLUvwXnYHSPlZljtjhcRlUyqZUiU1pJ8eKuIIkV7E2ZveVMe00NWWrpysP'); // Replace with your Stripe publishable key
 
-function CheckoutForm({ handleCheckout }) {
+function CheckoutForm({ cart, handlePaymentSuccess }) {
   const stripe = useStripe();
   const elements = useElements();
   const [error, setError] = useState(null);
@@ -14,26 +14,37 @@ function CheckoutForm({ handleCheckout }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Step 1: Create Payment Intent on server
-    const { clientSecret } = await axios
-      .post('http://localhost:3000/create-payment-intent', { amount: 100, currency: 'usd' }) // Set the amount and currency
-      .then((res) => res.data);
+    // Calculate the total amount based on the cart items
+    const totalAmount = cart.reduce((total, item) => total + item.price, 0);
+    const amountInCents = totalAmount * 100;  // Convert to cents
 
-    // Step 2: Confirm Card Payment
-    const cardElement = elements.getElement(CardElement);
-    const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
-      payment_method: {
-        card: cardElement,
-      },
-    });
+    try {
+      // Step 1: Create Payment Intent on server
+      const { clientSecret } = await axios
+        .post('http://localhost:3000/create-payment-intent', { amount: amountInCents, currency: 'usd' })
+        .then((res) => res.data);
 
-    if (error) {
-      setError(error.message);
-      setSuccess(false);
-    } else if (paymentIntent.status === 'succeeded') {
-      setError(null);
-      setSuccess(true);
-      handleCheckout(); // Call handleCheckout after payment success
+      // Step 2: Confirm Card Payment
+      const cardElement = elements.getElement(CardElement);
+      const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: cardElement,
+        },
+      });
+
+      if (error) {
+        setError(error.message);
+        setSuccess(false);
+      } else if (paymentIntent.status === 'succeeded') {
+        setSuccess(true);
+        setError(null);
+
+        // Step 3: Save the tickets to the database after successful payment
+        handlePaymentSuccess(cart);
+      }
+    } catch (err) {
+      setError('An error occurred. Please try again.');
+      console.error(err);
     }
   };
 
@@ -50,11 +61,11 @@ function CheckoutForm({ handleCheckout }) {
   );
 }
 
-function Payment({ handleCheckout }) {
+function Payment({ cart, handlePaymentSuccess }) {
   return (
     <div style={paymentContainerStyles}>
       <Elements stripe={stripePromise}>
-        <CheckoutForm handleCheckout={handleCheckout} />
+        <CheckoutForm cart={cart} handlePaymentSuccess={handlePaymentSuccess} />
       </Elements>
     </div>
   );
