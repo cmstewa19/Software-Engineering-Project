@@ -83,6 +83,36 @@ app.get('/api/qr/:ticketId', (req, res) => {
   });
 });
 
+// Login endpoint
+app.post('/api/login', (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ error: 'Email and password are required.' });
+  }
+
+  // Query the database for the user by email
+  db.get('SELECT * FROM Users WHERE email = ?', [email], (err, row) => {
+    if (err) {
+      console.error('Database Error:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+
+    if (!row) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
+    // Compare the provided password with the one stored in the database
+    if (row.password !== password) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
+    // Set session data after successful login
+    req.session.user = { userid: row.userid, email: row.email };
+
+    res.status(200).json({ message: 'Login successful!', user: { userid: row.userid, email: row.email } });
+  });
+});
 
 // Users Table Endpoints
 app.post('/api/signup', (req, res) => {
