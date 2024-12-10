@@ -116,9 +116,7 @@ app.post('/api/login', (req, res) => {
     req.session.save((err) => {
       if (err) {
         console.error('Error saving session:', err);
-      } else {
-        console.log('Session after save:', req.session);
-      }
+      } 
     });
 
     res.status(200).json({ message: 'Login successful!', user: { user_id: row.user_id, email: row.email } });
@@ -187,13 +185,13 @@ app.post('/api/signup', (req, res) => {
 // Display user info endpoint (for profile page)
 app.get('/api/profile', (req, res) => {
   if (!req.session || !req.session.user || !req.session.user.user_id) {
-    console.log('Session: ', req.session)
+    //console.log('Session: ', req.session)
     //console.log('Session.user: ', req.session.user)
     //console.log('Session.user.user_id: ', req.session.user.user_id)
     return res.status(401).json({ error: 'Unauthorized. Please log in.' });
   }
 
-  console.log('Assigning user:', req.session.user.user_id)
+  //console.log('Assigning user:', req.session.user.user_id)
   const user_id = req.session.user.user_id;
 
   db.get(
