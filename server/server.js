@@ -112,9 +112,9 @@ app.post('/api/login', (req, res) => {
     }
 
     // Set session data after successful login
-    req.session.user = { userid: row.userid, email: row.email };
+    req.session.user = { user_id: row.user_id, email: row.email };
 
-    res.status(200).json({ message: 'Login successful!', user: { userid: row.userid, email: row.email } });
+    res.status(200).json({ message: 'Login successful!', user: { user_id: row.user_id, email: row.email } });
   });
 });
 
@@ -179,15 +179,18 @@ app.post('/api/change-password', (req, res) => {
 
 // Display user info endpoint (for profile page)
 app.get('/api/profile', (req, res) => {
-  if (!req.session || !req.session.user || !req.session.user.userId) {
+  if (!req.session || !req.session.user || !req.session.user.user_id) {
+    console.log('Session: ', req.session)
+    console.log('Session.user: ', req.session.user)
+    //console.log('Session.user.user_id: ', req.session.user.user_id)
     return res.status(401).json({ error: 'Unauthorized. Please log in.' });
   }
 
-  const userId = req.session.user.userId;
+  const user_id = req.session.user.user_id;
 
   db.get(
     'SELECT email, first_name, last_name, phone_number, billing_address FROM Users WHERE user_id = ?',
-    [userId],
+    [user_id],
     (err, row) => {
       if (err) {
         console.error('Database Error:', err);
@@ -204,16 +207,16 @@ app.get('/api/profile', (req, res) => {
 
 // Tickets Table Endpoints
 app.post('/api/purchase-ticket', (req, res) => {
-  const { userId, trainId, origin, destination, departureTime, arrivalTime, seatNumber, qrCode, price } = req.body;
+  const { user_id, trainId, origin, destination, departureTime, arrivalTime, seatNumber, qrCode, price } = req.body;
 
-  if (!userId || !trainId || !origin || !destination || !departureTime || !arrivalTime || !price) {
+  if (!user_id || !trainId || !origin || !destination || !departureTime || !arrivalTime || !price) {
     return res.status(400).json({ error: 'Missing required fields.' });
   }
 
   db.run(
     `INSERT INTO Tickets (user_id, train_id, origin, destination, departure_time, arrival_time, seat_number, qr_code, price)
      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [userId, trainId, origin, destination, departureTime, arrivalTime, seatNumber, qrCode, price],
+    [user_id, trainId, origin, destination, departureTime, arrivalTime, seatNumber, qrCode, price],
     (err) => {
       if (err) {
         console.error('Database Error:', err);
@@ -224,10 +227,10 @@ app.post('/api/purchase-ticket', (req, res) => {
   );
 });
 
-app.get('/api/my-tickets/:userId', (req, res) => {
-  const { userId } = req.params;
+app.get('/api/my-tickets/:user_id', (req, res) => {
+  const { user_id } = req.params;
 
-  db.all('SELECT * FROM Tickets WHERE user_id = ?', [userId], (err, rows) => {
+  db.all('SELECT * FROM Tickets WHERE user_id = ?', [user_id], (err, rows) => {
     if (err) {
       console.error('Database Error:', err);
       return res.status(500).json({ error: 'Database error.' });
