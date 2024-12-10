@@ -95,7 +95,6 @@ app.post('/api/login', (req, res) => {
     return res.status(400).json({ error: 'Email and password are required.' });
   }
 
-  // Query the database for the user by email
   db.get('SELECT * FROM Users WHERE email = ?', [email], (err, row) => {
     if (err) {
       console.error('Database Error:', err);
@@ -106,15 +105,21 @@ app.post('/api/login', (req, res) => {
       return res.status(401).json({ error: 'Email not found. Sign up below.' });
     }
 
-    // Compare the provided password with the one stored in the database
     if (row.password !== password) {
       return res.status(401).json({ error: 'Invalid password.' });
     }
 
     // Set session data after successful login
     req.session.user = { user_id: row.user_id, email: row.email };
-    console.log('Session after setting user:', req.session);
-    console.log('User:', req.session.user.user_id);
+
+    // save session
+    req.session.save((err) => {
+      if (err) {
+        console.error('Error saving session:', err);
+      } else {
+        console.log('Session after save:', req.session);
+      }
+    });
 
     res.status(200).json({ message: 'Login successful!', user: { user_id: row.user_id, email: row.email } });
   });
@@ -152,38 +157,38 @@ app.post('/api/signup', (req, res) => {
   });
 });
 
-// Change password endpoint
-app.post('/api/change-password', (req, res) => {
-  const { email, password } = req.body;
+// // Change password endpoint
+// app.post('/api/change-password', (req, res) => {
+//   const { email, password } = req.body;
 
-  if (!email || !password) {
-    return res.status(400).json({ error: 'Email and password are required.' });
-  }
+//   if (!email || !password) {
+//     return res.status(400).json({ error: 'Email and password are required.' });
+//   }
 
-  db.get('SELECT * FROM Users WHERE email = ?', [email], (err, row) => {
-    if (err) {
-      console.error('Database Error:', err);
-      return res.status(500).json({ error: 'Database error.' });
-    }
-    if (!row) {
-      return res.status(400).json({ error: 'Invalid email.' });
-    }
+//   db.get('SELECT * FROM Users WHERE email = ?', [email], (err, row) => {
+//     if (err) {
+//       console.error('Database Error:', err);
+//       return res.status(500).json({ error: 'Database error.' });
+//     }
+//     if (!row) {
+//       return res.status(400).json({ error: 'Invalid email.' });
+//     }
 
-    db.run('UPDATE Users SET password = ?, updated_at = datetime("now") WHERE email = ?', [password, email], (err) => {
-      if (err) {
-        console.error('Database Error:', err);
-        return res.status(500).json({ error: 'Failed to update password.' });
-      }
-      res.status(200).json({ message: 'Password changed successfully!' });
-    });
-  });
-});
+//     db.run('UPDATE Users SET password = ?, updated_at = datetime("now") WHERE email = ?', [password, email], (err) => {
+//       if (err) {
+//         console.error('Database Error:', err);
+//         return res.status(500).json({ error: 'Failed to update password.' });
+//       }
+//       res.status(200).json({ message: 'Password changed successfully!' });
+//     });
+//   });
+// });
 
 // Display user info endpoint (for profile page)
 app.get('/api/profile', (req, res) => {
   if (!req.session || !req.session.user || !req.session.user.user_id) {
     console.log('Session: ', req.session)
-    console.log('Session.user: ', req.session.user)
+    //console.log('Session.user: ', req.session.user)
     //console.log('Session.user.user_id: ', req.session.user.user_id)
     return res.status(401).json({ error: 'Unauthorized. Please log in.' });
   }

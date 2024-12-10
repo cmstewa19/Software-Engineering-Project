@@ -17,6 +17,7 @@ function Profile() {
     const fetchProfile = async () => {
       try {
         const response = await fetch(`http://localhost:3000/api/profile`, {
+          method: 'GET',
           credentials: 'include', // Ensures cookies (session) are sent with the request
         });
 
