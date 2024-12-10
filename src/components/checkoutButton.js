@@ -1,15 +1,28 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const CheckoutButton = ({ cart, isCardValid, isCodeValid, isDateValid, selectedPayment }) => {
+const CheckoutButton = ({ cart, isCardValid, isCodeValid, isDateValid, selectedPayment, userId }) => {
   const navigate = useNavigate();
 
   const saveTicketsToDatabase = async () => {
     try {
-      const response = await fetch('/api/save-tickets', {
+      // Prepare the ticket data to be sent to the backend
+      const ticketData = cart.map(ticket => ({
+        user_id: userId,
+        train_id: ticket.trainId,
+        origin: ticket.origin,
+        destination: ticket.destination,
+        departure_time: ticket.departureTime,
+        arrival_time: ticket.arrivalTime,
+        seat_number: ticket.seatNumber,
+        qr_code: ticket.qrCode,
+        price: ticket.price,
+      }));
+
+      const response = await fetch('/api/purchase-ticket', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tickets: cart, userId }),
+        body: JSON.stringify({ tickets: ticketData }),
       });
 
       if (!response.ok) {
@@ -23,16 +36,12 @@ const CheckoutButton = ({ cart, isCardValid, isCodeValid, isDateValid, selectedP
   };
 
   const handleClick = async () => {
-    console.log("Card Valid:", isCardValid);
-    console.log("Code Valid:", isCodeValid);
-    console.log("Date Valid:", isDateValid);
-    console.log("Cart:", cart);
-    console.log("Selected Payment:", selectedPayment);
-  
+    // Check for validation errors
     if (!selectedPayment) {
       alert("Please select a payment method.");
       return;
     }
+
     if (selectedPayment === "New Credit Card") {
       if (!isCardValid) {
         alert("Please enter a valid card number.");
@@ -47,13 +56,16 @@ const CheckoutButton = ({ cart, isCardValid, isCodeValid, isDateValid, selectedP
         return;
       }
     }
+
     if (cart.length === 0) {
       alert("Must have items in cart to checkout.");
       return;
     }
+
     // Save tickets to the database
     await saveTicketsToDatabase();
-  
+
+    // Navigate to success page
     navigate("/success");
   };
 

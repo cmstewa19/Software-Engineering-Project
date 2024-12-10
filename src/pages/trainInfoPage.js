@@ -21,21 +21,42 @@ function TrainInfoPage() {
 
   // Update the selectedSeats state when seats are selected
   const handleSeatSelection = (seats) => {
-    setSelectedSeats(seats);
+    // Map selected seats to ticket details
+    const updatedSelectedSeats = seats.map(seat => ({
+      trainCode: trainData.trainCode,
+      origin: trainData.origin,
+      destination: trainData.destination,
+      departureTime: trainData.departureTime,
+      seatNumber: seat, // Seat number selected by the user
+      price: 9.99,  // You can replace this with the actual price logic if applicable
+      qrCode: "someGeneratedQrCode",  // Example for QR code generation
+    }));
+  
+    // Set the updated selected seats with all ticket details
+    setSelectedSeats(updatedSelectedSeats);
   };
 
   const handleBooking = () => {
-    // Pass the selected seats and train info to the checkout page
+    // Create a ticket object (or array) with the necessary details
+    const tickets = selectedSeats.map(seat => ({
+      trainCode: trainData.trainCode,
+      origin: trainData.origin,
+      destination: trainData.destination,
+      departureTime: trainData.departureTime,
+      seatNumber: seat,  
+      price: 9.99,  
+      qrCode: "someGeneratedQrCode",  // Example 
+    }));
+  
+    // Pass the tickets array to the checkout page
     navigate('/checkout', {
       state: { 
-        trainCode: trainData.trainCode, 
-        origin: trainData.origin, 
-        destination: trainData.destination, 
-        departureTime: trainData.departureTime,  
-        selectedSeats 
+        tickets,
+        selectedSeats,
       },
     });
   };
+  
 
   // Effect to update the map center based on the origin and destination
   useEffect(() => {

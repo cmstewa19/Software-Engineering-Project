@@ -213,12 +213,42 @@ app.get('/api/profile', (req, res) => {
 
 // Tickets Table Endpoints
 app.post('/api/purchase-ticket', (req, res) => {
-  const { user_id, trainId, origin, destination, departureTime, arrivalTime, seatNumber, qrCode, price } = req.body;
+  // Check if the user is logged in and the session exists
+  if (!req.session || !req.session.user) {
+    //console.log('Logging purchase-tickets endpoint')
+    //console.log('Session: ', req.session)
+    //console.log('Session.user: ', req.session.user)
+    return res.status(401).json({ error: 'User not authenticated' });
+  }
 
-  if (!user_id || !trainId || !origin || !destination || !departureTime || !arrivalTime || !price) {
+  // Extract the user_id from the session
+  const user_id = req.session.user.user_id;
+
+  if (!req.body) {
+    return res.status(400).json({ error: 'Request body is missing.' });
+  }
+
+  // Destructure other fields from the request body
+  const { trainId, origin, destination, departureTime, arrivalTime, seatNumber, qrCode, price } = req.body;
+
+  // Log the received data
+  console.log('Received ticket purchase data:', {
+    trainId,
+    origin,
+    destination,
+    departureTime,
+    arrivalTime,
+    seatNumber,
+    qrCode,
+    price
+  });
+
+  // Validate the received data
+  if (!trainId || !origin || !destination || !departureTime || !arrivalTime || !price) {
     return res.status(400).json({ error: 'Missing required fields.' });
   }
 
+  // Insert the ticket details into the database
   db.run(
     `INSERT INTO Tickets (user_id, train_id, origin, destination, departure_time, arrival_time, seat_number, qr_code, price)
      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
@@ -233,6 +263,11 @@ app.post('/api/purchase-ticket', (req, res) => {
   );
 });
 
+
+
+
+
+
 app.get('/api/my-tickets/:user_id', (req, res) => {
   const { user_id } = req.params;
 
@@ -243,6 +278,12 @@ app.get('/api/my-tickets/:user_id', (req, res) => {
     }
     res.status(200).json(rows);
   });
+});
+
+// testing session
+app.get('/api/test-session', (req, res) => {
+  //console.log(req.session); // Check if user info is in session
+  res.status(200).json({ user: req.session.user });
 });
 
 // Start the server
