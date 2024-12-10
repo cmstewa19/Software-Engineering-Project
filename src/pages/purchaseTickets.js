@@ -9,11 +9,6 @@ import paymentImage4 from "../assets/Discover-Bank-logo-review-featured-image.pn
 import paymentImage5 from "../assets/Mastercard-Logo.png";
 import NavigationButton from "../components/navigationButton.js";
 import TrainDetails from '../components/trainDetails.js';
-import Payment from '../components/checkoutForm.js';
-import { loadStripe } from '@stripe/stripe-js';
-import { Elements } from '@stripe/react-stripe-js';
-
-const stripePromise = loadStripe('pk_test_51QKjDaKo2xrmK8G63Ai8S8y6TR8IxkbGYXkHWUz5uLUvwXnYHSPlZljtjhcRlUyqZUiU1pJ8eKuIIkV7E2ZveVMe00NWWrpysP'); 
 
 const PurchaseTicketsPage = () => {
   const location = useLocation();
@@ -31,56 +26,84 @@ const PurchaseTicketsPage = () => {
   } = location.state || {};
 
   const [cart, setCart] = useState(location.state?.cart || []);
-  const [selectedPayment, setSelectedPayment] = useState("New Credit Card");
+  const [selectedPayment, setSelectedPayment] = useState("");
   const [paymentImage, setPaymentImage] = useState(null);
-  const [clientSecret, setClientSecret] = useState(null);
+  const [cardNumber, setCardNumber] = useState("");
   const [isCardValid, setIsCardValid] = useState(true);
+  const [codeNumber, setCodeNumber] = useState("");
+  const [isCodeValid, setIsCodeValid] = useState(true);
+  const [dateNumber, setDateNumber] = useState("");
+  const [isDateValid, setIsDateValid] = useState(true);
 
-  // Create PaymentIntent when component is mounted
-  useEffect(() => {
-    const createPaymentIntent = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/create-payment-intent", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ amount: cart.length * 9.99 + 3.99 + 2.99, currency: "usd" })
-        });
-
-        const data = await response.json();
-        setClientSecret(data.clientSecret);
-      } catch (error) {
-        console.error("Error creating payment intent:", error);
-      }
-    };
-
-    createPaymentIntent();
-  }, [cart]);
-
-  const handleCheckout = async () => {
-    if (!stripe || !elements) return; // Make sure stripe and elements are loaded
-
-    const card = elements.getElement(CardElement);
-    if (!card) return;
-
-    // Create payment method
-    const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
-      payment_method: {
-        card: card,
-        billing_details: {
-          name: "Name Here", // You can collect the user's name from the form if needed
-        },
-      },
-    });
-
-    if (error) {
-      console.error("Payment failed:", error);
-      alert("Payment failed. Please try again.");
-    } else if (paymentIntent.status === "succeeded") {
-      // Payment succeeded, save the tickets to the database
-      await saveTicketsToDatabase();
-      navigate("/success");
-    }
+  const getIssuer = (cardNumber) => {
+    if (!cardNumber) return null;
+    if (/^4/.test(cardNumber)) return "Visa";
+    if (/^5[1-5]/.test(cardNumber)) return "MasterCard";
+    if (/^3[47]/.test(cardNumber)) return "American Express";
+    if (/^6(?:011|5)/.test(cardNumber)) return "Discover";
+    return null;
   };
+
+  useEffect(() => {
+    if (selectedPayment === "New Credit Card") {
+      const issuer = getIssuer(cardNumber);
+      switch (issuer) {
+        case "Visa":
+          setPaymentImage(paymentImage1);
+          break;
+        case "American Express":
+          setPaymentImage(paymentImage3);
+          break;
+        case "Discover":
+          setPaymentImage(paymentImage4);
+          break;
+        case "MasterCard":
+          setPaymentImage(paymentImage5);
+          break;
+        default:
+          setPaymentImage(null);
+      }
+    } else if (selectedPayment === "PayPal") {
+      setPaymentImage(paymentImage2);
+    } else {
+      setPaymentImage(null);
+    }
+  }, [cardNumber, selectedPayment]);
+
+  const handlePaymentChange = (e) => {
+    setSelectedPayment(e.target.value);
+  };
+
+  const handleCardNumberChange = (e) => {
+    const cardInput = e.target.value;
+    const regex = /^[0-9]{16}$/;
+    setCardNumber(cardInput);
+    setIsCardValid(regex.test(cardInput));
+  };
+
+  const handleSecurityCodeChange = (e) => {
+    const codeInput = e.target.value;
+    const regex = /^[0-9]{3}$/;
+    setCodeNumber(codeInput);
+    setIsCodeValid(regex.test(codeInput));
+  };
+
+  const handleExpDateChange = (e) => {
+    const dateInput = e.target.value;
+    const regex = /^[01][0-9]\/[0-9]{2}$/;
+    setDateNumber(dateInput);
+    setIsDateValid(regex.test(dateInput));
+  };
+
+  const handleRemoveFromCart = (index) => {
+    const updatedCart = [...cart];
+    updatedCart.splice(index, 1);
+    setCart(updatedCart);
+  };
+
+  useEffect(() => {
+    setCart(selectedSeats);
+  }, [selectedSeats]);
 
   const saveTicketsToDatabase = async () => {
     try {
@@ -115,6 +138,39 @@ const PurchaseTicketsPage = () => {
     }
   };
 
+  const handleCheckout = async () => {
+    if (!selectedPayment) {
+      alert("Please select a payment method.");
+      return;
+    }
+
+    if (selectedPayment === "New Credit Card") {
+      if (!isCardValid) {
+        alert("Please enter a valid card number.");
+        return;
+      }
+      if (!isCodeValid) {
+        alert("Please enter a valid security code.");
+        return;
+      }
+      if (!isDateValid) {
+        alert("Please enter a valid expiration date.");
+        return;
+      }
+    }
+
+    if (cart.length === 0) {
+      alert("Must have items in cart to checkout.");
+      return;
+    }
+
+    // Save tickets to the database
+    await saveTicketsToDatabase();
+
+    // Navigate to success page
+    navigate("/success");
+  };
+
   return (
     <div style={{ overflowY: "auto", height: "100vh", display: "flex", flexDirection: "column" }}>
       <Header />
@@ -122,10 +178,33 @@ const PurchaseTicketsPage = () => {
       <div style={{ display: "flex", justifyContent: "space-around", marginTop: "20px" }}>
         <div style={{ width: "40%", maxWidth: "600px", margin: "20px", padding: "20px", border: "1px solid black", borderRadius: "5px", backgroundColor: "#40826D", color: "white" }}>
           <h2>Payment Details</h2>
-          {/* Wrap Payment component with Elements provider */}
-          <Elements stripe={stripePromise}>
-            <Payment />
-          </Elements>
+          <select value={selectedPayment} onChange={handlePaymentChange} style={{ width: "100%", padding: "10px", margin: "10px 0", fontSize: "16px", borderRadius: "5px" }}>
+            <option value="">Select Payment Option</option>
+            <option value="New Credit Card">Credit Card</option>
+            <option value="PayPal">PayPal</option>
+          </select>
+          {paymentImage && (
+            <img src={paymentImage} alt="Payment Method" style={{ width: "80px", height: "40px", margin: "10px 0" }} />
+          )}
+          {selectedPayment === "New Credit Card" && (
+            <>
+              <div>
+                <label htmlFor="card-number">Card Number</label>
+                <input id="card-number" type="text" value={cardNumber} onChange={handleCardNumberChange} style={{ width: "100%", padding: "10px", margin: "10px 0", borderRadius: "5px" }} />
+                {!isCardValid && <p style={{ color: "red", fontSize: "12px" }}>Invalid card number</p>}
+              </div>
+              <div>
+                <label htmlFor="security-code">Security Code</label>
+                <input id="security-code" type="text" value={codeNumber} onChange={handleSecurityCodeChange} style={{ width: "100%", padding: "10px", margin: "10px 0", borderRadius: "5px" }} />
+                {!isCodeValid && <p style={{ color: "red", fontSize: "12px" }}>Invalid security code</p>}
+              </div>
+              <div>
+                <label htmlFor="exp-date">Expiration Date (mm/yy)</label>
+                <input id="exp-date" type="text" value={dateNumber} onChange={handleExpDateChange} style={{ width: "100%", padding: "10px", margin: "10px 0", borderRadius: "5px" }} />
+                {!isDateValid && <p style={{ color: "red", fontSize: "12px" }}>Invalid expiration date</p>}
+              </div>
+            </>
+          )}
         </div>
         <div style={{ width: "40%", maxWidth: "600px", margin: "20px", padding: "20px", border: "1px solid black", borderRadius: "5px", backgroundColor: "#40826D", color: "white" }}>
           <div style={{ width: "80%", padding: "10px", backgroundColor: "#40826D", color: "white" }}>
@@ -168,8 +247,6 @@ const PurchaseTicketsPage = () => {
           <NavigationButton text="Back to Browse" path="/browse" style={{ padding: "5px 10px", fontSize: "18px", marginTop: "10px", display: "block", textAlign: "center" }} />
         </div>
       </div>
-
-
     </div>
   );
 };
