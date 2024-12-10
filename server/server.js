@@ -182,6 +182,14 @@ app.post('/api/signup', (req, res) => {
 //   });
 // });
 
+app.get('/api/home', (req,res) => {
+  if (!req.session || !req.session.user) {
+    return res.status(401).json({ error: 'User not authenticated' });
+  }
+  console.log(req.session.user);
+  return res.status(201).json({message: "Navigating to home page"});
+});
+
 // Display user info endpoint (for profile page)
 app.get('/api/profile', (req, res) => {
   if (!req.session || !req.session.user || !req.session.user.user_id) {

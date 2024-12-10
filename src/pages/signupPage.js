@@ -52,7 +52,7 @@ function SignUp() {
 
       if (response.ok) {
         alert('Account created successfully!');
-        navigate('/home'); // Redirect to home
+        navigate('/'); // Redirect to login (/api/login sets session data)
       } else {
         setError(data.error || 'Failed to create account.');
       }

@@ -32,6 +32,7 @@ function UsernamePasswordForm({ navigate, user }) {
         alert('Login successful!');
         navigate('/home'); // Redirect to home page
       } else {
+        document.getElementById("forgot-password-anchor").style.visibility = "visible";
         setError(data.error || 'Failed to log in.');
       }
     } catch (err) {
