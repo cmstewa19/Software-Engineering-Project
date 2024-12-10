@@ -113,6 +113,8 @@ app.post('/api/login', (req, res) => {
 
     // Set session data after successful login
     req.session.user = { user_id: row.user_id, email: row.email };
+    console.log('Session after setting user:', req.session);
+    console.log('User:', req.session.user.user_id);
 
     res.status(200).json({ message: 'Login successful!', user: { user_id: row.user_id, email: row.email } });
   });
@@ -186,6 +188,7 @@ app.get('/api/profile', (req, res) => {
     return res.status(401).json({ error: 'Unauthorized. Please log in.' });
   }
 
+  console.log('Assigning user:', req.session.user.user_id)
   const user_id = req.session.user.user_id;
 
   db.get(
