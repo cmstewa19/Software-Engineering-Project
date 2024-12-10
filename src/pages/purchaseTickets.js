@@ -20,6 +20,7 @@ const PurchaseTicketsPage = () => {
     origin = '', 
     destination = '', 
     departureTime = '', 
+    arrivalTime = '',
     availableSeats = [], 
     selectedSeats = [] 
   } = location.state || {};
@@ -107,7 +108,7 @@ const PurchaseTicketsPage = () => {
   const saveTicketsToDatabase = async () => {
     try {
       const ticketData = cart.map(ticket => ({
-        trainId: ticket.trainId,
+        trainCode: ticket.trainCode,
         origin: ticket.origin,
         destination: ticket.destination,
         departureTime: ticket.departureTime,

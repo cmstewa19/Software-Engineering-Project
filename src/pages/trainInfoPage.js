@@ -27,9 +27,10 @@ function TrainInfoPage() {
       origin: trainData.origin,
       destination: trainData.destination,
       departureTime: trainData.departureTime,
+      arrivalTime: trainData.departureTime,
       seatNumber: seat, // Seat number selected by the user
-      price: 9.99,  // You can replace this with the actual price logic if applicable
-      qrCode: "someGeneratedQrCode",  // Example for QR code generation
+      price: 9.99,  
+      qrCode: "someGeneratedQrCode",  // Example 
     }));
   
     // Set the updated selected seats with all ticket details
@@ -43,6 +44,7 @@ function TrainInfoPage() {
       origin: trainData.origin,
       destination: trainData.destination,
       departureTime: trainData.departureTime,
+      arrivalTime: trainData.departureTime,
       seatNumber: seat,  
       price: 9.99,  
       qrCode: "someGeneratedQrCode",  // Example 

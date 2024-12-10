@@ -215,53 +215,47 @@ app.get('/api/profile', (req, res) => {
 app.post('/api/purchase-ticket', (req, res) => {
   // Check if the user is logged in and the session exists
   if (!req.session || !req.session.user) {
-    //console.log('Logging purchase-tickets endpoint')
-    //console.log('Session: ', req.session)
-    //console.log('Session.user: ', req.session.user)
     return res.status(401).json({ error: 'User not authenticated' });
   }
 
   // Extract the user_id from the session
   const user_id = req.session.user.user_id;
 
-  if (!req.body) {
-    return res.status(400).json({ error: 'Request body is missing.' });
+  if (!req.body || !Array.isArray(req.body.tickets)) {
+    return res.status(400).json({ error: 'Request body or tickets array is missing.' });
   }
-
-  // Destructure other fields from the request body
-  const { trainId, origin, destination, departureTime, arrivalTime, seatNumber, qrCode, price } = req.body;
 
   // Log the received data
-  console.log('Received ticket purchase data:', {
-    trainId,
-    origin,
-    destination,
-    departureTime,
-    arrivalTime,
-    seatNumber,
-    qrCode,
-    price
+  console.log('Received ticket purchase data:', req.body.tickets);
+
+  // Iterate over each ticket in the array
+  req.body.tickets.forEach(ticket => {
+    const { trainCode, origin, destination, departureTime, arrivalTime, seatNumber, qrCode, price } = ticket;
+
+    // Validate the received data for each ticket
+    if (!trainCode || !origin || !destination || !departureTime || !arrivalTime || !price) {
+      console.log('Invalid ticket data:', ticket);
+      return res.status(400).json({ error: 'Missing required fields in ticket data.' });
+    }
+
+    // Insert the ticket details into the database
+    db.run(
+      `INSERT INTO Tickets (user_id, train_id, origin, destination, departure_time, arrival_time, seat_number, qr_code, price)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [user_id, trainCode, origin, destination, departureTime, arrivalTime, seatNumber, qrCode, price],
+      (err) => {
+        if (err) {
+          console.error('Database Error:', err);
+          return res.status(500).json({ error: 'Failed to purchase ticket.' });
+        }
+        console.log('Ticket saved:', ticket);
+      }
+    );
   });
 
-  // Validate the received data
-  if (!trainId || !origin || !destination || !departureTime || !arrivalTime || !price) {
-    return res.status(400).json({ error: 'Missing required fields.' });
-  }
-
-  // Insert the ticket details into the database
-  db.run(
-    `INSERT INTO Tickets (user_id, train_id, origin, destination, departure_time, arrival_time, seat_number, qr_code, price)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [user_id, trainId, origin, destination, departureTime, arrivalTime, seatNumber, qrCode, price],
-    (err) => {
-      if (err) {
-        console.error('Database Error:', err);
-        return res.status(500).json({ error: 'Failed to purchase ticket.' });
-      }
-      res.status(201).json({ message: 'Ticket purchased successfully!' });
-    }
-  );
+  res.status(201).json({ message: 'Tickets purchased successfully!' });
 });
+
 
 
 
