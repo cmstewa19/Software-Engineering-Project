@@ -1,29 +1,22 @@
 require('dotenv').config();
-const express = require('express'); // required node package
-const sqlite3 = require('sqlite3').verbose(); // require sqlite
-const cors = require('cors'); // require cors so frontend and backend play nice
-const QRCode = require('qrcode'); //require package for the qr code generator
-const Stripe = require('stripe'); // require stripe for payment simulation
-const db = require('./database'); // require database
-const stripe = Stripe(process.env.STRIPE_SECRET_KEY); // uses your secret env key
+const express = require('express');
+const sqlite3 = require('sqlite3').verbose();
+const cors = require('cors');
+const QRCode = require('qrcode');
+const Stripe = require('stripe');
 const session = require('express-session');
+const db = require('./database');
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
-const app = express(); // instance of our app
-const port = 3000; // backend goes on 3000. (frontend goes on 3001)
+const app = express();
+const port = 3000;
 
 // Middleware
 app.use(cors({
-  origin: 'http://localhost:3001',  // Frontend URL
-  credentials: true,                // Allow cookies to be included in requests
+  origin: 'http://localhost:3001',
+  credentials: true,
 }));
-
 app.use(express.json());
-app.use((req, res, next) => {
-  console.log('Session ID on request:', req.sessionID);
-  next();
-});
-
-// Session middleware setup
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -31,15 +24,13 @@ app.use(
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      sameSite: 'Lax',  
-      maxAge: 3600000,    // 1 hour expiration
+      sameSite: 'Lax',
+      maxAge: 3600000,
     },
   })
 );
 
-
-
-// Create payment intent using Stripe
+// Stripe endpoint
 app.post('/create-payment-intent', async (req, res) => {
   try {
     const { amount, currency } = req.body;
@@ -68,7 +59,7 @@ app.post('/create-payment-intent', async (req, res) => {
 });
 
 
-// Endpoint to generate QR code for a ticket
+// QR endpoint
 app.get('/api/qr/:ticketId', (req, res) => {
   const ticketId = req.params.ticketId;
 
@@ -93,36 +84,10 @@ app.get('/api/qr/:ticketId', (req, res) => {
 });
 
 
-// Signup POST request endpoint
-app.post('/api/signup', async (req, res) => {
-    const { firstName, lastName, phoneNumber, email, password } = req.body;
-  
-    if (!firstName || !lastName || !phoneNumber || !email || !password) {
-      return res.status(400).json({ error: 'All fields are required.' });
-    }
-  
-    // Checking and inserting into the database
-    db.get('SELECT * FROM users WHERE email = ?', [email], (err, row) => {
-      if (row) {
-        return res.status(400).json({ error: 'Email already in use.' });
-      }
-  
-      db.run(
-        `INSERT INTO users (email, password, first_name, last_name, phone_number, created_at, updated_at)
-         VALUES (?, ?, ?, ?, ?, datetime('now'), datetime('now'))`,
-        [email, password, firstName, lastName, phoneNumber],
-        (err) => {
-          if (err) {
-            console.error('Database Error:', err);
-            return res.status(500).json({ error: 'Failed to create account.' });
-          }
-          res.status(201).json({ message: 'Account created successfully!' });
-        }
-      );
-    });
-  });
 
-// Login POST request endpoint
+// Users Table Endpoints
+
+// Login endpoint
 app.post('/api/login', (req, res) => {
   const { email, password } = req.body;
 
@@ -130,73 +95,193 @@ app.post('/api/login', (req, res) => {
     return res.status(400).json({ error: 'Email and password are required.' });
   }
 
-  // Query the database for the user by email
-  db.get('SELECT * FROM users WHERE email = ?', [email], (err, row) => {
+  db.get('SELECT * FROM Users WHERE email = ?', [email], (err, row) => {
     if (err) {
       console.error('Database Error:', err);
       return res.status(500).json({ error: 'Database error' });
     }
 
     if (!row) {
-      return res.status(401).json({ error: 'Invalid email or password', anchortext:'forgot password?', anchor:'forgot-password'});
+      return res.status(401).json({ error: 'Email not found. Sign up below.' });
     }
 
-    // Compare the provided password with the one stored in the database
     if (row.password !== password) {
-      return res.status(401).json({ error: 'Invalid email or password', anchortext:'forgot password?', anchor:'forgot-password'});
+      return res.status(401).json({ error: 'Invalid password.' });
     }
 
-    // Set session data
-    req.session.user = { userid: row.userid, email: row.email };
+    // Set session data after successful login
+    req.session.user = { user_id: row.user_id, email: row.email };
 
-    res.status(200).json({ message: 'Login successful!' });
-  });
-}); // <-- Properly close this route
-
-// Change Password POST request
-app.post('/api/change-password', (req, res) => {
-  // get email and password from request
-  const {email, password} = req.body;
-  if (!email || !password) {
-    return res.status(400).json({ error: 'Email and password are required.' });
-  }
-  // tries to get row associated w email to ensure account exists
-  db.get("SELECT * FROM users WHERE email = ?", [email], (err, row) => {
-    if(err) {
-      console.error('Database Error:', err);
-      return res.status(500).json({ error: 'Failed to change password.' });
-    }
-    if(!row) {
-      return res.status(400).json({error : 'invalid email'});
-    }
-    //updates password field
-    db.run("UPDATE users SET password = ? WHERE email = ?", [password, email], () => {
-      res.status(201).json({message: "Password changed successfully"});
+    // save session
+    req.session.save((err) => {
+      if (err) {
+        console.error('Error saving session:', err);
+      } 
     });
+
+    res.status(200).json({ message: 'Login successful!', user: { user_id: row.user_id, email: row.email } });
   });
 });
 
-// API Endpoint to save tickets
-app.post('/api/save-tickets', async (req, res) => {
-  const { tickets, userId } = req.body;
+// Signup endpoint
+app.post('/api/signup', (req, res) => {
+  const { firstName, lastName, phoneNumber, email, password } = req.body;
 
-  if (!tickets || tickets.length === 0) {
-    return res.status(400).json({ error: 'No tickets provided.' });
+  if (!firstName || !lastName || !phoneNumber || !email || !password) {
+    return res.status(400).json({ error: 'All fields are required.' });
   }
 
-  // Checking and inserting into the database
-  db.run(
-    `INSERT INTO Tickets (user_id, train_id, departure_time, arrival_time, seat_number, qr_code, price)
-    VALUES (?, ?, ?, ?, ?, ?, ?)`,
-    [user_id, train_id, departure_time, arrival_time, seat_number, qr_code, price],
-    (err) => {
+  db.get('SELECT * FROM Users WHERE email = ?', [email], (err, row) => {
+    if (err) {
+      console.error('Database Error:', err);
+      return res.status(500).json({ error: 'Database error.' });
+    }
+    if (row) {
+      return res.status(400).json({ error: 'Email already in use.' });
+    }
+
+    db.run(
+      `INSERT INTO Users (email, password, first_name, last_name, phone_number, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, datetime('now'), datetime('now'))`,
+      [email, password, firstName, lastName, phoneNumber],
+      (err) => {
+        if (err) {
+          console.error('Database Error:', err);
+          return res.status(500).json({ error: 'Failed to create account.' });
+        }
+        res.status(201).json({ message: 'Account created successfully!' });
+      }
+    );
+  });
+});
+
+// // Change password endpoint
+// app.post('/api/change-password', (req, res) => {
+//   const { email, password } = req.body;
+
+//   if (!email || !password) {
+//     return res.status(400).json({ error: 'Email and password are required.' });
+//   }
+
+//   db.get('SELECT * FROM Users WHERE email = ?', [email], (err, row) => {
+//     if (err) {
+//       console.error('Database Error:', err);
+//       return res.status(500).json({ error: 'Database error.' });
+//     }
+//     if (!row) {
+//       return res.status(400).json({ error: 'Invalid email.' });
+//     }
+
+//     db.run('UPDATE Users SET password = ?, updated_at = datetime("now") WHERE email = ?', [password, email], (err) => {
+//       if (err) {
+//         console.error('Database Error:', err);
+//         return res.status(500).json({ error: 'Failed to update password.' });
+//       }
+//       res.status(200).json({ message: 'Password changed successfully!' });
+//     });
+//   });
+// });
+
+// Display user info endpoint (for profile page)
+app.get('/api/profile', (req, res) => {
+  if (!req.session || !req.session.user || !req.session.user.user_id) {
+    //console.log('Session: ', req.session)
+    //console.log('Session.user: ', req.session.user)
+    //console.log('Session.user.user_id: ', req.session.user.user_id)
+    return res.status(401).json({ error: 'Unauthorized. Please log in.' });
+  }
+
+  //console.log('Assigning user:', req.session.user.user_id)
+  const user_id = req.session.user.user_id;
+
+  db.get(
+    'SELECT email, first_name, last_name, phone_number, billing_address FROM Users WHERE user_id = ?',
+    [user_id],
+    (err, row) => {
       if (err) {
         console.error('Database Error:', err);
-        return res.status(500).json({ error: 'Failed to save tickets to the database.' });
+        return res.status(500).json({ error: 'Database error.' });
       }
-      res.status(201).json({ message: 'Tickets saved successfully.' });
+      if (!row) {
+        return res.status(404).json({ error: 'User not found.' });
+      }
+      res.status(200).json(row);
     }
   );
+});
+
+
+// Tickets Table Endpoints
+app.post('/api/purchase-ticket', (req, res) => {
+  // Check if the user is logged in and the session exists
+  if (!req.session || !req.session.user) {
+    return res.status(401).json({ error: 'User not authenticated' });
+  }
+
+  // Extract the user_id from the session
+  const user_id = req.session.user.user_id;
+
+  if (!req.body || !Array.isArray(req.body.tickets)) {
+    return res.status(400).json({ error: 'Request body or tickets array is missing.' });
+  }
+
+  // Log the received data
+  //console.log('Received ticket purchase data:', req.body.tickets);
+
+  // Iterate over each ticket in the array
+  req.body.tickets.forEach(ticket => {
+    const { trainCode, origin, destination, departureTime, arrivalTime, seatNumber, qrCode, price } = ticket;
+
+    // Validate the received data for each ticket
+    if (!trainCode || !origin || !destination || !departureTime || !arrivalTime || !price) {
+      console.log('Invalid ticket data:', ticket);
+      return res.status(400).json({ error: 'Missing required fields in ticket data.' });
+    }
+
+    // Insert the ticket details into the database
+    db.run(
+      `INSERT INTO Tickets (user_id, train_id, origin, destination, departure_time, arrival_time, seat_number, qr_code, price)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [user_id, trainCode, origin, destination, departureTime, arrivalTime, seatNumber, qrCode, price],
+      (err) => {
+        if (err) {
+          console.error('Database Error:', err);
+          return res.status(500).json({ error: 'Failed to purchase ticket.' });
+        }
+        //console.log('Ticket saved:', ticket);
+      }
+    );
+  });
+
+  res.status(201).json({ message: 'Tickets purchased successfully!' });
+});
+
+app.get('/api/my-tickets', (req, res) => {
+  // Check if the user is logged in and the session exists
+  if (!req.session || !req.session.user) {
+    return res.status(401).json({ error: 'User not authenticated' });
+  }
+
+  // Extract the user_id from the session
+  const user_id = req.session.user.user_id;
+
+  db.all('SELECT * FROM Tickets WHERE user_id = ?', [user_id], (err, rows) => {
+    if (err) {
+      console.error('Database Error:', err);
+      return res.status(500).json({ error: 'Database error.' });
+    }
+
+    console.log("Rows: ", rows)
+    // Return the user's tickets
+    res.status(200).json(rows);
+  });
+});
+
+
+// endpoint to test session. just for testing purposes, not used in application.
+app.get('/api/test-session', (req, res) => {
+  //console.log(req.session); // Check if user info is in session
+  res.status(200).json({ user: req.session.user });
 });
 
 // Start the server
