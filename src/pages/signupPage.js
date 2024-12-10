@@ -231,10 +231,8 @@ function SignUp() {
             }}
           >
             {/* Create Account Button */}
-            <NavigationButton
-              text="Create Account"
-              path="/home"
-              onClick={handleSubmit} 
+            <button
+              onClick={handleSubmit}
               style={{
                 width: '300px',
                 backgroundColor: 'black',
@@ -242,9 +240,10 @@ function SignUp() {
                 marginBottom: '10px',
                 padding: '10px',
                 textAlign: 'center',
-                marginBottom: '50px'
               }}
-            />
+            >
+              Create Account
+            </button>
 
             {/* Sign-Up Option */}
             <div 
