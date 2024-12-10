@@ -16,23 +16,22 @@ function UsernamePasswordForm({ navigate, user }) {
     if (!email || !password) {
       return setError('Both email and password are required.');
     }
-
+  
     try {
       const response = await fetch('http://localhost:3000/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
+        credentials: 'include'
       });
-
+  
       const data = await response.json();
-
+  
       if (response.ok) {
         
         alert('Login successful!');
         navigate('/home'); // Redirect to home page
       } else {
-        //create anchor element
-        document.getElementById("forgot-password-anchor").style.visibility = "visible";
         setError(data.error || 'Failed to log in.');
       }
     } catch (err) {
@@ -40,7 +39,7 @@ function UsernamePasswordForm({ navigate, user }) {
       setError('An error occurred. Please try again later.');
     }
   };
-
+  
 
   return (
     <div
