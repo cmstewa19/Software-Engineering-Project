@@ -13,10 +13,14 @@ function BookingSection({ selectedSeats, handleBooking }) {
   return (
     <div className={styles.bookingSection}>
       <h3>Selected Seats</h3>
-      
-      {/* Shows selected seats, or if none are selected shows 'None selected' */}
-      <p>{selectedSeats.length > 0 ? selectedSeats.join(', ') : 'None selected'}</p>
-      
+
+      {/* Show selected seat numbers or display 'None selected' if no seats are selected */}
+      <p>
+        {selectedSeats.length > 0 
+          ? selectedSeats.map(seat => seat.seatNumber).join(', ')  // Extract seat numbers from the objects
+          : 'None selected'}
+      </p>
+
       {/* Button to initiate the booking process. Disabled if no seats are selected */}
       <button
         className={styles.bookTicketsButton}
@@ -30,3 +34,4 @@ function BookingSection({ selectedSeats, handleBooking }) {
 }
 
 export default BookingSection;
+
