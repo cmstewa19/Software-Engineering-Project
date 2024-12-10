@@ -178,20 +178,29 @@ app.post('/api/change-password', (req, res) => {
 });
 
 // Display user info endpoint (for profile page)
-app.get('/api/profile/:userId', (req, res) => {
-  const { userId } = req.params;
+app.get('/api/profile', (req, res) => {
+  if (!req.session || !req.session.user || !req.session.user.userId) {
+    return res.status(401).json({ error: 'Unauthorized. Please log in.' });
+  }
 
-  db.get('SELECT email, first_name, last_name, phone_number, billing_address FROM Users WHERE user_id = ?', [userId], (err, row) => {
-    if (err) {
-      console.error('Database Error:', err);
-      return res.status(500).json({ error: 'Database error.' });
+  const userId = req.session.user.userId;
+
+  db.get(
+    'SELECT email, first_name, last_name, phone_number, billing_address FROM Users WHERE user_id = ?',
+    [userId],
+    (err, row) => {
+      if (err) {
+        console.error('Database Error:', err);
+        return res.status(500).json({ error: 'Database error.' });
+      }
+      if (!row) {
+        return res.status(404).json({ error: 'User not found.' });
+      }
+      res.status(200).json(row);
     }
-    if (!row) {
-      return res.status(404).json({ error: 'User not found.' });
-    }
-    res.status(200).json(row);
-  });
+  );
 });
+
 
 // Tickets Table Endpoints
 app.post('/api/purchase-ticket', (req, res) => {
