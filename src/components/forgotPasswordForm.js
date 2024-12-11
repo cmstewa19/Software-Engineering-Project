@@ -31,6 +31,7 @@ function UsernamePasswordForm({ navigate }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
+        // probably need to add credentials: 'include' here
       });
 
       const data = await response.json();
