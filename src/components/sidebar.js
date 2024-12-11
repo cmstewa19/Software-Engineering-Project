@@ -41,21 +41,21 @@ const Sidebar = () => {
         <div className={styles.header}>Navigation</div>
 
         {/* use for testing ------ */}
-        <Link to="/home" className={styles.button}>Home</Link>
+        {/* <Link to="/home" className={styles.button}>Home</Link>
         <Link to="/browse" className={styles.button}>Browse Trains</Link>
         <Link to="/user-tickets" className={styles.button}>My Tickets</Link>
         <Link to="/profile" className={styles.button}>Profile Page</Link>
         <Link to="/" className={styles.button}>Login</Link>
         <Link to="/signup" className={styles.button}>Sign Up</Link>
-        <Link to="/checkout" className={styles.button}>Checkout</Link>
+        <Link to="/checkout" className={styles.button}>Checkout</Link> */}
 
         {/* use for final product ------ */}
 
         {/* Links to all of the pages */}        
-        {/* <Link to="/home" className={styles.button}>Home</Link>
+        <Link to="/home" className={styles.button}>Home</Link>
         <Link to="/browse" className={styles.button}>Browse Trains</Link>
         <Link to="/profile" className={styles.button}>My Profile</Link>
-        <Link to="/myTickets" className={styles.button}>My Tickets</Link> */}
+        <Link to="/myTickets" className={styles.button}>My Tickets</Link>
         
 
       </div>
