@@ -156,7 +156,7 @@ app.post('/api/signup', (req, res) => {
   });
 });
 
-// // Change password endpoint
+// Change password endpoint
 app.post('/api/change-password', (req, res) => {
   const { email, password } = req.body;
 
@@ -197,16 +197,20 @@ app.get('/api/home', (req,res) => {
     }
     //if user has no valid tickets respond without sending ticket info
     if(!row){
-      return res.status(201).json({message: "No Ticket"});
+      res.clearCookie("url");
+      res.cookie("origin", -1, {httpOnly: false, secure: false, sameSite: 'Lax', maxAge: 3600000,});
+      res.clearCookie("destination");
+      res.clearCookie("departDate");
+      return res.status(201).json({ticket: "0"});
+    } else {
+      const qr_url = generateQRCode(req.session.user.user_id, row.ticket_id, req.headers.origin);
+      res.cookie("url", qr_url, {httpOnly: false, secure: false, sameSite: 'Lax', maxAge: 3600000,});
+      res.cookie("origin", row.origin, {httpOnly: false, secure: false, sameSite: 'Lax', maxAge: 3600000,});
+      res.cookie("destination", row.destination, {httpOnly: false, secure: false, sameSite: 'Lax', maxAge: 3600000,});
+      res.cookie("departDate", row.departure_time, {httpOnly: false, secure: false, sameSite: 'Lax', maxAge: 3600000,});
+      res.status(201).json({ticket: "1"});
     }
-    const qr_url = generateQRCode(req.session.user.user_id, row.ticket_id, req.headers.origin);
-    res.cookie("url", qr_url, {httpOnly: false, secure: false, sameSite: 'Lax', maxAge: 3600000,});
-    res.cookie("origin", row.origin, {httpOnly: false, secure: false, sameSite: 'Lax', maxAge: 3600000,});
-    res.cookie("destination", row.destination, {httpOnly: false, secure: false, sameSite: 'Lax', maxAge: 3600000,});
-    res.cookie("departDate", row.departure_time, {httpOnly: false, secure: false, sameSite: 'Lax', maxAge: 3600000,});
-    return res.status(201).json({message: "Ticket"});
   });
-  
 });
 
 // Display user info endpoint (for profile page)
@@ -304,25 +308,44 @@ app.get('/api/my-tickets', (req, res) => {
   });
 });
 
-app.post('/api/scan', (req, res) => {
+app.post('/api/scan', async (req, res) => {
   const { uid, tid } = req.body;
-  console.log("UID: "+uid);
-  console.log("TID: "+tid);
-  db.get("SELECT scanned FROM Tickets WHERE user_id = ? AND ticket_id = ? AND scanned = 0 LIMIT 1", [uid, tid], (err, row) => {
-    if(err) {
-      return res.status(500).json({error: "First Database error."});
-    }
-    if(!row) {
-      return res.status(404).json({error: "No ticket found"});
-    }
-  });
 
-  db.run("UPDATE Tickets SET scanned = 1 WHERE user_id = ? AND ticket_id = ? AND scanned = 0", [uid, tid], (err) => {
-    if(err) {
-      return res.status(500).json({error: "Second Database error."});
+  try {
+    // Check if the ticket exists and if it is scanned
+    const row = await new Promise((resolve, reject) => {
+      db.get("SELECT * FROM Tickets WHERE user_id = ? AND ticket_id = ? LIMIT 1", [uid, tid], (err, row) => {
+        if (err) return reject({status: 500, message: "First Database error."});
+        resolve(row);
+      });
+    });
+
+    if (!row) {
+      console.log("No ticket found.");
+      return res.status(400).json({ error: "No ticket found" });
     }
-    return res.status(200).json({message: "valid ticket"});
-  });
+
+    if (row.scanned !== 0) {
+      console.log("Ticket already scanned.");
+      return res.status(200).json({ valid: "0" });
+    }
+
+    // Update the ticket as scanned
+    await new Promise((resolve, reject) => {
+      db.run("UPDATE Tickets SET scanned = 1 WHERE user_id = ? AND ticket_id = ? AND scanned = 0", [uid, tid], (err) => {
+        if (err) return reject({status: 500, message: "Second Database error."});
+        resolve();
+      });
+    });
+
+    console.log("Ticket successfully scanned.");
+    res.status(200).json({ valid: "1" });
+
+  } catch (error) {
+    // Handle errors from both database operations
+    console.error(error.message);
+    res.status(error.status || 500).json({ error: error.message });
+  }
 });
 
 // function to generate QR code
