@@ -48,6 +48,9 @@ app.post('/create-payment-intent', async (req, res) => {
       currency,
     });
 
+    console.log('Payment Intent created:', paymentIntent.id);
+    console.log('Client Secret:', paymentIntent.client_secret);
+
     // Send client secret to the frontend
       res.send({
         clientSecret: paymentIntent.client_secret,
@@ -58,7 +61,6 @@ app.post('/create-payment-intent', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
 
 // QR endpoint
 app.get('/api/qr/:ticketId', (req, res) => {
