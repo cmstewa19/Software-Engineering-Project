@@ -1,11 +1,11 @@
 import React from 'react';
 import trainPhoto from '../assets/train.jpg'; // photo for login page
 import Header from '../components/headerNoSidebar.js'; // header without sidebar
-import UsernamePasswordForm from '../components/usernamePasswordForm.js'; // username password form
+import ForgotPasswordForm from '../components/forgotPasswordForm.js'; // username password form
 import NavigationButton from '../components/navigationButton';
 import { useNavigate } from 'react-router-dom'; // for navigation
 
-function Login(user) {
+function ForgotPassword() {
   const navigate = useNavigate();
 
   return (
@@ -35,7 +35,7 @@ function Login(user) {
             }}
           >
             {/* Username and password form */}
-            <UsernamePasswordForm navigate={navigate} user={user} />
+            <ForgotPasswordForm navigate={navigate} />
 
             {/* Sign-Up Option */}
             <div 
@@ -45,10 +45,10 @@ function Login(user) {
                 textAlign: 'center',
               }}
             >
-              Don't have an account?{' '}
+              Change your mind?{' '}
               <NavigationButton
-                text="Sign Up"
-                path="/signup"
+                text="Login"
+                path="/"
                 style={{
                   backgroundColor: 'white',
                   color: 'black',
@@ -82,4 +82,4 @@ function Login(user) {
   );
 }
 
-export default Login;
+export default ForgotPassword;

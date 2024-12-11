@@ -14,6 +14,7 @@ import UserTickets from './pages/userTicketsPage.js'
 import TrainInfoPage from './pages/trainInfoPage.js'; 
 import ScanTicket from './pages/scanTicketPage.js';
 import ChangePassword from './pages/changePasswordPage.js';
+import ForgotPassword from './pages/forgotPasswordPage.js';
 import PurchaseSuccess from './pages/successPurchase.js';
 
 
@@ -50,13 +51,11 @@ function App() {
   }, []); // Empty dependency array to run once on component mount
 
   //hardcoded user data - eventually will come from our database
-  const user =  [
-    {
+  let user ={
       id: "1111",
       first: "John",
       last: "Doe"
-    }
-  ]
+  };
 
   // Hardcoded ticket data (this would normally come from an API)
   const ticketData = [
@@ -98,15 +97,15 @@ function App() {
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
         <main style={{ flexGrow: 1 }}>
           <Routes>
-            <Route path="/" element={<LoginPageWithNavigation />} />
+            <Route path="/" element={<LoginPageWithNavigation user={user} />} />
             {/* Pass the ticket data as props to Home and MyTickets */}
             <Route
               path="/home"
-              element={<Home tickets={tickets} loading={loading} trains={trains} setFilteredTrains={setFilteredTrains} user={user[0]} />}
+              element={<Home tickets={tickets} loading={loading} trains={trains} setFilteredTrains={setFilteredTrains} user={user} />}
             />
             
             <Route path="/signup" element={<Signup />} />
-            <Route path="forgot-password" element={<ChangePassword />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/browse" element={<BrowseTrains />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/checkout" element={<PurchaseTickets />} />

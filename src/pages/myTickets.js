@@ -8,6 +8,7 @@ import QRCode from "../components/QRCode.js";
 const MyTickets = () => {
   const location = useLocation(); // Access the location object
   const ticket = location.state?.ticket; // Extract the ticket data
+  document.getElementsByTagName("body")[0].style.backgroundColor="#F5F5F5"; //ensure background color is white
 
   return (
     <div
