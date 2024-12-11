@@ -16,7 +16,12 @@ const Home = ({ tickets, loading: ticketLoading, trains, setFilteredTrains }) =>
   const [loading, setLoading] = useState(true); // Local loading state for train data
   const [error, setError] = useState(null); // Error state for fetching data
   const [first, setFirst] = useState(""); // State to store the "first" name
-  const [nextTicket, setNextTicket] = useState({ url: null, origin: null, destination: null, departDate: null });
+  const [nextTicket, setNextTicket] = useState({ 
+    url: null, 
+    origin: null, 
+    destination: null,  
+    departureTime: null 
+  });
 
   document.getElementsByTagName("body")[0].style.backgroundColor="#F5F5F5";
 
@@ -103,14 +108,14 @@ const Home = ({ tickets, loading: ticketLoading, trains, setFilteredTrains }) =>
             url: data.url,
             origin: data.origin,
             destination: data.destination,
-            departDate: data.departDate,
+            departureTime: data.departure_time, 
           });
         } else {
           setNextTicket({
             url: null,
             origin: null,
             destination: null,
-            departDate: null,
+            departureTime: null,
           });
         }
       } catch (err) {
@@ -154,7 +159,7 @@ const Home = ({ tickets, loading: ticketLoading, trains, setFilteredTrains }) =>
             {nextTicket.origin ? (
               <>
                 <h2>{nextTicket.origin} → {nextTicket.destination}</h2>
-                <h2>{nextTicket.departDate}</h2>
+                <h3>Departure Time: {nextTicket.departureTime}</h3> {/* Display departure time */}
                 <a href={nextTicket.url}>
                   <QRCode url={nextTicket.url} />
                 </a>
