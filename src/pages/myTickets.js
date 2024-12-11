@@ -101,7 +101,7 @@ const MyTickets = () => {
               <div style={styles.details}>
               </div>
               <div style={styles.qrCodeWrapper}>
-                <QRCode value={`Ticket-${ticket.id}`} />
+                <QRCode value={`Ticket-${ticket.ticket_id}`} />
               </div>
             </>
           ) : (
