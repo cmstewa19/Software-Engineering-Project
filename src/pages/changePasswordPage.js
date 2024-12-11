@@ -1,6 +1,5 @@
 import React from 'react';
 import Header from '../components/header.js';
-import Divider from '../components/divider.js';
 import NavigationButton from '../components/navigationButton.js';
 
 {/* Page to change a user's password */}
@@ -29,26 +28,9 @@ function ChangePasswordPage() {
               borderRadius: '10px',
               position: 'relative',
               top: '20px',
-              height: '60vh'
+              height: '50vh'
             }}
           >
-            {/* Display current password */}
-            <div style = {{
-                fontFamily: 'Arial',
-                fontSize: '20px',
-                fontWeight: 'bold',
-                marginBottom: '20px'
-            }}>Your Current Password:</div>
-            
-            <div style = {{marginBottom: '20px'}}>(Insert Password Here)</div>
-
-            {/* Divider Component */}
-            <div style = {{
-                display: 'flex',
-                justifyContent: 'right',
-                width: '100%',
-                marginBottom: '20px'
-            }}><Divider /></div>
 
             {/* Create a new password */}
             <div style = {{
