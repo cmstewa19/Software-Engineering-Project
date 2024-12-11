@@ -69,20 +69,7 @@ const Home = ({ tickets, loading: ticketLoading, trains, setFilteredTrains }) =>
     getData();
   }, []);
 
-  // Find the ticket with the soonest departure date
-  const soonestTicket = !loading && tickets.length > 0 
-    ? tickets.reduce((earliest, current) => {
-        return new Date(current.departureDate) < new Date(earliest.departureDate) ? current : earliest;
-      }, tickets[0])
-    : null;
 
-  if (loading) {
-    return <div>Loading train data...</div>; // Show loading state while fetching trains
-  }
-
-  if (error) {
-    return <div>Error fetching train data: {error.message}</div>;
-  }
 
   async function fetchUserInfo(){
     try {

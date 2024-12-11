@@ -8,7 +8,7 @@ const ScanTicket = () => {
     const [hasFetched, setHasFetched] = useState(false);
     const [error, setError] = useState('');
     const [result, setResult] = useState('');
-
+    //on click function to return to home page
     const onClick = () => {
         navigate("/home");
         document.getElementsByTagName("body")[0].style.backgroundColor="#F5F5F5";
@@ -21,6 +21,7 @@ const ScanTicket = () => {
     const uid = params.user; 
     const tid = params.ticket;
 
+    // fetch to backend to see if ticket is valid
     async function fetchTicket() {
     try {
         const response = await fetch('http://localhost:3000/api/scan', {
@@ -44,12 +45,14 @@ const ScanTicket = () => {
       }
     }
 
+    //fix for multiple fetches
+    //if nothing has ben fetched do this first
     if(!hasFetched) {
         fetchTicket();
         setHasFetched(true);
     }
     
-
+    //don't render anything until data has been fetched
     if(hasFetched) {
         document.getElementsByTagName("body")[0].style.backgroundColor= isValid ? "#5CB85C" : "#ED4337";
         return(
