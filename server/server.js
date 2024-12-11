@@ -358,6 +358,24 @@ function generateQRCode(user_id, ticket_id, origin) {
   return url;
 }
 
+// Logout endpoint
+app.post('/api/logout', (req, res) => {
+  if (req.session) {
+    req.session.destroy((err) => {
+      if (err) {
+        console.error('Error destroying session:', err);
+        return res.status(500).json({ error: 'Failed to log out. Please try again.' });
+      }
+
+      // Clear the session cookie
+      res.clearCookie('connect.sid', { httpOnly: true, secure: false, sameSite: 'Lax' });
+      res.status(200).json({ message: 'Logged out successfully.' });
+    });
+  } else {
+    res.status(400).json({ error: 'No active session to log out.' });
+  }
+});
+
 
 // endpoint to test session. just for testing purposes, not used in application.
 app.get('/api/test-session', (req, res) => {
