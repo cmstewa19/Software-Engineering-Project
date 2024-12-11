@@ -1,31 +1,60 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 import axios from 'axios';
 
-const stripePromise = loadStripe('pk_test_51QKjDaKo2xrmK8G63Ai8S8y6TR8IxkbGYXkHWUz5uLUvwXnYHSPlZljtjhcRlUyqZUiU1pJ8eKuIIkV7E2ZveVMe00NWWrpysP'); // Replace with your Stripe publishable key
+const stripePromise = loadStripe('pk_test_51QKjDaKo2xrmK8G63Ai8S8y6TR8IxkbGYXkHWUz5uLUvwXnYHSPlZljtjhcRlUyqZUiU1pJ8eKuIIkV7E2ZveVMe00NWWrpysP'); // Replace with your publishable key
 
 function CheckoutForm({ cart, handlePaymentSuccess }) {
   const stripe = useStripe();
   const elements = useElements();
+  const [clientSecret, setClientSecret] = useState(null);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    // Create a Payment Intent when the component mounts
+    const createPaymentIntent = async () => {
+      console.log('Creating payment intent...');
+      try {
+        const totalAmount = cart.reduce((total, item) => total + item.price, 0);
+        const amountInCents = totalAmount * 100; // Convert to cents
+        console.log(`Total amount (in cents): ${amountInCents}`);
+
+        const response = await axios.post(
+          'http://localhost:3000/create-payment-intent',
+          { amount: amountInCents, currency: 'usd' },
+          { withCredentials: true }
+        );
+
+        console.log('Payment intent created successfully:', response.data);
+        setClientSecret(response.data.clientSecret);
+      } catch (err) {
+        console.error('Failed to create payment intent:', err);
+        setError('Unable to process payment at this time.');
+      }
+    };
+
+    if (cart.length > 0) {
+      createPaymentIntent();
+    }
+  }, [cart]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Calculate the total amount based on the cart items
-    const totalAmount = cart.reduce((total, item) => total + item.price, 0);
-    const amountInCents = totalAmount * 100;  // Convert to cents
+    if (!stripe || !elements || !clientSecret) {
+      setError('Stripe is not ready. Please try again.');
+      console.log('Stripe or elements not ready.');
+      return;
+    }
+
+    console.log('Stripe and elements are ready. Proceeding with payment confirmation...');
 
     try {
-      // Step 1: Create Payment Intent on server
-      const { clientSecret } = await axios
-        .post('http://localhost:3000/create-payment-intent', { amount: amountInCents, currency: 'usd' })
-        .then((res) => res.data);
-
-      // Step 2: Confirm Card Payment
       const cardElement = elements.getElement(CardElement);
+      console.log('Confirming card payment with clientSecret:', clientSecret);
+
       const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
         payment_method: {
           card: cardElement,
@@ -33,20 +62,27 @@ function CheckoutForm({ cart, handlePaymentSuccess }) {
       });
 
       if (error) {
+        console.error('Payment error:', error.message);
         setError(error.message);
         setSuccess(false);
       } else if (paymentIntent.status === 'succeeded') {
+        console.log('Payment successful:', paymentIntent);
         setSuccess(true);
         setError(null);
 
-        // Step 3: Save the tickets to the database after successful payment
+        // Notify parent about successful payment
         handlePaymentSuccess(cart);
       }
     } catch (err) {
-      setError('An error occurred. Please try again.');
-      console.error(err);
+      console.error('Payment processing error:', err);
+      setError('An error occurred while processing the payment.');
     }
   };
+
+  if (!clientSecret) {
+    console.log('Loading payment form...');
+    return <div>Loading payment form...</div>;
+  }
 
   return (
     <form onSubmit={handleSubmit} style={formStyles}>
@@ -61,7 +97,7 @@ function CheckoutForm({ cart, handlePaymentSuccess }) {
   );
 }
 
-function Payment({ cart, handlePaymentSuccess }) {
+function PaymentWrapper({ cart, handlePaymentSuccess }) {
   return (
     <div style={paymentContainerStyles}>
       <Elements stripe={stripePromise}>
@@ -109,4 +145,4 @@ const errorStyles = {
   fontSize: '14px',
 };
 
-export default Payment;
+export default PaymentWrapper;

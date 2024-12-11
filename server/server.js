@@ -6,7 +6,7 @@ const QRCode = require('qrcode');
 const Stripe = require('stripe');
 const session = require('express-session');
 const db = require('./database');
-const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const app = express();
 const port = 3000;
@@ -47,6 +47,9 @@ app.post('/create-payment-intent', async (req, res) => {
       currency,
     });
 
+    console.log('Payment Intent created:', paymentIntent.id);
+    console.log('Client Secret:', paymentIntent.client_secret);
+
     // Send client secret to the frontend
       res.send({
         clientSecret: paymentIntent.client_secret,
@@ -57,7 +60,6 @@ app.post('/create-payment-intent', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
 
 // QR endpoint
 app.get('/api/qr/:ticketId', (req, res) => {

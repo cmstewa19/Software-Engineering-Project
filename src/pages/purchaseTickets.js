@@ -4,11 +4,17 @@ import Header from "../components/header.js";
 import Sidebar from "../components/sidebar.js";
 import NavigationButton from "../components/navigationButton.js";
 import Payment from "../components/checkoutForm.js";
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+import axios from "axios";
+
+const stripePromise = loadStripe('pk_test_51QKjDaKo2xrmK8G63Ai8S8y6TR8IxkbGYXkHWUz5uLUvwXnYHSPlZljtjhcRlUyqZUiU1pJ8eKuIIkV7E2ZveVMe00NWWrpysP');
 
 const PurchaseTicketsPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const ticket = location.state?.ticket;
+  const [clientSecret, setClientSecret] = useState(null);
 
   const {
     trainCode = '',
@@ -25,7 +31,7 @@ const PurchaseTicketsPage = () => {
   useEffect(() => {
     setCart(selectedSeats);
   }, [selectedSeats]);
-
+  
   const saveTicketsToDatabase = async () => {
     try {
       const ticketData = cart.map(ticket => ({
