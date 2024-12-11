@@ -23,7 +23,8 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      httpOnly: true,
+      httpOnly: false,
+      secure: false,
       sameSite: 'Lax',
       maxAge: 3600000,
     },
@@ -110,7 +111,7 @@ app.post('/api/login', (req, res) => {
     }
 
     // Set session data after successful login
-    req.session.user = { user_id: row.user_id, email: row.email };
+    req.session.user = { user_id: row.user_id, first: row.first_name, email: row.email };
 
     // save session
     req.session.save((err) => {
@@ -183,11 +184,29 @@ app.post('/api/signup', (req, res) => {
 // });
 
 app.get('/api/home', (req,res) => {
-  if (!req.session || !req.session.user) {
+  if (!req.session || !req.session.user || !req.session.user.first) {
     return res.status(401).json({ error: 'User not authenticated' });
   }
-  console.log(req.session.user);
-  return res.status(201).json({message: "Navigating to home page"});
+
+  res.cookie("first", req.session.user.first, {httpOnly: false, secure: false, sameSite: 'Lax', maxAge: 3600000,});
+  //get first ticket from db
+  db.get("SELECT * FROM tickets WHERE user_id = ? AND scanned = 0 ORDER BY departure_time ASC LIMIT 1",[req.session.user.user_id], (err, row) => {
+    // respond with an error status
+    if(err){
+      return res.status(500).json({error: "Database Error"});
+    }
+    //if user has no valid tickets respond without sending ticket info
+    if(!row){
+      return res.status(201).json({message: "No Ticket"});
+    }
+    const qr_url = generateQRCode(req.session.user.user_id, row.ticket_id, req.get("origin"));
+    res.cookie("url", qr_url, {httpOnly: false, secure: false, sameSite: 'Lax', maxAge: 3600000,});
+    res.cookie("origin", row.origin, {httpOnly: false, secure: false, sameSite: 'Lax', maxAge: 3600000,});
+    res.cookie("destination", row.destination, {httpOnly: false, secure: false, sameSite: 'Lax', maxAge: 3600000,});
+    res.cookie("departDate", row.departure_time, {httpOnly: false, secure: false, sameSite: 'Lax', maxAge: 3600000,});
+    return res.status(201).json({message: "Ticket"});
+  });
+  
 });
 
 // Display user info endpoint (for profile page)
@@ -284,6 +303,15 @@ app.get('/api/my-tickets', (req, res) => {
     res.status(200).json(rows);
   });
 });
+
+// function to generate QR code
+function generateQRCode(user_id, ticket_id, origin) {
+  //for 
+  //http://localhost:3001/scan/?user=${userID}&ticket=${ticketID}
+  const url = origin + `/scan/?user=${user_id}&ticket=${ticket_id}`;
+  console.log(`QR URL: ${url}`);
+  return url;
+}
 
 
 // endpoint to test session. just for testing purposes, not used in application.

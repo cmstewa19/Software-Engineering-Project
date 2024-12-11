@@ -18,8 +18,9 @@ const Home = ({ tickets, loading: ticketLoading, trains, setFilteredTrains }) =>
   document.getElementsByTagName("body")[0].style.backgroundColor="#F5F5F5";
 
   const navigate = useNavigate();
+  let first = "";
   let nextTicket = {
-    id: null,
+    url: null,
     origin: null,
     destination: null,
     departDate: null,
@@ -82,19 +83,21 @@ const Home = ({ tickets, loading: ticketLoading, trains, setFilteredTrains }) =>
     return <div>Error fetching train data: {error.message}</div>;
   }
 
-  async function fetchUserInfo() {
+  const fetchUserInfo = async () => {
     try {
       const response = await fetch("http://localhost:3000/api/home", {
         method: "GET",
         headers:{ 'Content-Type': 'application/json' },
         credentials:"include",
+        withCredentials:""
       });
-      const data = await response.json();
+      const data = await response.text();
       if(response.ok){
-        return data;
+        if(data.message == "no ticket"){return false;}
+        return true;
       } else {
         setError(data.error || 'Something went wrong.');
-        //navigate("/");
+        navigate("/");
       }
     } catch (err) {
       console.error('Login Error:', err);
@@ -102,8 +105,30 @@ const Home = ({ tickets, loading: ticketLoading, trains, setFilteredTrains }) =>
     }
   }
 
-  const something = fetchUserInfo();
-  //console.log(something);
+  // Function to get a specific cookie by name
+  function getCookie(name) {
+    const nameEQ = name + "=";
+    const cookies = document.cookie.split(";");
+    for (let i = 0; i < cookies.length; i++) {
+      let c = cookies[i].trim();
+      if (c.indexOf(nameEQ) === 0) {
+        return c.substring(nameEQ.length, c.length);
+      }
+    }
+    return null;  // Cookie not found
+  }
+
+  if(fetchUserInfo()) {
+    nextTicket.url = decodeURIComponent(getCookie("url"));
+    nextTicket.origin = decodeURIComponent(getCookie("origin"));
+    nextTicket.destination = decodeURIComponent(getCookie("destination"));
+    nextTicket.departDate = decodeURIComponent(getCookie("departDate"));
+  }
+  first = getCookie("first");
+  
+  
+
+  
 
   return (
     <div className={styles.homePage}>
@@ -114,18 +139,18 @@ const Home = ({ tickets, loading: ticketLoading, trains, setFilteredTrains }) =>
       <Sidebar />
 
       {/* Welcome Message */}
-      <h2 className={styles.welcomeText}>Welcome Andrew!</h2>
+      <h2 className={styles.welcomeText}>Welcome {first}!</h2>
 
       {/* Main content wrapper */}
       <div className={styles.contentWrapper}>
         {/* Profile Card Section */}
         <div className={styles.profileCard}>
           <div className={styles.ticketCard}>
-            {nextTicket != null ? (
+            {nextTicket.origin != null ? (
               <>
-                <h2>Origin → Destination</h2>
+                <h2>{nextTicket.origin} → {nextTicket.destination}</h2>
                 <h2>{nextTicket.departDate}</h2>
-                <QRCode userID={201} trainID={501}/>
+                
               </>
             ) : (
               <h2>No tickets to display</h2>
