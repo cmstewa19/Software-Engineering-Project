@@ -59,14 +59,14 @@ const MyTickets = () => {
           >
             {ticket ? (
               <>
-                <h2 style={styles.ticketTitle}>Ticket ID: {ticket.id}</h2>
+                <h2 style={styles.ticketTitle}>Ticket ID: {ticket.ticket_id}</h2>
                 <h2 style={styles.ticketTitle}>Origin: {ticket.origin}</h2>
                 <h2 style={styles.ticketTitle}>Destination: {ticket.destination}</h2>
                 <h2 style={styles.ticketTitle}>
-                  Departure Date: {ticket.departureDate}
+                  Departure Date: {ticket.departure_time}
                 </h2>
                 <h2 style={styles.ticketTitle}>
-                  Departure Time: {ticket.departureTime}
+                  Arrival Time: {ticket.arrival_time}
                 </h2>
               </>
             ) : (
@@ -90,7 +90,8 @@ const MyTickets = () => {
         >
           {ticket ? (
             <>
-              <h2 style={styles.ticketTitle}>Ticket ID: {ticket.id}</h2>
+              <h2 style={styles.ticketTitle}>Ticket QR: </h2>
+              <h2 style={styles.routeInfo}>Ticket ID: {ticket.ticket_id}</h2>
               <div style={styles.routeInfo}>
                 <p>
                   <strong>{ticket.origin}</strong> →{" "}
@@ -98,13 +99,6 @@ const MyTickets = () => {
                 </p>
               </div>
               <div style={styles.details}>
-                <p>
-                  <strong>Departure:</strong> {ticket.departureDate}{" "}
-                  {ticket.departureTime}
-                </p>
-                <p>
-                  <strong>Arrival:</strong> {ticket.arrivalDate}
-                </p>
               </div>
               <div style={styles.qrCodeWrapper}>
                 <QRCode value={`Ticket-${ticket.id}`} />
