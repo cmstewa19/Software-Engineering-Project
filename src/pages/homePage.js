@@ -150,6 +150,9 @@ const Home = ({ tickets, loading: ticketLoading, trains, setFilteredTrains }) =>
               <>
                 <h2>{nextTicket.origin} → {nextTicket.destination}</h2>
                 <h2>{nextTicket.departDate}</h2>
+                <a href={nextTicket.url}>
+                  <QRCode url={nextTicket.url} />
+                </a>
                 
               </>
             ) : (

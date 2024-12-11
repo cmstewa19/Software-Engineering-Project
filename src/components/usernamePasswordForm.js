@@ -8,7 +8,6 @@ function UsernamePasswordForm({ navigate, user }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const container = document.getElementById("container");
   
 
   const handleLogin = async () => {
