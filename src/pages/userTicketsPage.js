@@ -29,7 +29,7 @@ function UserTickets() {
         <div id="user-tickets-page">
             <Header />
             <Sidebar />
-            <h1>User's Tickets</h1>
+            <h1>User Tickets</h1>
             {loading ? <p>Loading tickets...</p> : <TicketTable tickets={tickets} />}
         </div>
     );

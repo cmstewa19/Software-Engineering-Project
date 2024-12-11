@@ -59,13 +59,15 @@ const MyTickets = () => {
           >
             {ticket ? (
               <>
-                <h2 style={styles.ticketTitle}>Ticket ID: {ticket.ticket_id}</h2>
-                <h2 style={styles.ticketTitle}>Origin: {ticket.origin}</h2>
-                <h2 style={styles.ticketTitle}>Destination: {ticket.destination}</h2>
-                <h2 style={styles.ticketTitle}>
-                  Departure Date: {ticket.departure_time}
+                <h2 style={styles.title}>Ticket Info</h2>
+                <h2 style={styles.routeInfo}>Ticket ID: {ticket.ticket_id}</h2>
+                <h2 style={styles.routeInfo}>Origin: {ticket.origin}</h2>
+                <h2 style={styles.routeInfo}>Destination: {ticket.destination}</h2>
+                <h2 style={styles.routeInfo}>Seat Number: {ticket.seat_number}</h2>
+                <h2 style={styles.routeInfo}>
+                  Departure Time: {ticket.departure_time}
                 </h2>
-                <h2 style={styles.ticketTitle}>
+                <h2 style={styles.routeInfo}>
                   Arrival Time: {ticket.arrival_time}
                 </h2>
               </>
@@ -90,7 +92,7 @@ const MyTickets = () => {
         >
           {ticket ? (
             <>
-              <h2 style={styles.ticketTitle}>Ticket QR: </h2>
+              <h2 style={styles.title}>Ticket QR: </h2>
               <h2 style={styles.routeInfo}>Ticket ID: {ticket.ticket_id}</h2>
               <div style={styles.routeInfo}>
                 <p>
@@ -115,8 +117,8 @@ const MyTickets = () => {
 
 // Updated styles for the new ticket display
 const styles = {
-  ticketTitle: {
-    fontSize: "22px",
+  title: {
+    fontSize: "32px",
     fontWeight: "bold",
     marginBottom: "10px",
   },
