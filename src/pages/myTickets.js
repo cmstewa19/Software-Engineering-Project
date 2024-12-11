@@ -59,14 +59,11 @@ const MyTickets = () => {
           >
             {ticket ? (
               <>
-                <h2 style={styles.ticketTitle}>Ticket ID: {ticket.id}</h2>
+                <h2 style={styles.ticketTitle}>Ticket ID: {ticket.ticket_id}</h2>
                 <h2 style={styles.ticketTitle}>Origin: {ticket.origin}</h2>
                 <h2 style={styles.ticketTitle}>Destination: {ticket.destination}</h2>
                 <h2 style={styles.ticketTitle}>
-                  Departure Date: {ticket.departureDate}
-                </h2>
-                <h2 style={styles.ticketTitle}>
-                  Departure Time: {ticket.departureTime}
+                  Departure Date/Time: {ticket.departure_time}
                 </h2>
               </>
             ) : (
