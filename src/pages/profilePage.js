@@ -1,86 +1,67 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import NavigationButton from '../components/navigationButton.js';
 import Header from '../components/header.js';
 import Divider from '../components/divider.js';
 import ProfileHeader from '../components/profileHeader.js';
 
+// Profile Page Component
 function Profile() {
-  const [userData, setUserData] = useState(null); // Holds user profile data
-  const [error, setError] = useState(null); // Holds any errors
-  const [showUser, setShowUser] = useState(false);
-  const [showSavedPayments, setShowSavedPayments] = useState(false);
-  const [showSecurity, setShowSecurity] = useState(false);
-  const [showTicketHistory, setShowTicketHistory] = useState(false);
+  const [user, setUser] = useState(null);
+  const [error, setError] = useState(null);
 
-  // Fetch user profile data
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const response = await fetch(`http://localhost:3000/api/profile`, {
-          method: 'GET',
-          credentials: 'include', // Ensures cookies (session) are sent with the request
-        });
-
+    fetch('http://localhost:3000/api/userinfo', {
+      method: 'GET',
+      credentials: 'include', // Important for including cookies
+    })
+      .then(response => {
         if (!response.ok) {
-          throw new Error('Failed to fetch user profile');
+          throw new Error('Failed to fetch user info');
         }
-
-        const data = await response.json();
-        setUserData(data);
-      } catch (err) {
-        console.error('Error fetching profile:', err);
-        setError('Unable to load profile data. Please try again later.');
-      }
-    };
-
-    fetchProfile();
+        return response.json();
+      })
+      .then(data => {
+        setUser(data); // Update the state with the fetched user data
+        console.log('User Info:', data);
+      })
+      .catch(error => {
+        setError(error.message); // Set the error state if there's an issue
+        console.error('Error:', error);
+      });
   }, []);
 
-  const toggleUserInfo = () => {
-    setShowUser((prevState) => !prevState);
-    setShowSavedPayments(false);
-    setShowSecurity(false);
-    setShowTicketHistory(false);
-  };
+  if (error) {
+    return (
+      <div>
+        <h2>Error</h2>
+        <p>{error}</p>
+      </div>
+    );
+  }
 
-  const toggleSavedPayments = () => {
-    setShowSavedPayments((prevState) => !prevState);
-    setShowUser(false);
-    setShowSecurity(false);
-    setShowTicketHistory(false);
-  };
-
-  const toggleSecurity = () => {
-    setShowSecurity((prevState) => !prevState);
-    setShowUser(false);
-    setShowSavedPayments(false);
-    setShowTicketHistory(false);
-  };
+  if (!user) {
+    return <div>Loading user information...</div>;
+  }
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+
+      {/* Header Component */}
       <Header isLoggedIn={true} />
 
-      <div
-        style={{
-          position: 'absolute',
-          top: '90px',
-          left: '65px',
-          marginTop: '20px',
-          fontSize: '50px',
-          fontWeight: 'bold',
-        }}
-      >
-        My Profile
-      </div>
-
+      {/* Flex container for the main content */}
       <div
         className="container-fluid"
         style={{
           flexGrow: 1,
           display: 'flex',
           alignItems: 'stretch',
-          marginTop: '100px',
+          marginTop: '75px',
+          marginLeft: '50px',
+          marginRight: '50px',
+          marginBottom: '175px',
+          border: '2px solid #40826D',
+          borderRadius: '10px',
         }}
       >
         <div
@@ -90,54 +71,83 @@ function Profile() {
             flexGrow: 1,
           }}
         >
+          {/* Right Column */}
           <div
-            className="col-md-6 d-flex flex-column align-items-center me-3"
-            style={{
-              padding: '20px',
-              border: '2px solid #40826D',
-              borderRadius: '10px',
-              marginRight: '20px',
-              minWidth: '300px',
-            }}
-          >
-            <button
-              onClick={toggleUserInfo}
-              style={{
-                backgroundColor: '#40826D',
-                color: 'white',
-                border: '1px solid #40826D',
-                padding: '10px 0',
-                marginTop: '20px',
-                borderRadius: '5px',
-                width: '100%',
-                cursor: 'pointer',
-                fontSize: '20px',
-              }}
-            >
-              User Info
-            </button>
-          </div>
-
-          <div
-            className="col-md-6 d-flex flex-column align-items-start ms-3"
+            className="col-md-12 d-flex flex-column align-items-start ms-3"
             style={{
               backgroundColor: '#E3E3E3',
               padding: '20px',
-              width: 'calc(100% - 20px)',
+              width: '100%',
               flexGrow: 1,
             }}
           >
-            {error && <div style={{ color: 'red' }}>{error}</div>}
+            <div style={{ textAlign: 'left', width: '100%' }}>
+              {/* User Info Section */}
+              <ProfileHeader />
+              <div
+                style={{
+                  width: '100%',
+                  marginTop: '20px',
+                  border: '2px solid #40826D',
+                  borderRadius: '10px',
+                  padding: '20px',
+                  backgroundColor: '#FFF',
+                  boxSizing: 'border-box',
+                }}
+              >
+                <div
+                  style={{
+                    display: 'flex', // Use flex layout
+                    justifyContent: 'space-between', // Space between title and button
+                    alignItems: 'center', // Align items vertically
+                    marginTop: '20px',
+                    fontSize: '40px',
+                    fontWeight: 'bold',
+                    fontFamily: 'Arial',
+                  }}
+                >
+                  {/* Title for the box that holds all information */}
+                  <span>Personal Information</span>
 
-            {showUser && userData && (
-              <div>
-                <h3>First Name: {userData.first_name}</h3>
-                <h3>Last Name: {userData.last_name}</h3>
-                <h3>Email: {userData.email}</h3>
-                <h3>Phone Number: {userData.phone_number}</h3>
-                <h3>Billing Address: {userData.billing_address}</h3>
+                  {/* Change Password Button */}
+                  <NavigationButton
+                    text="Change Password"
+                    path="/changepassword"
+                    style={{
+                      padding: '10px',
+                      fontSize: '18px',
+                      color: '#40826D',
+                      backgroundColor: 'white',
+                      border: '2px solid #40826D',
+                      marginRight: '20px', 
+                      width: '200px'
+                    }}
+                  />
+                </div>
+                <br />
+                <Divider />
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    gap: '20px',
+                  }}
+                >
+                  <div style={{ flex: 1 }}>
+                    <h3 style={{ fontFamily: 'Arial', fontSize: '20px' }}>First Name:</h3>
+                    <h3 style={{ fontFamily: 'Arial', fontSize: '20px' }}>{user.first_name}</h3>
+                    <h3 style={{ fontFamily: 'Arial', fontSize: '20px' }}>Last Name:</h3>
+                    <h3 style={{ fontFamily: 'Arial', fontSize: '20px' }}>{user.last_name}</h3>
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <h3 style={{ fontFamily: 'Arial', fontSize: '20px' }}>Email:</h3>
+                    <h3 style={{ fontFamily: 'Arial', fontSize: '20px' }}>{user.email}</h3>
+                    <h3 style={{ fontFamily: 'Arial', fontSize: '20px' }}>Phone Number:</h3>
+                    <h3 style={{ fontFamily: 'Arial', fontSize: '20px' }}>{user.phone_number}</h3>
+                  </div>
+                </div>
               </div>
-            )}
+            </div>
           </div>
         </div>
       </div>
