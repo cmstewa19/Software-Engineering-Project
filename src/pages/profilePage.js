@@ -56,10 +56,10 @@ function Profile() {
           flexGrow: 1,
           display: 'flex',
           alignItems: 'stretch',
-          marginTop: '50px',
+          marginTop: '75px',
           marginLeft: '50px',
           marginRight: '50px',
-          marginBottom: '60px',
+          marginBottom: '175px',
           border: '2px solid #40826D',
           borderRadius: '10px',
         }}
@@ -86,7 +86,6 @@ function Profile() {
               <ProfileHeader />
               <div
                 style={{
-                  height: '430px',
                   width: '100%',
                   marginTop: '20px',
                   border: '2px solid #40826D',
@@ -115,11 +114,11 @@ function Profile() {
                     text="Change Password"
                     path="/changepassword"
                     style={{
-                      padding: '10px 20px',
+                      padding: '10px',
                       fontSize: '18px',
-                      color: 'white',
-                      backgroundColor: '#40826D',
-                      border: '1px solid #40826D',
+                      color: '#40826D',
+                      backgroundColor: 'white',
+                      border: '2px solid #40826D',
                       marginRight: '20px', 
                       width: '200px'
                     }}
@@ -135,12 +134,16 @@ function Profile() {
                   }}
                 >
                   <div style={{ flex: 1 }}>
-                    <h3 style={{ fontFamily: 'Arial', fontSize: '30px' }}>First Name: {user.first_name}</h3>
-                    <h3 style={{ fontFamily: 'Arial', fontSize: '30px' }}>Last Name: {user.last_name}</h3>
+                    <h3 style={{ fontFamily: 'Arial', fontSize: '20px' }}>First Name:</h3>
+                    <h3 style={{ fontFamily: 'Arial', fontSize: '20px' }}>{user.first_name}</h3>
+                    <h3 style={{ fontFamily: 'Arial', fontSize: '20px' }}>Last Name:</h3>
+                    <h3 style={{ fontFamily: 'Arial', fontSize: '20px' }}>{user.last_name}</h3>
                   </div>
                   <div style={{ flex: 1 }}>
-                    <h3 style={{ fontFamily: 'Arial', fontSize: '30px' }}>Email: {user.email}</h3>
-                    <h3 style={{ fontFamily: 'Arial', fontSize: '30px' }}>Phone Number: {user.phone_number}</h3>
+                    <h3 style={{ fontFamily: 'Arial', fontSize: '20px' }}>Email:</h3>
+                    <h3 style={{ fontFamily: 'Arial', fontSize: '20px' }}>{user.email}</h3>
+                    <h3 style={{ fontFamily: 'Arial', fontSize: '20px' }}>Phone Number:</h3>
+                    <h3 style={{ fontFamily: 'Arial', fontSize: '20px' }}>{user.phone_number}</h3>
                   </div>
                 </div>
               </div>
