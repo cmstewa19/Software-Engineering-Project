@@ -6,7 +6,7 @@ const QRCode = require('qrcode');
 const Stripe = require('stripe');
 const session = require('express-session');
 const db = require('./database');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 const app = express();
 const port = 3000;

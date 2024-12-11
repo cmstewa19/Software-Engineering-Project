@@ -17,14 +17,13 @@ function CheckoutForm({ cart, handlePaymentSuccess }) {
     const createPaymentIntent = async () => {
       console.log('Creating payment intent...');
       try {
-        const totalAmount = cart.reduce((total, item) => total + item.price, 0);
+        const totalAmount = 9.99
         const amountInCents = totalAmount * 100; // Convert to cents
         console.log(`Total amount (in cents): ${amountInCents}`);
 
         const response = await axios.post(
           'http://localhost:3000/create-payment-intent',
           { amount: amountInCents, currency: 'usd' },
-          { withCredentials: true }
         );
 
         console.log('Payment intent created successfully:', response.data);
