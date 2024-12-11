@@ -16,3 +16,4 @@ local.properties
 node_modules
 .env
 server/traintrack.db
+src/pages/ChangePasswordPage.js
