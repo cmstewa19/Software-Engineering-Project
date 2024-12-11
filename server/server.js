@@ -376,6 +376,31 @@ app.post('/api/logout', (req, res) => {
   }
 });
 
+// Endpoint to get the most recent ticket for the logged-in user
+app.get('/api/recent-ticket', (req, res) => {
+  // Check if the user is logged in and the session exists
+  if (!req.session || !req.session.user || !req.session.user.user_id) {
+    return res.status(401).json({ error: 'User not authenticated' });
+  }
+
+  const user_id = req.session.user.user_id;
+
+  // Fetch the most recent ticket sorted by purchase_time (descending order)
+  db.get('SELECT * FROM Tickets WHERE user_id = ? ORDER BY purchase_time DESC LIMIT 1', [user_id], (err, row) => {
+    if (err) {
+      console.error('Database Error:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+
+    if (!row) {
+      return res.status(404).json({ error: 'No tickets found for this user.' });
+    }
+
+    // Return the most recent ticket
+    res.status(200).json(row);
+  });
+});
+
 
 // endpoint to test session. just for testing purposes, not used in application.
 app.get('/api/test-session', (req, res) => {

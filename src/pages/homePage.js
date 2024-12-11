@@ -16,7 +16,12 @@ const Home = ({ tickets, loading: ticketLoading, trains, setFilteredTrains }) =>
   const [loading, setLoading] = useState(true); // Local loading state for train data
   const [error, setError] = useState(null); // Error state for fetching data
   const [first, setFirst] = useState(""); // State to store the "first" name
-  const [nextTicket, setNextTicket] = useState({ url: null, origin: null, destination: null, departDate: null });
+  const [nextTicket, setNextTicket] = useState({ 
+    url: null, 
+    origin: null, 
+    destination: null,  
+    departureTime: null 
+  });
 
   document.getElementsByTagName("body")[0].style.backgroundColor="#F5F5F5";
 
@@ -64,7 +69,7 @@ const Home = ({ tickets, loading: ticketLoading, trains, setFilteredTrains }) =>
     getData();
   }, []);
 
-  // Fetch the "first" name from the cookie and user info in useEffect
+  // Fetch user info and recent ticket on component mount
   useEffect(() => {
     const fetchUserInfoAndSetState = async () => {
       try {
@@ -76,16 +81,8 @@ const Home = ({ tickets, loading: ticketLoading, trains, setFilteredTrains }) =>
 
         const data = await response.text();
         if (response.ok) {
-          if (data.message === "no ticket") {
-            return false;
-          }
           setFirst(getCookie("first")); // Set first name from cookie
-          setNextTicket({
-            url: decodeURIComponent(getCookie("url")),
-            origin: decodeURIComponent(getCookie("origin")),
-            destination: decodeURIComponent(getCookie("destination")),
-            departDate: decodeURIComponent(getCookie("departDate")),
-          });
+          fetchRecentTicket(); // Fetch recent ticket after user info is loaded
         } else {
           setError(data.error || 'Something went wrong.');
           navigate("/");
@@ -93,6 +90,37 @@ const Home = ({ tickets, loading: ticketLoading, trains, setFilteredTrains }) =>
       } catch (err) {
         console.error('Login Error:', err);
         setError('An error occurred. Please try again later.');
+      }
+    };
+
+    // Fetch the most recent ticket from the server
+    const fetchRecentTicket = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/api/recent-ticket", {
+          method: "GET",
+          headers: { 'Content-Type': 'application/json' },
+          credentials: "include",
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+          setNextTicket({
+            url: data.url,
+            origin: data.origin,
+            destination: data.destination,
+            departureTime: data.departure_time, 
+          });
+        } else {
+          setNextTicket({
+            url: null,
+            origin: null,
+            destination: null,
+            departureTime: null,
+          });
+        }
+      } catch (err) {
+        console.error('Error fetching recent ticket:', err);
+        setError('An error occurred while fetching your recent ticket.');
       }
     };
 
@@ -128,14 +156,13 @@ const Home = ({ tickets, loading: ticketLoading, trains, setFilteredTrains }) =>
         {/* Profile Card Section */}
         <div className={styles.profileCard}>
           <div className={styles.ticketCard}>
-            {nextTicket.origin != null ? (
+            {nextTicket.origin ? (
               <>
                 <h2>{nextTicket.origin} → {nextTicket.destination}</h2>
-                <h2>{nextTicket.departDate}</h2>
+                <h3>Departure Time: {nextTicket.departureTime}</h3> {/* Display departure time */}
                 <a href={nextTicket.url}>
                   <QRCode url={nextTicket.url} />
                 </a>
-                
               </>
             ) : (
               <h2>No tickets to display</h2>
