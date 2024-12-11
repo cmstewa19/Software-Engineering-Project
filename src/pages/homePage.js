@@ -15,16 +15,12 @@ const Home = ({ tickets, loading: ticketLoading, trains, setFilteredTrains }) =>
   const [filteredTrains, setFilteredTrainsState] = useState([]); // Trains after filtering
   const [loading, setLoading] = useState(true); // Local loading state for train data
   const [error, setError] = useState(null); // Error state for fetching data
+  const [first, setFirst] = useState(""); // State to store the "first" name
+  const [nextTicket, setNextTicket] = useState({ url: null, origin: null, destination: null, departDate: null });
+
   document.getElementsByTagName("body")[0].style.backgroundColor="#F5F5F5";
 
   const navigate = useNavigate();
-  let first = "";
-  let nextTicket = {
-    url: null,
-    origin: null,
-    destination: null,
-    departDate: null,
-  };
 
   // Fetching train data using useEffect
   useEffect(() => {
@@ -68,42 +64,40 @@ const Home = ({ tickets, loading: ticketLoading, trains, setFilteredTrains }) =>
     getData();
   }, []);
 
-  // Find the ticket with the soonest departure date
-  const soonestTicket = !loading && tickets.length > 0 
-    ? tickets.reduce((earliest, current) => {
-        return new Date(current.departureDate) < new Date(earliest.departureDate) ? current : earliest;
-      }, tickets[0])
-    : null;
+  // Fetch the "first" name from the cookie and user info in useEffect
+  useEffect(() => {
+    const fetchUserInfoAndSetState = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/api/home", {
+          method: "GET",
+          headers: { 'Content-Type': 'application/json' },
+          credentials: "include",
+        });
 
-  if (loading) {
-    return <div>Loading train data...</div>; // Show loading state while fetching trains
-  }
-
-  if (error) {
-    return <div>Error fetching train data: {error.message}</div>;
-  }
-
-  const fetchUserInfo = async () => {
-    try {
-      const response = await fetch("http://localhost:3000/api/home", {
-        method: "GET",
-        headers:{ 'Content-Type': 'application/json' },
-        credentials:"include",
-        withCredentials:""
-      });
-      const data = await response.text();
-      if(response.ok){
-        if(data.message == "no ticket"){return false;}
-        return true;
-      } else {
-        setError(data.error || 'Something went wrong.');
-        navigate("/");
+        const data = await response.text();
+        if (response.ok) {
+          if (data.message === "no ticket") {
+            return false;
+          }
+          setFirst(getCookie("first")); // Set first name from cookie
+          setNextTicket({
+            url: decodeURIComponent(getCookie("url")),
+            origin: decodeURIComponent(getCookie("origin")),
+            destination: decodeURIComponent(getCookie("destination")),
+            departDate: decodeURIComponent(getCookie("departDate")),
+          });
+        } else {
+          setError(data.error || 'Something went wrong.');
+          navigate("/");
+        }
+      } catch (err) {
+        console.error('Login Error:', err);
+        setError('An error occurred. Please try again later.');
       }
-    } catch (err) {
-      console.error('Login Error:', err);
-      setError('An error occurred. Please try again later.');
-    }
-  }
+    };
+
+    fetchUserInfoAndSetState();
+  }, []); // Empty dependency array to run once after component mounts
 
   // Function to get a specific cookie by name
   function getCookie(name) {
@@ -117,18 +111,6 @@ const Home = ({ tickets, loading: ticketLoading, trains, setFilteredTrains }) =>
     }
     return null;  // Cookie not found
   }
-
-  if(fetchUserInfo()) {
-    nextTicket.url = decodeURIComponent(getCookie("url"));
-    nextTicket.origin = decodeURIComponent(getCookie("origin"));
-    nextTicket.destination = decodeURIComponent(getCookie("destination"));
-    nextTicket.departDate = decodeURIComponent(getCookie("departDate"));
-  }
-  first = getCookie("first");
-  
-  
-
-  
 
   return (
     <div className={styles.homePage}>
