@@ -5,7 +5,7 @@ import UsernamePasswordForm from '../components/usernamePasswordForm.js'; // use
 import NavigationButton from '../components/navigationButton';
 import { useNavigate } from 'react-router-dom'; // for navigation
 
-function Login() {
+function Login(user) {
   const navigate = useNavigate();
 
   return (
@@ -35,7 +35,7 @@ function Login() {
             }}
           >
             {/* Username and password form */}
-            <UsernamePasswordForm navigate={navigate} />
+            <UsernamePasswordForm navigate={navigate} user={user} />
 
             {/* Sign-Up Option */}
             <div 

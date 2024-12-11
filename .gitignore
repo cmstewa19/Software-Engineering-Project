@@ -15,4 +15,4 @@
 local.properties
 node_modules
 .env
-server/tickets.db
+server/traintrack.db

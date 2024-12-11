@@ -23,7 +23,8 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      httpOnly: true,
+      httpOnly: false,
+      secure: false,
       sameSite: 'Lax',
       maxAge: 3600000,
     },
@@ -112,7 +113,7 @@ app.post('/api/login', (req, res) => {
     }
 
     // Set session data after successful login
-    req.session.user = { user_id: row.user_id, email: row.email };
+    req.session.user = { user_id: row.user_id, first: row.first_name, email: row.email };
 
     // save session
     req.session.save((err) => {
@@ -158,31 +159,57 @@ app.post('/api/signup', (req, res) => {
 });
 
 // // Change password endpoint
-// app.post('/api/change-password', (req, res) => {
-//   const { email, password } = req.body;
+app.post('/api/change-password', (req, res) => {
+  const { email, password } = req.body;
 
-//   if (!email || !password) {
-//     return res.status(400).json({ error: 'Email and password are required.' });
-//   }
+  if (!email || !password) {
+    return res.status(400).json({ error: 'Email and password are required.' });
+  }
 
-//   db.get('SELECT * FROM Users WHERE email = ?', [email], (err, row) => {
-//     if (err) {
-//       console.error('Database Error:', err);
-//       return res.status(500).json({ error: 'Database error.' });
-//     }
-//     if (!row) {
-//       return res.status(400).json({ error: 'Invalid email.' });
-//     }
+  db.get('SELECT * FROM Users WHERE email = ?', [email], (err, row) => {
+    if (err) {
+      console.error('Database Error:', err);
+      return res.status(500).json({ error: 'Database error.' });
+    }
+    if (!row) {
+      return res.status(404).json({ error: 'Invalid email.' });
+    }
 
-//     db.run('UPDATE Users SET password = ?, updated_at = datetime("now") WHERE email = ?', [password, email], (err) => {
-//       if (err) {
-//         console.error('Database Error:', err);
-//         return res.status(500).json({ error: 'Failed to update password.' });
-//       }
-//       res.status(200).json({ message: 'Password changed successfully!' });
-//     });
-//   });
-// });
+    db.run('UPDATE Users SET password = ?, updated_at = CURRENT_TIMESTAMP WHERE email = ?', [password, email], (err) => {
+      if (err) {
+        console.error('Database Error:', err);
+        return res.status(500).json({ error: 'Failed to update password.' });
+      }
+      res.status(200).json({ message: 'Password changed successfully!' });
+    });
+  });
+});
+
+app.get('/api/home', (req,res) => {
+  if (!req.session || !req.session.user || !req.session.user.first) {
+    return res.status(401).json({ error: 'User not authenticated' });
+  }
+
+  res.cookie("first", req.session.user.first, {httpOnly: false, secure: false, sameSite: 'Lax', maxAge: 3600000,});
+  //get first ticket from db
+  db.get("SELECT * FROM tickets WHERE user_id = ? AND scanned = 0 ORDER BY departure_time ASC LIMIT 1",[req.session.user.user_id], (err, row) => {
+    // respond with an error status
+    if(err){
+      return res.status(500).json({error: "Database Error"});
+    }
+    //if user has no valid tickets respond without sending ticket info
+    if(!row){
+      return res.status(201).json({message: "No Ticket"});
+    }
+    const qr_url = generateQRCode(req.session.user.user_id, row.ticket_id, req.headers.origin);
+    res.cookie("url", qr_url, {httpOnly: false, secure: false, sameSite: 'Lax', maxAge: 3600000,});
+    res.cookie("origin", row.origin, {httpOnly: false, secure: false, sameSite: 'Lax', maxAge: 3600000,});
+    res.cookie("destination", row.destination, {httpOnly: false, secure: false, sameSite: 'Lax', maxAge: 3600000,});
+    res.cookie("departDate", row.departure_time, {httpOnly: false, secure: false, sameSite: 'Lax', maxAge: 3600000,});
+    return res.status(201).json({message: "Ticket"});
+  });
+  
+});
 
 // Display user info endpoint (for profile page)
 app.get('/api/profile', (req, res) => {
@@ -278,6 +305,35 @@ app.get('/api/my-tickets', (req, res) => {
     res.status(200).json(rows);
   });
 });
+
+app.post('/api/scan', (req, res) => {
+  const { uid, tid } = req.body;
+  console.log("UID: "+uid);
+  console.log("TID: "+tid);
+  db.get("SELECT scanned FROM Tickets WHERE user_id = ? AND ticket_id = ? AND scanned = 0 LIMIT 1", [uid, tid], (err, row) => {
+    if(err) {
+      return res.status(500).json({error: "First Database error."});
+    }
+    if(!row) {
+      return res.status(404).json({error: "No ticket found"});
+    }
+  });
+
+  db.run("UPDATE Tickets SET scanned = 1 WHERE user_id = ? AND ticket_id = ? AND scanned = 0", [uid, tid], (err) => {
+    if(err) {
+      return res.status(500).json({error: "Second Database error."});
+    }
+    return res.status(200).json({message: "valid ticket"});
+  });
+});
+
+// function to generate QR code
+function generateQRCode(user_id, ticket_id, origin) {
+  //url example format:
+  //http://localhost:3001/scan/?user=${userID}&ticket=${ticketID}
+  const url = origin + `/scan/?user=${user_id}&ticket=${ticket_id}`;
+  return url;
+}
 
 
 // endpoint to test session. just for testing purposes, not used in application.
