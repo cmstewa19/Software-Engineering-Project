@@ -64,7 +64,7 @@ const Home = ({ tickets, loading: ticketLoading, trains, setFilteredTrains }) =>
     getData();
   }, []);
 
-  // Fetch the "first" name from the cookie and user info in useEffect
+  // Fetch user info and recent ticket on component mount
   useEffect(() => {
     const fetchUserInfoAndSetState = async () => {
       try {
@@ -76,16 +76,8 @@ const Home = ({ tickets, loading: ticketLoading, trains, setFilteredTrains }) =>
 
         const data = await response.text();
         if (response.ok) {
-          if (data.message === "no ticket") {
-            return false;
-          }
           setFirst(getCookie("first")); // Set first name from cookie
-          setNextTicket({
-            url: decodeURIComponent(getCookie("url")),
-            origin: decodeURIComponent(getCookie("origin")),
-            destination: decodeURIComponent(getCookie("destination")),
-            departDate: decodeURIComponent(getCookie("departDate")),
-          });
+          fetchRecentTicket(); // Fetch recent ticket after user info is loaded
         } else {
           setError(data.error || 'Something went wrong.');
           navigate("/");
@@ -93,6 +85,37 @@ const Home = ({ tickets, loading: ticketLoading, trains, setFilteredTrains }) =>
       } catch (err) {
         console.error('Login Error:', err);
         setError('An error occurred. Please try again later.');
+      }
+    };
+
+    // Fetch the most recent ticket from the server
+    const fetchRecentTicket = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/api/recent-ticket", {
+          method: "GET",
+          headers: { 'Content-Type': 'application/json' },
+          credentials: "include",
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+          setNextTicket({
+            url: data.url,
+            origin: data.origin,
+            destination: data.destination,
+            departDate: data.departDate,
+          });
+        } else {
+          setNextTicket({
+            url: null,
+            origin: null,
+            destination: null,
+            departDate: null,
+          });
+        }
+      } catch (err) {
+        console.error('Error fetching recent ticket:', err);
+        setError('An error occurred while fetching your recent ticket.');
       }
     };
 
@@ -128,14 +151,13 @@ const Home = ({ tickets, loading: ticketLoading, trains, setFilteredTrains }) =>
         {/* Profile Card Section */}
         <div className={styles.profileCard}>
           <div className={styles.ticketCard}>
-            {nextTicket.origin != null ? (
+            {nextTicket.origin ? (
               <>
                 <h2>{nextTicket.origin} → {nextTicket.destination}</h2>
                 <h2>{nextTicket.departDate}</h2>
                 <a href={nextTicket.url}>
                   <QRCode url={nextTicket.url} />
                 </a>
-                
               </>
             ) : (
               <h2>No tickets to display</h2>
