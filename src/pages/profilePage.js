@@ -10,7 +10,7 @@ function Profile() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/userinfo', {
+    fetch('http://localhost:3000/api/profile', {
       method: 'GET',
       credentials: 'include', // Important for including cookies
     })
