@@ -9,9 +9,12 @@ to run your own repository
 
 To update any changes inyour repository: git pull origin main
 
-## Node vailable Scripts
+## Node available scripts
 
 In the project directory, you can run:
+
+### `npm install`
+Gets dependencies.
 
 ### `npm start`
 Starts the frontend. 
@@ -19,3 +22,5 @@ Open [http://localhost:3001](http://localhost:3001) to view it in the browser.
 
 ### `npm run start-server`
 Starts the server
+
+Note: project will not compile without secret key for auth with Stripe. 
